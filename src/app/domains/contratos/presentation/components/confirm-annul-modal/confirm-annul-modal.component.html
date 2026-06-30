@@ -1,0 +1,69 @@
+<app-modal-shell maxWidth="md" (dismiss)="cancel.emit()">
+  <!-- Header -->
+  <div class="px-stack-lg pt-stack-lg pb-4 flex items-start gap-4">
+    <div class="p-3 bg-error-container rounded-full shrink-0 flex items-center justify-center">
+      <mat-icon class="text-on-error-container icon-filled flex items-center justify-center">warning</mat-icon>
+    </div>
+    <div class="flex-1">
+      <h3 class="text-title-lg font-title-lg text-on-surface">Confirmar Anulación</h3>
+      <p class="text-body-md font-body-md text-on-surface-variant mt-1">
+        ¿Está seguro de que desea cancelar esta novedad? Esta acción registrará cambios permanentes en el historial contractual.
+      </p>
+    </div>
+  </div>
+
+  <!-- Detalles -->
+  <div class="mx-stack-lg bg-surface-container-low p-stack-md rounded-lg border border-outline-variant/30 space-y-3">
+    <div class="flex justify-between items-center">
+      <span class="text-label-sm font-label-sm text-on-surface-variant">Contrato No.</span>
+      <span class="text-label-lg font-label-lg font-semibold text-on-surface">{{ contractNumber() }}</span>
+    </div>
+    @if (vigencia()) {
+      <div class="flex justify-between items-center">
+        <span class="text-label-sm font-label-sm text-on-surface-variant">Vigencia</span>
+        <span class="text-label-lg font-label-lg text-on-surface">{{ vigencia() }}</span>
+      </div>
+    }
+    <div class="flex justify-between items-center">
+      <span class="text-label-sm font-label-sm text-on-surface-variant">Tipo</span>
+      <span class="text-label-lg font-label-lg text-on-surface">{{ tipo() }}</span>
+    </div>
+    <div class="flex justify-between items-center">
+      <span class="text-label-sm font-label-sm text-on-surface-variant">Fecha</span>
+      <span class="text-label-lg font-label-lg text-on-surface">{{ fecha() }}</span>
+    </div>
+    <div class="flex justify-between items-center">
+      <span class="text-label-sm font-label-sm text-on-surface-variant">Estado Actual</span>
+      <span class="text-label-sm font-label-sm bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded">{{ estado() }}</span>
+    </div>
+  </div>
+
+  <!-- Advertencia -->
+  <div class="px-stack-lg py-4">
+    <div class="bg-surface-container-high p-3 rounded-lg border-l-4 border-error">
+      <p class="text-body-md font-body-md text-on-surface">
+        Se registrarán los estados <span class="font-bold italic">Novedad Anulada</span> y luego <span class="font-bold italic">En ejecución</span> en el contrato.
+      </p>
+    </div>
+  </div>
+
+  <!-- Acciones -->
+  <div class="px-stack-lg pb-stack-lg pt-2 flex gap-3 justify-end">
+    <button
+      type="button"
+      (click)="cancel.emit()"
+      class="px-stack-lg py-2 rounded-full border border-outline text-primary text-label-lg font-label-lg hover:bg-surface-container-high transition-colors">
+      Cancelar
+    </button>
+    <button
+      type="button"
+      [disabled]="submitting()"
+      (click)="confirm.emit()"
+      class="px-stack-lg py-2 rounded-full bg-error text-on-error text-label-lg font-label-lg hover:opacity-90 transition-opacity shadow-sm disabled:opacity-50 flex items-center gap-2">
+      @if (submitting()) {
+        <mat-icon class="animate-spin text-[18px] flex items-center justify-center">sync</mat-icon>
+      }
+      Confirmar Anulación
+    </button>
+  </div>
+</app-modal-shell>

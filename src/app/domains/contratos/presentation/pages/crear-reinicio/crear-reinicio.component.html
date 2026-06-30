@@ -1,0 +1,57 @@
+@if (pageState() === 'success') {
+  <app-novelty-result
+    [noveltyName]="noveltyName"
+    [contractNumber]="state.selectedContract()?.number ?? ''"
+    [executedAt]="executedAt()"
+    [responsible]="state.selectedContract()?.supervisor ?? ''"
+    (back)="goBack()" />
+} @else if (pageState() === 'error') {
+  <app-novelty-error [noveltyName]="noveltyName" (retry)="onRetry()" (back)="goBack()" />
+} @else {
+<app-novelty-page-layout
+  title="Crear Acta de Novedad de Reinicio"
+  [breadcrumbItems]="breadcrumb()"
+  [contract]="state.selectedContract()">
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-stack-lg">
+
+    <app-card title="Datos de la Solicitud" icon="folder">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+        <app-form-field label="Fecha de solicitud" for="fecha_solicitud">
+          <input appFormInput id="fecha_solicitud" type="date" formControlName="fechaSolicitud">
+        </app-form-field>
+        <app-form-field label="Fecha de expedición del acta" for="fecha_expedicion">
+          <input appFormInput id="fecha_expedicion" type="date" formControlName="fechaExpedicionActa">
+        </app-form-field>
+        <app-form-field label="Fecha inicio suspensión" for="fecha_inicio">
+          <input appFormInput id="fecha_inicio" type="date" formControlName="fechaInicioSuspension">
+        </app-form-field>
+        <app-form-field label="Fecha fin suspensión" for="fecha_fin">
+          <input appFormInput id="fecha_fin" type="date" formControlName="fechaFinSuspension">
+        </app-form-field>
+        <app-form-field label="Periodo suspensión (Días) *" for="periodo_suspension">
+          <input appFormInput id="periodo_suspension" type="number" formControlName="periodoDias">
+        </app-form-field>
+        <app-form-field label="Fecha reinicio" for="fecha_reinicio">
+          <input appFormInput id="fecha_reinicio" type="date" formControlName="fechaReinicio">
+        </app-form-field>
+      </div>
+
+      <app-document-preview-control />
+    </app-card>
+
+    <app-novelty-form-actions [submitting]="submitting()" (clear)="onClear()" />
+  </form>
+
+  @if (showConfirm()) {
+    <app-confirm-novelty-modal
+      noveltyLabel="reinicio"
+      [contractNumber]="state.selectedContract()?.number ?? ''"
+      [year]="year()"
+      [summary]="summary()"
+      [submitting]="submitting()"
+      (confirm)="onConfirm()"
+      (cancel)="closeConfirm()" />
+  }
+</app-novelty-page-layout>
+}
