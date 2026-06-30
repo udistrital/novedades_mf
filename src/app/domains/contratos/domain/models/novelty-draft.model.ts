@@ -76,8 +76,21 @@ export interface TerminacionDraft {
   clausula: AdditionalClause;
 }
 
+export interface ReinicioDraft {
+  type: NoveltyType.RESTART;
+  solicitud: {
+    fechaSolicitud: string;
+    fechaExpedicionActa: string;
+  };
+  fechaInicioSuspension: string; // Solo lectura: proviene de la suspensión vigente.
+  fechaFinSuspension: string;
+  periodoDias: number | null;
+  fechaReinicio: string; // Solo lectura: calculada a partir de la suspensión.
+}
+
 export type NoveltyDraft =
   | AdicionProrrogaDraft
   | SuspensionDraft
   | CesionDraft
-  | TerminacionDraft;
+  | TerminacionDraft
+  | ReinicioDraft;

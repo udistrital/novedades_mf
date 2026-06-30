@@ -65,6 +65,29 @@ export class MockContractService implements IContractRepository {
           canAnnul: true
         }
       ]
+    },
+    {
+      id: '3',
+      number: '2024558',
+      contractType: 'Contrato de Prestación de Servicios Profesionales o Apoyo a la Gestión',
+      contractorName: 'LAURA CAMILA RODRÍGUEZ MORENO',
+      contractorId: '1.012.345.678',
+      contractingEntity: 'Universidad Distrital Francisco José de Caldas',
+      totalValue: 78000000,
+      object: 'Apoyo a la gestión documental y archivística de la Secretaría General.',
+      initialTerm: 'OCHO ( 8 ) MESES',
+      startDate: '01/03/2024',
+      supervisor: 'Oficina Asesora Jurídica',
+      spendingManager: 'PABLO ANDRES PÉREZ ALARCÓN',
+      novelties: [
+        {
+          id: 'n4',
+          type: NoveltyType.SUSPENSION,
+          expeditionDate: '20/05/2024',
+          status: NoveltyStatus.IN_EXECUTION,
+          canAnnul: true
+        }
+      ]
     }
   ];
 

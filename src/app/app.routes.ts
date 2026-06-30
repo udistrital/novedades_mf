@@ -25,5 +25,10 @@ export const routes: Routes = [
     path: 'contratos/:contractId/novedades/terminacion',
     loadComponent: () => import('./domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component')
       .then(m => m.CrearTerminacionComponent)
+  },
+  {
+    path: 'contratos/:contractId/novedades/reinicio',
+    loadComponent: () => import('./domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component')
+      .then(m => m.CrearReinicioComponent)
   }
 ];
