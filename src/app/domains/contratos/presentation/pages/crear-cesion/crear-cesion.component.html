@@ -1,0 +1,118 @@
+@if (pageState() === 'success') {
+  <app-novelty-result
+    [noveltyName]="noveltyName"
+    [contractNumber]="state.selectedContract()?.number ?? ''"
+    [executedAt]="executedAt()"
+    [responsible]="state.selectedContract()?.supervisor ?? ''"
+    (back)="goBack()" />
+} @else if (pageState() === 'error') {
+  <app-novelty-error [noveltyName]="noveltyName" (retry)="onRetry()" (back)="goBack()" />
+} @else {
+<app-novelty-page-layout
+  title="Crear Acta de Cesión"
+  [breadcrumbItems]="breadcrumb()"
+  [contract]="state.selectedContract()">
+
+  <app-assignee-info-card aside [assignee]="assignee()" />
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-stack-lg">
+
+    <!-- Datos de la Solicitud -->
+    <app-card title="Datos de la Solicitud" icon="folder_open">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+        <app-form-field label="Fecha de solicitud" for="fecha_solicitud">
+          <input appFormInput id="fecha_solicitud" type="date" formControlName="fechaSolicitud">
+        </app-form-field>
+        <app-form-field label="Fecha de expedición del acta" for="fecha_expedicion">
+          <input appFormInput id="fecha_expedicion" type="date" formControlName="fechaExpedicionActa">
+        </app-form-field>
+        <app-form-field label="Número oficio supervisor a ordenador*" for="num_oficio_sup">
+          <input appFormInput id="num_oficio_sup" type="text" placeholder="Ej. OFI-2024-001" formControlName="numOficioSupervisor">
+        </app-form-field>
+        <app-form-field label="Fecha oficio supervisor a ordenador" for="fecha_oficio_sup">
+          <input appFormInput id="fecha_oficio_sup" type="date" formControlName="fechaOficioSupervisor">
+        </app-form-field>
+        <app-form-field label="Número oficio ordenador a OC*" for="num_oficio_ord">
+          <input appFormInput id="num_oficio_ord" type="text" placeholder="Ej. OFI-2024-002" formControlName="numOficioOrdenador">
+        </app-form-field>
+        <app-form-field label="Fecha oficio ordenador a OC" for="fecha_oficio_ord">
+          <input appFormInput id="fecha_oficio_ord" type="date" formControlName="fechaOficioOrdenador">
+        </app-form-field>
+      </div>
+      <app-document-preview-control />
+    </app-card>
+
+    <!-- Configuración de la Novedad -->
+    <app-card title="Configuración de la Novedad" icon="settings_applications">
+      <div class="flex flex-col gap-stack-lg">
+
+        <!-- Datos de la Cesión -->
+        <div class="border border-outline-variant/30 rounded-lg p-4 flex flex-col gap-stack-md">
+          <div class="flex items-center gap-3">
+            <mat-icon class="text-primary flex items-center justify-center">swap_horiz</mat-icon>
+            <span class="font-title-md text-title-md text-on-surface">Datos de la Cesión</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+            <app-form-field label="Fecha sesión" for="fecha_sesion">
+              <input appFormInput id="fecha_sesion" type="date" formControlName="fechaSesion">
+            </app-form-field>
+            <app-form-field label="Fecha de terminación del cedente" for="fecha_term_cedente">
+              <input appFormInput id="fecha_term_cedente" type="date" formControlName="fechaTerminacionCedente">
+            </app-form-field>
+            <app-money-field label="Valor desembolsado*" for="valor_desembolsado">
+              <input appFormInput class="!pl-7" id="valor_desembolsado" type="number" placeholder="0.00" formControlName="valorDesembolsado">
+            </app-money-field>
+            <app-money-field label="Valor a favor de cedente*" for="valor_favor_cedente">
+              <input appFormInput class="!pl-7" id="valor_favor_cedente" type="number" placeholder="0.00" formControlName="valorFavorCedente">
+            </app-money-field>
+            <app-form-field label="Días faltantes por pago (cedente)" for="dias_faltantes">
+              <input appFormInput id="dias_faltantes" type="number" placeholder="12" formControlName="diasFaltantes">
+            </app-form-field>
+            <app-form-field label="Cédula cesionario" for="cedula_cesionario">
+              <div class="relative">
+                <input appFormInput class="!pr-10" id="cedula_cesionario" type="text" placeholder="Buscar por número de documento..." formControlName="cedulaCesionario">
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                  <mat-icon class="text-on-surface-variant text-[18px] flex items-center justify-center">search</mat-icon>
+                </div>
+              </div>
+            </app-form-field>
+          </div>
+        </div>
+
+        <!-- Considerando Adicional -->
+        <div formGroupName="considerando" class="border border-outline-variant/30 rounded-lg p-4">
+          <app-toggle-section
+            label="Agregar Considerando Adicional"
+            [active]="!!considerando.controls['activo'].value"
+            (activeChange)="considerando.controls['activo'].setValue($event)">
+            <div class="w-full md:w-1/3">
+              <app-form-field label="Posición (1-7)" for="posicion_considerando">
+                <input appFormInput id="posicion_considerando" type="number" min="1" max="7" step="1" placeholder="Ej. 1" formControlName="posicion">
+              </app-form-field>
+            </div>
+            <app-form-field label="Considerando adicional" for="considerando_texto">
+              <textarea appFormInput id="considerando_texto" rows="4" placeholder="Redacte aquí el texto del considerando adicional..." formControlName="texto"></textarea>
+            </app-form-field>
+          </app-toggle-section>
+        </div>
+
+        <!-- Cláusula Adicional -->
+        <app-additional-clause-section [group]="clausula" />
+      </div>
+    </app-card>
+
+    <app-novelty-form-actions [submitting]="submitting()" (clear)="onClear()" />
+  </form>
+
+  @if (showConfirm()) {
+    <app-confirm-novelty-modal
+      noveltyLabel="cesión"
+      [contractNumber]="state.selectedContract()?.number ?? ''"
+      [year]="year()"
+      [summary]="summary()"
+      [submitting]="submitting()"
+      (confirm)="onConfirm()"
+      (cancel)="closeConfirm()" />
+  }
+</app-novelty-page-layout>
+}

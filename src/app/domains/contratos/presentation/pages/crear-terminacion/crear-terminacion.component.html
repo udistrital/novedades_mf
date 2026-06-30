@@ -1,0 +1,91 @@
+@if (pageState() === 'success') {
+  <app-novelty-result
+    [noveltyName]="noveltyName"
+    [contractNumber]="state.selectedContract()?.number ?? ''"
+    [executedAt]="executedAt()"
+    [responsible]="state.selectedContract()?.supervisor ?? ''"
+    (back)="goBack()" />
+} @else if (pageState() === 'error') {
+  <app-novelty-error [noveltyName]="noveltyName" (retry)="onRetry()" (back)="goBack()" />
+} @else {
+<app-novelty-page-layout
+  title="Crear Acta de Terminación Anticipada"
+  [breadcrumbItems]="breadcrumb()"
+  [contract]="state.selectedContract()">
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-stack-lg">
+
+    <!-- Datos de la Solicitud -->
+    <app-card title="Datos de la Solicitud" icon="folder_open">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+        <app-form-field label="Fecha de solicitud" for="fecha_solicitud">
+          <input appFormInput id="fecha_solicitud" type="date" formControlName="fechaSolicitud">
+        </app-form-field>
+        <app-form-field label="Fecha de expedición del acta" for="fecha_expedicion">
+          <input appFormInput id="fecha_expedicion" type="date" formControlName="fechaExpedicionActa">
+        </app-form-field>
+        <app-form-field label="Número oficio supervisor a ordenador*" for="num_oficio_sup">
+          <input appFormInput id="num_oficio_sup" type="text" placeholder="Ej. OFI-2024-001" formControlName="numOficioSupervisor">
+        </app-form-field>
+        <app-form-field label="Fecha oficio supervisor a ordenador" for="fecha_oficio_sup">
+          <input appFormInput id="fecha_oficio_sup" type="date" formControlName="fechaOficioSupervisor">
+        </app-form-field>
+        <app-form-field label="Número oficio ordenador a OC*" for="num_oficio_ord">
+          <input appFormInput id="num_oficio_ord" type="text" placeholder="Ej. OFI-2024-002" formControlName="numOficioOrdenador">
+        </app-form-field>
+        <app-form-field label="Fecha oficio ordenador a OC" for="fecha_oficio_ord">
+          <input appFormInput id="fecha_oficio_ord" type="date" formControlName="fechaOficioOrdenador">
+        </app-form-field>
+      </div>
+      <app-document-preview-control />
+    </app-card>
+
+    <!-- Configuración de la Novedad -->
+    <app-card title="Configuración de la Novedad" icon="settings_applications">
+      <div class="flex flex-col gap-stack-lg">
+
+        <!-- Datos de la terminación -->
+        <div class="border border-outline-variant/30 rounded-lg p-4 flex flex-col gap-stack-md">
+          <div class="flex items-center gap-3">
+            <mat-icon class="text-primary flex items-center justify-center">swap_horiz</mat-icon>
+            <span class="font-title-md text-title-md text-on-surface">Datos de la terminación</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+            <app-form-field label="Fecha Terminación Anticipada (Último día trabajado):" for="fecha_terminacion">
+              <input appFormInput id="fecha_terminacion" type="date" formControlName="fechaTerminacion">
+            </app-form-field>
+            <app-form-field label="Fecha certificación" for="fecha_certificacion">
+              <input appFormInput id="fecha_certificacion" type="date" formControlName="fechaCertificacion">
+            </app-form-field>
+            <app-money-field label="Valor desembolsado*" for="valor_desembolsado">
+              <input appFormInput class="!pl-7" id="valor_desembolsado" type="number" placeholder="0.00" formControlName="valorDesembolsado">
+            </app-money-field>
+            <app-money-field label="Saldo a favor del contratista*" for="saldo_contratista">
+              <input appFormInput class="!pl-7" id="saldo_contratista" type="number" placeholder="0.00" formControlName="saldoFavorContratista">
+            </app-money-field>
+            <app-form-field label="Saldo a favor de la Universidad*" for="saldo_universidad">
+              <input appFormInput id="saldo_universidad" type="number" placeholder="0.00" formControlName="saldoFavorUniversidad">
+            </app-form-field>
+          </div>
+        </div>
+
+        <!-- Cláusula Adicional -->
+        <app-additional-clause-section [group]="clausula" />
+      </div>
+    </app-card>
+
+    <app-novelty-form-actions [submitting]="submitting()" (clear)="onClear()" />
+  </form>
+
+  @if (showConfirm()) {
+    <app-confirm-novelty-modal
+      noveltyLabel="Terminación Anticipada"
+      [contractNumber]="state.selectedContract()?.number ?? ''"
+      [year]="year()"
+      [summary]="summary()"
+      [submitting]="submitting()"
+      (confirm)="onConfirm()"
+      (cancel)="closeConfirm()" />
+  }
+</app-novelty-page-layout>
+}

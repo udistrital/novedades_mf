@@ -1,0 +1,119 @@
+@if (pageState() === 'success') {
+  <app-novelty-result
+    [noveltyName]="noveltyName"
+    [contractNumber]="state.selectedContract()?.number ?? ''"
+    [executedAt]="executedAt()"
+    [responsible]="state.selectedContract()?.supervisor ?? ''"
+    (back)="goBack()" />
+} @else if (pageState() === 'error') {
+  <app-novelty-error [noveltyName]="noveltyName" (retry)="onRetry()" (back)="goBack()" />
+} @else {
+<app-novelty-page-layout
+  title="Crear Acta de Novedad de Adición y/o Prórroga"
+  [breadcrumbItems]="breadcrumb()"
+  [contract]="state.selectedContract()">
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-stack-lg">
+
+    <!-- Datos de la Solicitud -->
+    <app-card title="Datos de la Solicitud" icon="folder_open">
+      <div formGroupName="solicitud" class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+        <app-form-field label="Número solicitud de necesidad" for="num_solicitud">
+          <input appFormInput id="num_solicitud" type="text" placeholder="Ej. SOL-2024-001" formControlName="numSolicitud">
+        </app-form-field>
+        <app-form-field label="Fecha solicitud de necesidad" for="fecha_solicitud">
+          <input appFormInput id="fecha_solicitud" type="date" formControlName="fechaSolicitud">
+        </app-form-field>
+        <app-form-field label="Número oficio" for="num_oficio">
+          <input appFormInput id="num_oficio" type="text" placeholder="Ej. OFI-2024-045" formControlName="numOficio">
+        </app-form-field>
+        <app-form-field label="Fecha oficio" for="fecha_oficio">
+          <input appFormInput id="fecha_oficio" type="date" formControlName="fechaOficio">
+        </app-form-field>
+        <div class="md:col-span-2">
+          <app-form-field label="Fecha expedición del acta" for="fecha_acta">
+            <input appFormInput id="fecha_acta" type="date" formControlName="fechaActa">
+          </app-form-field>
+        </div>
+      </div>
+      <app-document-preview-control />
+    </app-card>
+
+    <!-- Configuración de la Novedad -->
+    <app-card title="Configuración de la Novedad" icon="settings_applications">
+      <div class="flex flex-col gap-stack-lg">
+
+        <!-- Adición Presupuestal -->
+        <div formGroupName="adicion" class="border border-outline-variant/30 rounded-lg p-4">
+          <app-toggle-section
+            label="Agregar Adición Presupuestal"
+            [active]="!!adicion.controls['activa'].value"
+            (activeChange)="adicion.controls['activa'].setValue($event)">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+              <app-form-field label="Número de CDP" for="num_cdp">
+                <input appFormInput id="num_cdp" type="number" placeholder="Ej. 123" formControlName="numCdp">
+              </app-form-field>
+              <app-form-field label="Vigencia" for="vigencia_cdp">
+                <select appFormInput id="vigencia_cdp" formControlName="vigencia">
+                  @for (y of vigencias; track y) { <option [value]="y">{{ y }}</option> }
+                </select>
+              </app-form-field>
+              <app-money-field label="Valor Adicional" for="valor_adicional">
+                <input appFormInput class="!pl-7" id="valor_adicional" type="number" placeholder="1.000.000" formControlName="valorAdicional">
+              </app-money-field>
+              <app-form-field label="Fecha de la Adición" for="fecha_adicion">
+                <input appFormInput id="fecha_adicion" type="date" formControlName="fechaAdicion">
+              </app-form-field>
+              <div class="md:col-span-2">
+                <app-form-field label="Nuevo Valor del Contrato">
+                  <div class="block w-full rounded-md border border-outline-variant bg-surface-container-low p-3">
+                    <div class="text-primary font-bold text-title-md">{{ nuevoValor() | currency:'COP':'symbol':'1.0-0' }}</div>
+                  </div>
+                </app-form-field>
+              </div>
+            </div>
+          </app-toggle-section>
+        </div>
+
+        <!-- Prórroga de Tiempo -->
+        <div formGroupName="prorroga" class="border border-outline-variant/30 rounded-lg p-4">
+          <app-toggle-section
+            label="Agregar Prórroga de Tiempo"
+            [active]="!!prorroga.controls['activa'].value"
+            (activeChange)="prorroga.controls['activa'].setValue($event)">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-stack-md">
+              <app-form-field label="Tiempo de prórroga (Días)" for="tiempo_prorroga">
+                <input appFormInput id="tiempo_prorroga" type="text" placeholder="Ej. 30" formControlName="tiempoDias">
+              </app-form-field>
+              <app-form-field label="Fecha de la Prórroga" for="fecha_prorroga">
+                <input appFormInput id="fecha_prorroga" type="date" formControlName="fechaProrroga">
+              </app-form-field>
+              <app-form-field label="Nuevo Plazo del Contrato">
+                <div class="block w-full rounded-md border border-outline-variant bg-surface-container-low text-on-surface-variant italic text-sm px-3 py-2 min-h-[40px]">
+                  {{ state.selectedContract()?.initialTerm }}
+                </div>
+              </app-form-field>
+            </div>
+          </app-toggle-section>
+        </div>
+
+        <!-- Cláusula Adicional -->
+        <app-additional-clause-section [group]="clausula" />
+      </div>
+    </app-card>
+
+    <app-novelty-form-actions [submitting]="submitting()" (clear)="onClear()" />
+  </form>
+
+  @if (showConfirm()) {
+    <app-confirm-novelty-modal
+      noveltyLabel="adición y/o prórroga"
+      [contractNumber]="state.selectedContract()?.number ?? ''"
+      [year]="year()"
+      [summary]="summary()"
+      [submitting]="submitting()"
+      (confirm)="onConfirm()"
+      (cancel)="closeConfirm()" />
+  }
+</app-novelty-page-layout>
+}
