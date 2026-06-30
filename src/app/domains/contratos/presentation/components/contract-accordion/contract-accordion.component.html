@@ -1,0 +1,119 @@
+<details class="bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm group">
+  <summary class="p-4 cursor-pointer hover:bg-surface-container-low transition-colors flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-lg">
+    <div class="flex-1">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="text-title-md font-title-md font-bold text-primary">Contrato No. {{ contract.number }}</span>
+      </div>
+      <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">Contratista</span>
+      <p class="text-body-md font-body-md text-on-surface font-medium">{{ contract.contractorName }}</p>
+    </div>
+    <div class="flex items-center gap-6 w-full sm:w-auto justify-between sm:justify-end">
+      <div class="text-left sm:text-right">
+        <span class="text-label-sm font-label-sm text-on-surface-variant block">Valor Total</span>
+        <span class="text-title-md font-title-md text-on-surface font-semibold">{{ contract.totalValue | currency:'COP':'symbol':'1.0-0' }}</span>
+      </div>
+      <div class="h-8 w-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant group-hover:bg-surface-variant transition-colors">
+        <mat-icon class="transform group-open:rotate-180 transition-transform duration-200">expand_more</mat-icon>
+      </div>
+    </div>
+  </summary>
+  <div class="p-4 border-t border-outline-variant bg-surface">
+    <!-- Contract Details -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 p-4 bg-surface-container-lowest rounded border border-outline-variant/50">
+      <div>
+        <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">Contratante</span>
+        <span class="text-body-md font-body-md text-on-surface">{{ contract.contractingEntity }}</span>
+      </div>
+      <div class="md:row-span-2">
+        <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">Objeto del Contrato</span>
+        <span class="text-body-md font-body-md text-on-surface">{{ contract.object }}</span>
+      </div>
+      <div>
+        <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">NIT / CC Contratista</span>
+        <span class="text-body-md font-body-md text-on-surface">{{ contract.contractorId }}</span>
+      </div>
+    </div>
+    <!-- Novedades Section -->
+    <div class="mt-4">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="text-title-sm font-title-md font-semibold text-primary">Novedades ({{ contract.novelties.length }})</h3>
+        <div class="relative">
+          <button
+            type="button"
+            (click)="toggleMenu()"
+            [attr.aria-expanded]="isMenuOpen()"
+            aria-haspopup="true"
+            class="bg-secondary-container hover:bg-secondary-fixed-dim transition-colors px-4 py-1.5 rounded shadow-sm font-bold text-label-sm flex items-center gap-1 text-on-surface">
+            <mat-icon class="text-[16px] flex items-center justify-center">add</mat-icon> Añadir Novedad
+            <mat-icon class="text-[16px] flex items-center justify-center transition-transform duration-200" [class.rotate-180]="isMenuOpen()">arrow_drop_down</mat-icon>
+          </button>
+
+          @if (isMenuOpen()) {
+            <div class="absolute right-0 mt-2 w-56 bg-surface-container-lowest rounded-lg shadow-lg border border-outline-variant z-10 py-1">
+              @for (option of noveltyMenuOptions; track option.type) {
+                <a
+                  [routerLink]="['/contratos', contract.id, 'novedades', option.path]"
+                  (click)="closeMenu()"
+                  class="w-full text-left px-4 py-2 text-body-md font-body-md hover:bg-surface-container transition-colors flex items-center gap-2 text-on-surface cursor-pointer">
+                  <mat-icon class="text-primary text-[20px] flex items-center justify-center">{{ option.icon }}</mat-icon>
+                  {{ option.label }}
+                </a>
+              }
+            </div>
+          }
+        </div>
+      </div>
+      <div class="overflow-x-auto border border-outline-variant rounded bg-surface-container-lowest">
+        <table class="w-full text-left">
+          <thead class="bg-surface-container-low border-b border-outline-variant">
+            <tr>
+              <th class="px-3 py-2 text-label-sm font-label-sm text-on-surface-variant font-semibold">Tipo de novedad</th>
+              <th class="px-3 py-2 text-label-sm font-label-sm text-on-surface-variant font-semibold">Fecha de expedición</th>
+              <th class="px-3 py-2 text-label-sm font-label-sm text-on-surface-variant font-semibold">Estado</th>
+              <th class="px-3 py-2 text-label-sm font-label-sm text-on-surface-variant font-semibold">Enlace</th>
+              <th class="px-3 py-2 text-label-sm font-label-sm text-on-surface-variant font-semibold text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-outline-variant text-body-md font-body-md">
+            @for (novelty of contract.novelties; track novelty.id) {
+              <tr class="hover:bg-surface-container transition-colors">
+                <td class="px-3 py-2 text-on-surface font-medium">{{ novelty.type }}</td>
+                <td class="px-3 py-2 text-on-surface-variant">{{ novelty.expeditionDate }}</td>
+                <td class="px-3 py-2">
+                  @if (novelty.status === 'Terminada') {
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-surface-container-highest text-on-surface-variant border border-outline-variant">
+                      {{ novelty.status }}
+                    </span>
+                  } @else {
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-primary/10 text-primary border border-primary/20">
+                      {{ novelty.status }}
+                    </span>
+                  }
+                </td>
+                <td class="px-3 py-2">
+                  <button mat-icon-button class="text-on-surface-variant hover:text-primary hover:bg-primary/10 transition-colors" title="Ver/Descargar">
+                    <mat-icon class="text-[18px]">link</mat-icon>
+                  </button>
+                </td>
+                <td class="px-3 py-2 text-right">
+                  <div class="flex justify-end gap-1">
+                    <a href="#" target="_blank" class="bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:bg-surface-container-low px-3 py-1 rounded text-label-sm font-bold transition-colors flex items-center gap-1" title="Ver Acta">
+                      <mat-icon class="text-[16px]">visibility</mat-icon> Ver Acta
+                    </a>
+                    <button type="button" (click)="annul.emit(novelty)" class="bg-surface-container-lowest border border-error text-error hover:bg-error/10 px-3 py-1 rounded text-label-sm font-bold flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed" [disabled]="!novelty.canAnnul" title="Anular">
+                      <mat-icon class="text-[16px]">delete</mat-icon> Anular
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="5" class="px-3 py-4 text-center text-on-surface-variant">No hay novedades registradas para este contrato.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</details>

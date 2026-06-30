@@ -1,0 +1,58 @@
+<app-modal-shell maxWidth="lg" (dismiss)="cancel.emit()">
+  <!-- Header -->
+  <div class="px-6 py-4 border-b border-outline-variant/30 flex justify-between items-center">
+    <h2 class="font-title-lg text-title-lg text-primary">Confirmar Generación de Acta</h2>
+    <button type="button" class="text-on-surface-variant hover:text-primary transition-colors" (click)="cancel.emit()">
+      <mat-icon class="flex items-center justify-center">close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Body -->
+  <div class="p-6 flex flex-col gap-4">
+    <p class="text-body-md text-on-surface">
+      Se realizará la novedad de <b>{{ noveltyLabel() }}</b> al contrato No. <b>{{ contractNumber() }}</b>@if (year()) { de <b>{{ year() }}</b>}.
+    </p>
+    <span class="text-label-sm font-bold uppercase text-on-surface-variant tracking-wider">Resumen</span>
+
+    <div class="grid grid-cols-1 gap-3 bg-surface-container-low p-4 rounded-lg border border-outline-variant/20">
+      @for (item of summary(); track item.label) {
+        <div class="flex flex-col">
+          <span class="text-label-sm font-label-sm uppercase text-on-surface-variant tracking-wider">{{ item.label }}</span>
+          @if (item.highlight) {
+            <span class="font-title-md text-title-md text-primary">{{ item.value }}</span>
+          } @else {
+            <span class="font-medium">{{ item.value }}</span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Advertencia -->
+    <div class="flex gap-3 p-3 bg-error-container text-on-error-container rounded-lg border border-error/20">
+      <mat-icon class="text-error flex items-center justify-center">warning</mat-icon>
+      <p class="text-xs font-medium">
+        Verifique los datos antes de continuar. Si alguno no coincide, comuníquese con el equipo de soporte a través de <b><u>IRIS</u></b>.
+      </p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="px-6 py-4 bg-surface-container-low flex justify-end gap-3">
+    <button
+      type="button"
+      (click)="cancel.emit()"
+      class="px-4 py-2 border border-outline text-on-surface-variant rounded hover:bg-surface-variant transition-colors font-label-lg">
+      Cancelar
+    </button>
+    <button
+      type="button"
+      [disabled]="submitting()"
+      (click)="confirm.emit()"
+      class="px-4 py-2 bg-primary rounded hover:bg-primary-container transition-colors font-label-lg shadow-sm text-on-primary disabled:opacity-50 flex items-center gap-2">
+      @if (submitting()) {
+        <mat-icon class="animate-spin text-[18px] flex items-center justify-center">sync</mat-icon>
+      }
+      Confirmar y Generar
+    </button>
+  </div>
+</app-modal-shell>

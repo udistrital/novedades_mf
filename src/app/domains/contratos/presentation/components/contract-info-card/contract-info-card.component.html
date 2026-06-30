@@ -1,0 +1,39 @@
+<app-card title="Información del Contrato" icon="description" variant="context">
+  <div class="flex flex-col gap-stack-sm font-body-md text-body-md">
+    <div>
+      <span class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Tipo de contrato</span>
+      <p class="font-medium">{{ contract().contractType }}</p>
+    </div>
+    <div>
+      <span class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Número de contrato</span>
+      <p class="font-medium">{{ contract().number }}</p>
+    </div>
+    <div>
+      <span class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Objeto del contrato</span>
+      <p class="text-sm">{{ contract().object }}</p>
+    </div>
+    <div>
+      <span class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Valor total del contrato</span>
+      <p class="font-title-md text-title-md text-primary">{{ contract().totalValue | currency:'COP':'symbol':'1.0-0' }}</p>
+    </div>
+    <div class="bg-surface p-3 rounded border border-surface-variant mt-2">
+      <span class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Datos contratista</span>
+      <p class="font-medium text-sm">{{ contract().contractorName }}</p>
+      <p class="text-xs text-on-surface-variant">NIT {{ contract().contractorId }}</p>
+    </div>
+    <div class="grid grid-cols-2 gap-2 mt-2">
+      <div>
+        <span class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Plazo inicial</span>
+        <p class="text-sm">{{ contract().initialTerm }}</p>
+      </div>
+      <div>
+        <span class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Fecha de iniciación</span>
+        <p class="text-sm">{{ contract().startDate }}</p>
+      </div>
+    </div>
+    <div>
+      <span class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Supervisor</span>
+      <p class="text-sm">{{ contract().supervisor }}</p>
+    </div>
+  </div>
+</app-card>
