@@ -1,5 +1,6 @@
 import { Directive, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
 
 import { ContractStateService } from '../../application/contract-state.service';
 import { NoveltyService } from '../../application/novelty.service';
@@ -41,6 +42,8 @@ export abstract class CreateNoveltyPage {
 
   /** Nombre legible de la novedad (p. ej. "Adición y Prórroga"). */
   abstract readonly noveltyName: string;
+  /** Formulario de la página concreta; se valida antes de abrir la confirmación. */
+  abstract readonly form: FormGroup;
   /** Construye el draft a enviar al repositorio. */
   protected abstract buildDraft(): NoveltyDraft;
   /** Construye los campos del resumen mostrados en el modal de confirmación. */
@@ -50,7 +53,19 @@ export abstract class CreateNoveltyPage {
     this.state.loadContract(this.contractId);
   }
 
-  onSubmit(): void {
+  onSubmit(event: Event): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      const formEl = event.target as HTMLElement;
+      // Prioriza inputs nativos; si el primer inválido es un componente propio (p. ej. el
+      // autocomplete de contratista), Angular pone `ng-invalid` en su host, no en un input/select/textarea.
+      const firstInvalid =
+        formEl.querySelector<HTMLElement>('input.ng-invalid, select.ng-invalid, textarea.ng-invalid') ??
+        formEl.querySelector<HTMLElement>('.ng-invalid');
+      firstInvalid?.focus({ preventScroll: true });
+      firstInvalid?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
     this.summary.set(this.buildSummary());
     this.showConfirm.set(true);
   }
@@ -59,9 +74,10 @@ export abstract class CreateNoveltyPage {
     this.showConfirm.set(false);
   }
 
-  onConfirm(): void {
+  // El parámetro `forceError` es el switch de pruebas del modal de confirmación.
+  onConfirm(forceError = false): void {
     this.submitting.set(true);
-    this.noveltyService.create(this.contractId, this.buildDraft()).subscribe({
+    this.noveltyService.create(this.contractId, this.buildDraft(), forceError).subscribe({
       next: () => {
         this.submitting.set(false);
         this.showConfirm.set(false);

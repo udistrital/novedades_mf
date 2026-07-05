@@ -47,6 +47,14 @@
     </div>
   </div>
 
+  <!-- TEST SWITCH — quitar este bloque para retirarlo. -->
+  <div class="px-stack-lg pb-2 flex items-center gap-2 border-t border-dashed border-outline-variant/50 pt-3">
+    <label class="flex items-center gap-2 cursor-pointer">
+      <input type="checkbox" class="accent-error" [checked]="forceError()" (change)="forceError.set($any($event.target).checked)">
+      <span class="text-xs text-on-surface-variant">[TEST] Simular petición fallida</span>
+    </label>
+  </div>
+
   <!-- Acciones -->
   <div class="px-stack-lg pb-stack-lg pt-2 flex gap-3 justify-end">
     <button
@@ -58,7 +66,7 @@
     <button
       type="button"
       [disabled]="submitting()"
-      (click)="confirm.emit()"
+      (click)="confirm.emit(forceError())"
       class="px-stack-lg py-2 rounded-full bg-error text-on-error text-label-lg font-label-lg hover:opacity-90 transition-opacity shadow-sm disabled:opacity-50 flex items-center gap-2">
       @if (submitting()) {
         <mat-icon class="animate-spin text-[18px] flex items-center justify-center">sync</mat-icon>

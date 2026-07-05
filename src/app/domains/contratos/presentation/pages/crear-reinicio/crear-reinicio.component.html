@@ -13,7 +13,7 @@
   [breadcrumbItems]="breadcrumb()"
   [contract]="state.selectedContract()">
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-stack-lg">
+  <form [formGroup]="form" (ngSubmit)="onSubmit($event)" class="flex flex-col gap-stack-lg">
 
     <app-card title="Datos de la Solicitud" icon="folder">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
@@ -26,10 +26,10 @@
         <app-form-field label="Fecha inicio suspensión" for="fecha_inicio">
           <input appFormInput id="fecha_inicio" type="date" formControlName="fechaInicioSuspension">
         </app-form-field>
-        <app-form-field label="Fecha fin suspensión" for="fecha_fin">
+        <app-form-field label="Fecha fin suspensión" for="fecha_fin" [required]="true" [control]="form.controls['fechaFinSuspension']">
           <input appFormInput id="fecha_fin" type="date" formControlName="fechaFinSuspension">
         </app-form-field>
-        <app-form-field label="Periodo suspensión (Días) *" for="periodo_suspension">
+        <app-form-field label="Periodo suspensión (Días)" for="periodo_suspension">
           <input appFormInput id="periodo_suspension" type="number" formControlName="periodoDias">
         </app-form-field>
         <app-form-field label="Fecha reinicio" for="fecha_reinicio">
@@ -50,7 +50,7 @@
       [year]="year()"
       [summary]="summary()"
       [submitting]="submitting()"
-      (confirm)="onConfirm()"
+      (confirm)="onConfirm($event)"
       (cancel)="closeConfirm()" />
   }
 </app-novelty-page-layout>

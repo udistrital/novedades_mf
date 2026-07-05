@@ -128,7 +128,7 @@
     [fecha]="target.novelty.expeditionDate"
     [estado]="target.novelty.status"
     [submitting]="annulling()"
-    (confirm)="confirmAnnul()"
+    (confirm)="confirmAnnul($event)"
     (cancel)="closeAnnulConfirm()" />
 }
 }

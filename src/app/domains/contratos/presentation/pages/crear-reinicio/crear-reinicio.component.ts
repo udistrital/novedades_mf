@@ -1,5 +1,7 @@
-import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Component, effect, inject } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { combineLatest, startWith } from 'rxjs';
 
 import { CreateNoveltyPage } from '../create-novelty-page.base';
 import { NoveltyPageLayoutComponent } from '../../components/novelty-page-layout/novelty-page-layout.component';
@@ -9,12 +11,14 @@ import { NoveltyErrorComponent } from '../../components/novelty-error/novelty-er
 import { CardComponent } from '../../../../../shared/ui/card.component';
 import { FormFieldComponent } from '../../../../../shared/ui/form-field.component';
 import { FormInputDirective } from '../../../../../shared/ui/form-input.directive';
+import { NoNegativeNumberDirective } from '../../../../../shared/ui/no-negative-number.directive';
 import { DocumentPreviewControlComponent } from '../../../../../shared/ui/document-preview-control.component';
 import { NoveltyFormActionsComponent } from '../../../../../shared/ui/novelty-form-actions.component';
-import { toDisplayDate } from '../../../../../shared/util/format.util';
+import { addDaysToDate, daysBetween, toDisplayDate, todayIso } from '../../../../../shared/util/format.util';
 
 import { NoveltyType } from '../../../domain/models/novelty-type.enum';
 import { ReinicioDraft, NoveltyDraft } from '../../../domain/models/novelty-draft.model';
+import { getLatestNovelty } from '../../../domain/contract.rules';
 
 @Component({
   selector: 'app-crear-reinicio',
@@ -28,6 +32,7 @@ import { ReinicioDraft, NoveltyDraft } from '../../../domain/models/novelty-draf
     CardComponent,
     FormFieldComponent,
     FormInputDirective,
+    NoNegativeNumberDirective,
     DocumentPreviewControlComponent,
     NoveltyFormActionsComponent
   ],
@@ -39,17 +44,52 @@ export class CrearReinicioComponent extends CreateNoveltyPage {
   readonly noveltyName = 'Reinicio';
 
   readonly form = this.fb.group({
-    fechaSolicitud: [''],
-    fechaExpedicionActa: [''],
-    // Datos de la suspensión vigente: el inicio y la fecha de reinicio son de solo lectura.
+    fechaSolicitud: [todayIso()],
+    fechaExpedicionActa: [todayIso()],
+    // Datos de la suspensión vigente: el inicio es de solo lectura.
     fechaInicioSuspension: [{ value: '', disabled: true }],
-    fechaFinSuspension: [''],
-    periodoDias: [null as number | null],
+    fechaFinSuspension: [todayIso(), Validators.required],
+    // Solo lectura: se calculan a partir de inicio/fin de la suspensión.
+    periodoDias: [{ value: null as number | null, disabled: true }],
     fechaReinicio: [{ value: '', disabled: true }]
   });
 
+  constructor() {
+    super();
+
+    const inicio = this.form.controls.fechaInicioSuspension;
+    const fin = this.form.controls.fechaFinSuspension;
+    const periodo = this.form.controls.periodoDias;
+    const reinicio = this.form.controls.fechaReinicio;
+
+    combineLatest([
+      inicio.valueChanges.pipe(startWith(inicio.value)),
+      fin.valueChanges.pipe(startWith(fin.value))
+    ]).pipe(takeUntilDestroyed()).subscribe(([i, f]) => {
+      periodo.setValue(daysBetween(i, f), { emitEvent: false });
+      reinicio.setValue(f ? addDaysToDate(f, 1) : '', { emitEvent: false });
+    });
+
+    // Fecha inicio de la suspensión: se toma de la última novedad del contrato (la suspensión
+    // vigente; a esta página solo se llega cuando esa es la última novedad). Se usa la fecha
+    // efectiva de la suspensión (cuándo empieza realmente), no la de expedición del acta —
+    // pueden diferir. Es un FormControl.setValue, no una escritura de signal: no requiere
+    // allowSignalWrites.
+    effect(() => {
+      const contract = this.state.selectedContract();
+      const latest = contract ? getLatestNovelty(contract) : undefined;
+      if (latest?.type === NoveltyType.SUSPENSION && !inicio.value) {
+        inicio.setValue(addDaysToDate(latest.effectiveDate ?? latest.expeditionDate, 0));
+      }
+    });
+  }
+
   onClear(): void {
-    this.form.reset();
+    this.form.reset({
+      fechaSolicitud: todayIso(),
+      fechaExpedicionActa: todayIso(),
+      fechaFinSuspension: todayIso()
+    });
   }
 
   protected buildDraft(): NoveltyDraft {

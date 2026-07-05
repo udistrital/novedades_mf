@@ -84,7 +84,8 @@ export class MockContractService implements IContractRepository {
         {
           id: 'n4',
           type: NoveltyType.SUSPENSION,
-          expeditionDate: '20/05/2024',
+          expeditionDate: '20/05/2024', // Fecha de expedición del acta.
+          effectiveDate: '22/05/2024', // La suspensión inicia dos días después de expedida el acta.
           status: NoveltyStatus.IN_EXECUTION,
           canAnnul: true
         }

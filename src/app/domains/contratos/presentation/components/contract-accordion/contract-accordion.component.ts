@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, inject, output, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, ViewChild, output, signal } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,7 +27,7 @@ export class ContractAccordionComponent {
   /** Solicitud de anulación de una novedad. */
   readonly annul = output<NoveltySummary>();
 
-  private readonly elementRef = inject(ElementRef);
+  @ViewChild('menuRef') private menuRef?: ElementRef<HTMLElement>;
 
   readonly isMenuOpen = signal(false);
 
@@ -73,7 +73,7 @@ export class ContractAccordionComponent {
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
-    if (this.isMenuOpen() && !this.elementRef.nativeElement.contains(event.target)) {
+    if (this.isMenuOpen() && !this.menuRef?.nativeElement.contains(event.target as Node)) {
       this.isMenuOpen.set(false);
     }
   }

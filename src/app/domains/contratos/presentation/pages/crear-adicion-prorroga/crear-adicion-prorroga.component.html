@@ -13,18 +13,18 @@
   [breadcrumbItems]="breadcrumb()"
   [contract]="state.selectedContract()">
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-stack-lg">
+  <form [formGroup]="form" (ngSubmit)="onSubmit($event)" class="flex flex-col gap-stack-lg">
 
     <!-- Datos de la Solicitud -->
     <app-card title="Datos de la Solicitud" icon="folder_open">
       <div formGroupName="solicitud" class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
-        <app-form-field label="Número solicitud de necesidad" for="num_solicitud">
+        <app-form-field label="Número solicitud de necesidad" for="num_solicitud" [required]="true" [control]="solicitud.controls['numSolicitud']">
           <input appFormInput id="num_solicitud" type="text" placeholder="Ej. SOL-2024-001" formControlName="numSolicitud">
         </app-form-field>
         <app-form-field label="Fecha solicitud de necesidad" for="fecha_solicitud">
           <input appFormInput id="fecha_solicitud" type="date" formControlName="fechaSolicitud">
         </app-form-field>
-        <app-form-field label="Número oficio" for="num_oficio">
+        <app-form-field label="Número oficio" for="num_oficio" [required]="true" [control]="solicitud.controls['numOficio']">
           <input appFormInput id="num_oficio" type="text" placeholder="Ej. OFI-2024-045" formControlName="numOficio">
         </app-form-field>
         <app-form-field label="Fecha oficio" for="fecha_oficio">
@@ -47,17 +47,22 @@
           <div class="flex flex-col gap-stack-md">
             <h3 class="font-title-md text-title-md text-on-surface">Adición Presupuestal</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
-              <app-form-field label="Número de CDP" for="num_cdp">
-                <input appFormInput id="num_cdp" type="number" placeholder="Ej. 123" formControlName="numCdp">
+              <app-form-field label="Número de CDP" for="num_cdp" [control]="adicion.controls['numCdp']">
+                <input appFormInput id="num_cdp" type="number" min="0" placeholder="Ej. 123" formControlName="numCdp">
               </app-form-field>
               <app-form-field label="Vigencia" for="vigencia_cdp">
-                <select appFormInput id="vigencia_cdp" formControlName="vigencia">
+                <select appFormInput class="!bg-surface-container-lowest" id="vigencia_cdp" formControlName="vigencia">
                   @for (y of vigencias; track y) { <option [value]="y">{{ y }}</option> }
                 </select>
               </app-form-field>
-              <app-money-field label="Valor Adicional" for="valor_adicional">
-                <input appFormInput class="!pl-7" id="valor_adicional" type="number" placeholder="1.000.000" formControlName="valorAdicional">
-              </app-money-field>
+              <div class="flex flex-col gap-1">
+                <app-money-field label="Valor Adicional" for="valor_adicional" [required]="true" [control]="adicion.controls['valorAdicional']">
+                  <input appFormInput class="!pl-7" id="valor_adicional" type="number" min="0" placeholder="1.000.000" formControlName="valorAdicional">
+                </app-money-field>
+                @if (valorAdicionalEnLetras()) {
+                  <span class="text-on-surface-variant text-xs italic px-1">{{ valorAdicionalEnLetras() }}</span>
+                }
+              </div>
               <app-form-field label="Fecha de la Adición" for="fecha_adicion">
                 <input appFormInput id="fecha_adicion" type="date" formControlName="fechaAdicion">
               </app-form-field>
@@ -65,6 +70,7 @@
                 <app-form-field label="Nuevo Valor del Contrato">
                   <div class="block w-full rounded-md border border-outline-variant bg-surface-container-low p-3">
                     <div class="text-primary font-bold text-title-md">{{ nuevoValor() | currency:'COP':'symbol':'1.0-0' }}</div>
+                    <div class="text-on-surface-variant text-xs italic mt-1">{{ nuevoValorEnLetras() }}</div>
                   </div>
                 </app-form-field>
               </div>
@@ -77,15 +83,15 @@
           <div class="flex flex-col gap-stack-md">
             <h3 class="font-title-md text-title-md text-on-surface">Prórroga de Tiempo</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-stack-md">
-              <app-form-field label="Tiempo de prórroga (Días)" for="tiempo_prorroga">
-                <input appFormInput id="tiempo_prorroga" type="text" placeholder="Ej. 30" formControlName="tiempoDias">
+              <app-form-field label="Tiempo de prórroga (Días)" for="tiempo_prorroga" [required]="true" [control]="prorroga.controls['tiempoDias']">
+                <input appFormInput id="tiempo_prorroga" type="number" min="0" placeholder="Ej. 30" formControlName="tiempoDias">
               </app-form-field>
               <app-form-field label="Fecha de la Prórroga" for="fecha_prorroga">
                 <input appFormInput id="fecha_prorroga" type="date" formControlName="fechaProrroga">
               </app-form-field>
               <app-form-field label="Nuevo Plazo del Contrato">
                 <div class="block w-full rounded-md border border-outline-variant bg-surface-container-low text-on-surface-variant italic text-sm px-3 py-2 min-h-[40px]">
-                  {{ state.selectedContract()?.initialTerm }}
+                  {{ nuevoPlazo() }}
                 </div>
               </app-form-field>
             </div>
@@ -109,7 +115,7 @@
       [year]="year()"
       [summary]="summary()"
       [submitting]="submitting()"
-      (confirm)="onConfirm()"
+      (confirm)="onConfirm($event)"
       (cancel)="closeConfirm()" />
   }
 </app-novelty-page-layout>

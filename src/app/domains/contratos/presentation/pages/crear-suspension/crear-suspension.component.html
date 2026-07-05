@@ -13,9 +13,9 @@
   [breadcrumbItems]="breadcrumb()"
   [contract]="state.selectedContract()">
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-stack-lg">
+  <form [formGroup]="form" (ngSubmit)="onSubmit($event)" class="flex flex-col gap-stack-lg">
 
-    <app-card title="Datos de la Solicitud" icon="folder">
+    <app-card title="Datos de la Solicitud" icon="folder_open">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
         <app-form-field label="Fecha de solicitud" for="fecha_solicitud">
           <input appFormInput id="fecha_solicitud" type="date" formControlName="fechaSolicitud">
@@ -23,32 +23,32 @@
         <app-form-field label="Fecha de expedición del acta" for="fecha_expedicion">
           <input appFormInput id="fecha_expedicion" type="date" formControlName="fechaExpedicionActa">
         </app-form-field>
-        <app-form-field label="Número oficio supervisor a ordenador*" for="num_oficio_sup">
+        <app-form-field label="Número oficio supervisor a ordenador" for="num_oficio_sup" [required]="true" [control]="form.controls['numOficioSupervisor']">
           <input appFormInput id="num_oficio_sup" type="text" formControlName="numOficioSupervisor">
         </app-form-field>
         <app-form-field label="Fecha oficio supervisor a ordenador" for="fecha_oficio_sup">
           <input appFormInput id="fecha_oficio_sup" type="date" formControlName="fechaOficioSupervisor">
         </app-form-field>
-        <app-form-field label="Número oficio ordenador a OC*" for="num_oficio_ord">
+        <app-form-field label="Número oficio ordenador a OC" for="num_oficio_ord" [required]="true" [control]="form.controls['numOficioOrdenador']">
           <input appFormInput id="num_oficio_ord" type="text" formControlName="numOficioOrdenador">
         </app-form-field>
         <app-form-field label="Fecha oficio ordenador a OC" for="fecha_oficio_ord">
           <input appFormInput id="fecha_oficio_ord" type="date" formControlName="fechaOficioOrdenador">
         </app-form-field>
-        <app-form-field label="Periodo suspensión (Días) *" for="periodo_suspension">
+        <app-form-field label="Fecha inicio suspensión" for="fecha_inicio" [required]="true" [control]="form.controls['fechaInicio']">
+          <input appFormInput id="fecha_inicio" type="date" [attr.min]="minFechaInicio()" formControlName="fechaInicio">
+        </app-form-field>
+        <app-form-field label="Fecha fin suspensión" for="fecha_fin" [required]="true" [control]="form.controls['fechaFin']">
+          <input appFormInput id="fecha_fin" type="date" [attr.min]="minFechaFin" formControlName="fechaFin">
+        </app-form-field>
+        <app-form-field label="Periodo suspensión (Días)" for="periodo_suspension">
           <input appFormInput id="periodo_suspension" type="number" formControlName="periodoDias">
-        </app-form-field>
-        <app-form-field label="Fecha inicio suspensión" for="fecha_inicio">
-          <input appFormInput id="fecha_inicio" type="date" formControlName="fechaInicio">
-        </app-form-field>
-        <app-form-field label="Fecha fin suspensión" for="fecha_fin">
-          <input appFormInput id="fecha_fin" type="date" formControlName="fechaFin">
         </app-form-field>
         <app-form-field label="Fecha reinicio" for="fecha_reinicio">
           <input appFormInput id="fecha_reinicio" type="date" formControlName="fechaReinicio">
         </app-form-field>
         <div class="md:col-span-2">
-          <app-form-field label="Motivo de suspensión *" for="motivo">
+          <app-form-field label="Motivo de suspensión" for="motivo" [required]="true" [control]="form.controls['motivo']">
             <textarea appFormInput id="motivo" rows="4" formControlName="motivo"></textarea>
           </app-form-field>
         </div>
@@ -71,7 +71,7 @@
       [year]="year()"
       [summary]="summary()"
       [submitting]="submitting()"
-      (confirm)="onConfirm()"
+      (confirm)="onConfirm($event)"
       (cancel)="closeConfirm()" />
   }
 </app-novelty-page-layout>

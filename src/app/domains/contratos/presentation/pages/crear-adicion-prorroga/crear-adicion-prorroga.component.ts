@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { CreateNoveltyPage } from '../create-novelty-page.base';
@@ -12,10 +12,11 @@ import { NoveltyErrorComponent } from '../../components/novelty-error/novelty-er
 import { CardComponent } from '../../../../../shared/ui/card.component';
 import { FormFieldComponent } from '../../../../../shared/ui/form-field.component';
 import { FormInputDirective } from '../../../../../shared/ui/form-input.directive';
+import { NoNegativeNumberDirective } from '../../../../../shared/ui/no-negative-number.directive';
 import { MoneyFieldComponent } from '../../../../../shared/ui/money-field.component';
 import { DocumentPreviewControlComponent } from '../../../../../shared/ui/document-preview-control.component';
 import { NoveltyFormActionsComponent } from '../../../../../shared/ui/novelty-form-actions.component';
-import { formatCop } from '../../../../../shared/util/format.util';
+import { addDaysToTerm, formatCop, formatCopWords, todayIso } from '../../../../../shared/util/format.util';
 
 import { NoveltyType } from '../../../domain/models/novelty-type.enum';
 import { AdicionProrrogaDraft, NoveltyDraft } from '../../../domain/models/novelty-draft.model';
@@ -34,6 +35,7 @@ import { AdicionProrrogaDraft, NoveltyDraft } from '../../../domain/models/novel
     CardComponent,
     FormFieldComponent,
     FormInputDirective,
+    NoNegativeNumberDirective,
     MoneyFieldComponent,
     DocumentPreviewControlComponent,
     NoveltyFormActionsComponent
@@ -48,21 +50,21 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
 
   readonly form = this.fb.group({
     solicitud: this.fb.group({
-      numSolicitud: [''],
-      fechaSolicitud: [''],
-      numOficio: [''],
-      fechaOficio: [''],
-      fechaActa: ['']
+      numSolicitud: ['', Validators.required],
+      fechaSolicitud: [todayIso()],
+      numOficio: ['', Validators.required],
+      fechaOficio: [todayIso()],
+      fechaActa: [todayIso()]
     }),
     adicion: this.fb.group({
-      numCdp: [''],
+      numCdp: ['', Validators.min(0)],
       vigencia: ['2026'],
-      valorAdicional: [null as number | null],
-      fechaAdicion: ['']
+      valorAdicional: [null as number | null, [Validators.required, Validators.min(0)]],
+      fechaAdicion: [todayIso()]
     }),
     prorroga: this.fb.group({
-      tiempoDias: [null as number | null],
-      fechaProrroga: ['']
+      tiempoDias: [null as number | null, [Validators.required, Validators.min(0)]],
+      fechaProrroga: [todayIso()]
     }),
     clausula: this.fb.group({
       activa: [false],
@@ -79,11 +81,28 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
     return base + add;
   });
 
+  readonly nuevoValorEnLetras = computed(() => formatCopWords(this.nuevoValor()));
+
+  readonly valorAdicionalEnLetras = computed(() => {
+    const valor = Number(this.formValue()?.adicion?.valorAdicional);
+    return valor > 0 ? formatCopWords(valor) : '';
+  });
+
+  readonly nuevoPlazo = computed(() =>
+    addDaysToTerm(this.state.selectedContract()?.initialTerm, Number(this.formValue()?.prorroga?.tiempoDias))
+  );
+
   get solicitud(): FormGroup { return this.form.get('solicitud') as FormGroup; }
+  get adicion(): FormGroup { return this.form.get('adicion') as FormGroup; }
+  get prorroga(): FormGroup { return this.form.get('prorroga') as FormGroup; }
   get clausula(): FormGroup { return this.form.get('clausula') as FormGroup; }
 
   onClear(): void {
-    this.form.reset({ adicion: { vigencia: '2026' } });
+    this.form.reset({
+      solicitud: { fechaSolicitud: todayIso(), fechaOficio: todayIso(), fechaActa: todayIso() },
+      adicion: { vigencia: '2026', fechaAdicion: todayIso() },
+      prorroga: { fechaProrroga: todayIso() }
+    });
   }
 
   protected buildDraft(): NoveltyDraft {
@@ -96,7 +115,7 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
       { label: 'Contratista', value: c?.contractorName ?? '' },
       { label: 'Ordenador del Gasto', value: c?.spendingManager ?? '' },
       { label: 'Nuevo Valor del Contrato', value: formatCop(this.nuevoValor()), highlight: true },
-      { label: 'Nuevo Plazo', value: c?.initialTerm ?? '' }
+      { label: 'Nuevo Plazo', value: this.nuevoPlazo() }
     ];
   }
 }

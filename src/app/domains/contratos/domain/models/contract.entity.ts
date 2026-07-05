@@ -3,7 +3,9 @@ import { NoveltyType, NoveltyStatus } from './novelty-type.enum';
 export interface NoveltySummary {
   id: string;
   type: NoveltyType;
-  expeditionDate: string;
+  expeditionDate: string; // Fecha de expedición del acta.
+  /** Fecha en que la novedad realmente entra en vigor (p. ej. inicio real de una suspensión); puede diferir de `expeditionDate`. */
+  effectiveDate?: string;
   status: NoveltyStatus;
   documentUrl?: string;
   canAnnul: boolean;

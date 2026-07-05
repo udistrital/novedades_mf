@@ -4,6 +4,7 @@ export interface NoveltySummaryDto {
   id: string;
   type: NoveltyType;
   expeditionDate: string;
+  effectiveDate?: string;
   status: NoveltyStatus;
   documentUrl?: string;
   canAnnul: boolean;

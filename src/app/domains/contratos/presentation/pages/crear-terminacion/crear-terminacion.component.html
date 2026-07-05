@@ -13,7 +13,7 @@
   [breadcrumbItems]="breadcrumb()"
   [contract]="state.selectedContract()">
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-stack-lg">
+  <form [formGroup]="form" (ngSubmit)="onSubmit($event)" class="flex flex-col gap-stack-lg">
 
     <!-- Datos de la Solicitud -->
     <app-card title="Datos de la Solicitud" icon="folder_open">
@@ -24,13 +24,13 @@
         <app-form-field label="Fecha de expedición del acta" for="fecha_expedicion">
           <input appFormInput id="fecha_expedicion" type="date" formControlName="fechaExpedicionActa">
         </app-form-field>
-        <app-form-field label="Número oficio supervisor a ordenador*" for="num_oficio_sup">
+        <app-form-field label="Número oficio supervisor a ordenador" for="num_oficio_sup" [required]="true" [control]="form.controls['numOficioSupervisor']">
           <input appFormInput id="num_oficio_sup" type="text" placeholder="Ej. OFI-2024-001" formControlName="numOficioSupervisor">
         </app-form-field>
         <app-form-field label="Fecha oficio supervisor a ordenador" for="fecha_oficio_sup">
           <input appFormInput id="fecha_oficio_sup" type="date" formControlName="fechaOficioSupervisor">
         </app-form-field>
-        <app-form-field label="Número oficio ordenador a OC*" for="num_oficio_ord">
+        <app-form-field label="Número oficio ordenador a OC" for="num_oficio_ord" [required]="true" [control]="form.controls['numOficioOrdenador']">
           <input appFormInput id="num_oficio_ord" type="text" placeholder="Ej. OFI-2024-002" formControlName="numOficioOrdenador">
         </app-form-field>
         <app-form-field label="Fecha oficio ordenador a OC" for="fecha_oficio_ord">
@@ -56,15 +56,15 @@
             <app-form-field label="Fecha certificación" for="fecha_certificacion">
               <input appFormInput id="fecha_certificacion" type="date" formControlName="fechaCertificacion">
             </app-form-field>
-            <app-money-field label="Valor desembolsado*" for="valor_desembolsado">
-              <input appFormInput class="!pl-7" id="valor_desembolsado" type="number" placeholder="0.00" formControlName="valorDesembolsado">
+            <app-money-field label="Valor desembolsado" for="valor_desembolsado" [required]="true" [control]="form.controls['valorDesembolsado']">
+              <input appFormInput class="!pl-7" id="valor_desembolsado" type="number" min="0" placeholder="0.00" formControlName="valorDesembolsado">
             </app-money-field>
-            <app-money-field label="Saldo a favor del contratista*" for="saldo_contratista">
-              <input appFormInput class="!pl-7" id="saldo_contratista" type="number" placeholder="0.00" formControlName="saldoFavorContratista">
+            <app-money-field label="Saldo a favor del contratista" for="saldo_contratista" [required]="true" [control]="form.controls['saldoFavorContratista']">
+              <input appFormInput class="!pl-7" id="saldo_contratista" type="number" min="0" placeholder="0.00" formControlName="saldoFavorContratista">
             </app-money-field>
-            <app-form-field label="Saldo a favor de la Universidad*" for="saldo_universidad">
-              <input appFormInput id="saldo_universidad" type="number" placeholder="0.00" formControlName="saldoFavorUniversidad">
-            </app-form-field>
+            <app-money-field label="Saldo a favor de la Universidad" for="saldo_universidad" [required]="true" [control]="form.controls['saldoFavorUniversidad']">
+              <input appFormInput class="!pl-7" id="saldo_universidad" type="number" min="0" placeholder="0.00" formControlName="saldoFavorUniversidad">
+            </app-money-field>
           </div>
         </div>
 
@@ -85,7 +85,7 @@
       [year]="year()"
       [summary]="summary()"
       [submitting]="submitting()"
-      (confirm)="onConfirm()"
+      (confirm)="onConfirm($event)"
       (cancel)="closeConfirm()" />
   }
 </app-novelty-page-layout>

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 
 import { CreateNoveltyPage } from '../create-novelty-page.base';
@@ -11,10 +11,11 @@ import { NoveltyErrorComponent } from '../../components/novelty-error/novelty-er
 import { CardComponent } from '../../../../../shared/ui/card.component';
 import { FormFieldComponent } from '../../../../../shared/ui/form-field.component';
 import { FormInputDirective } from '../../../../../shared/ui/form-input.directive';
+import { NoNegativeNumberDirective } from '../../../../../shared/ui/no-negative-number.directive';
 import { MoneyFieldComponent } from '../../../../../shared/ui/money-field.component';
 import { DocumentPreviewControlComponent } from '../../../../../shared/ui/document-preview-control.component';
 import { NoveltyFormActionsComponent } from '../../../../../shared/ui/novelty-form-actions.component';
-import { toDisplayDate } from '../../../../../shared/util/format.util';
+import { toDisplayDate, todayIso } from '../../../../../shared/util/format.util';
 
 import { NoveltyType } from '../../../domain/models/novelty-type.enum';
 import { TerminacionDraft, NoveltyDraft } from '../../../domain/models/novelty-draft.model';
@@ -33,6 +34,7 @@ import { TerminacionDraft, NoveltyDraft } from '../../../domain/models/novelty-d
     CardComponent,
     FormFieldComponent,
     FormInputDirective,
+    NoNegativeNumberDirective,
     MoneyFieldComponent,
     DocumentPreviewControlComponent,
     NoveltyFormActionsComponent
@@ -45,17 +47,17 @@ export class CrearTerminacionComponent extends CreateNoveltyPage {
   readonly noveltyName = 'Terminación Anticipada';
 
   readonly form = this.fb.group({
-    fechaSolicitud: [''],
-    fechaExpedicionActa: [''],
-    numOficioSupervisor: [''],
-    fechaOficioSupervisor: [''],
-    numOficioOrdenador: [''],
-    fechaOficioOrdenador: [''],
-    fechaTerminacion: [''],
-    fechaCertificacion: [''],
-    valorDesembolsado: [null as number | null],
-    saldoFavorContratista: [null as number | null],
-    saldoFavorUniversidad: [null as number | null],
+    fechaSolicitud: [todayIso()],
+    fechaExpedicionActa: [todayIso()],
+    numOficioSupervisor: ['', Validators.required],
+    fechaOficioSupervisor: [todayIso()],
+    numOficioOrdenador: ['', Validators.required],
+    fechaOficioOrdenador: [todayIso()],
+    fechaTerminacion: [todayIso()],
+    fechaCertificacion: [todayIso()],
+    valorDesembolsado: [null as number | null, [Validators.required, Validators.min(0)]],
+    saldoFavorContratista: [null as number | null, [Validators.required, Validators.min(0)]],
+    saldoFavorUniversidad: [null as number | null, [Validators.required, Validators.min(0)]],
     clausula: this.fb.group({
       activa: [false],
       posicion: [null as number | null],
@@ -66,7 +68,14 @@ export class CrearTerminacionComponent extends CreateNoveltyPage {
   get clausula(): FormGroup { return this.form.get('clausula') as FormGroup; }
 
   onClear(): void {
-    this.form.reset();
+    this.form.reset({
+      fechaSolicitud: todayIso(),
+      fechaExpedicionActa: todayIso(),
+      fechaOficioSupervisor: todayIso(),
+      fechaOficioOrdenador: todayIso(),
+      fechaTerminacion: todayIso(),
+      fechaCertificacion: todayIso()
+    });
   }
 
   protected buildDraft(): NoveltyDraft {

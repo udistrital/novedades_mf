@@ -1,5 +1,8 @@
 import { Component, forwardRef, inject, input, output } from '@angular/core';
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import {
+  ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR,
+  ReactiveFormsModule, ValidationErrors, Validator
+} from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { of } from 'rxjs';
@@ -20,7 +23,8 @@ import { Assignee } from '../../../domain/models/assignee.model';
   standalone: true,
   imports: [ReactiveFormsModule, MatAutocompleteModule, FormInputDirective],
   providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ContractorAutocompleteComponent), multi: true }
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ContractorAutocompleteComponent), multi: true },
+    { provide: NG_VALIDATORS, useExisting: forwardRef(() => ContractorAutocompleteComponent), multi: true }
   ],
   template: `
     <input appFormInput type="text" autocomplete="off"
@@ -37,13 +41,16 @@ import { Assignee } from '../../../domain/models/assignee.model';
     </mat-autocomplete>
   `
 })
-export class ContractorAutocompleteComponent implements ControlValueAccessor {
+export class ContractorAutocompleteComponent implements ControlValueAccessor, Validator {
   private readonly state = inject(ContractStateService);
 
   readonly placeholder = input('C.C. o NIT');
   readonly selected = output<Assignee>();
 
   readonly query = new FormControl<string | Assignee>('', { nonNullable: true });
+
+  /** true solo mientras el valor actual proviene de una selección real del dropdown. */
+  private isRealSelection = false;
 
   private onChange: (value: string) => void = () => {};
   private onTouched: () => void = () => {};
@@ -60,10 +67,12 @@ export class ContractorAutocompleteComponent implements ControlValueAccessor {
   );
 
   constructor() {
-    // El valor propagado al form padre es siempre la cédula (string).
-    this.query.valueChanges.pipe(takeUntilDestroyed()).subscribe(value =>
-      this.onChange(typeof value === 'string' ? value : value.documentNumber)
-    );
+    // El valor propagado al form padre es siempre la cédula (string); `isRealSelection`
+    // marca si ese valor vino de elegir una opción (objeto) o de texto libre (string).
+    this.query.valueChanges.pipe(takeUntilDestroyed()).subscribe(value => {
+      this.isRealSelection = typeof value !== 'string';
+      this.onChange(typeof value === 'string' ? value : value.documentNumber);
+    });
   }
 
   onSelected(event: MatAutocompleteSelectedEvent): void {
@@ -76,6 +85,7 @@ export class ContractorAutocompleteComponent implements ControlValueAccessor {
     typeof value === 'string' ? value : (value?.documentNumber ?? '');
 
   writeValue(value: string | null): void {
+    this.isRealSelection = false;
     this.query.setValue(value ?? '', { emitEvent: false });
   }
   registerOnChange(fn: (value: string) => void): void { this.onChange = fn; }
@@ -83,5 +93,10 @@ export class ContractorAutocompleteComponent implements ControlValueAccessor {
   setDisabledState(isDisabled: boolean): void {
     if (isDisabled) this.query.disable({ emitEvent: false });
     else this.query.enable({ emitEvent: false });
+  }
+
+  /** Inválido si hay texto pero no corresponde a una selección real de la lista. */
+  validate(): ValidationErrors | null {
+    return this.query.value && !this.isRealSelection ? { notSelected: true } : null;
   }
 }

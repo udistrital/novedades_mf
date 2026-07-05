@@ -1,5 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { startWith } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 
 import { CreateNoveltyPage } from '../create-novelty-page.base';
@@ -13,11 +15,12 @@ import { NoveltyErrorComponent } from '../../components/novelty-error/novelty-er
 import { CardComponent } from '../../../../../shared/ui/card.component';
 import { FormFieldComponent } from '../../../../../shared/ui/form-field.component';
 import { FormInputDirective } from '../../../../../shared/ui/form-input.directive';
+import { NoNegativeNumberDirective } from '../../../../../shared/ui/no-negative-number.directive';
 import { MoneyFieldComponent } from '../../../../../shared/ui/money-field.component';
 import { ToggleSectionComponent } from '../../../../../shared/ui/toggle-section.component';
 import { DocumentPreviewControlComponent } from '../../../../../shared/ui/document-preview-control.component';
 import { NoveltyFormActionsComponent } from '../../../../../shared/ui/novelty-form-actions.component';
-import { toDisplayDate } from '../../../../../shared/util/format.util';
+import { addDaysToDate, toDisplayDate, todayIso } from '../../../../../shared/util/format.util';
 
 import { NoveltyType } from '../../../domain/models/novelty-type.enum';
 import { CesionDraft, NoveltyDraft } from '../../../domain/models/novelty-draft.model';
@@ -39,6 +42,7 @@ import { Assignee } from '../../../domain/models/assignee.model';
     CardComponent,
     FormFieldComponent,
     FormInputDirective,
+    NoNegativeNumberDirective,
     MoneyFieldComponent,
     ToggleSectionComponent,
     DocumentPreviewControlComponent,
@@ -51,29 +55,25 @@ export class CrearCesionComponent extends CreateNoveltyPage {
 
   readonly noveltyName = 'Cesión';
 
-  // Mock: en producción se resolvería al buscar por cédula del cesionario.
-  readonly assignee = signal<Assignee>({
-    name: 'CAMILO ANDRES GARZON SOGAMOSO',
-    documentNumber: '1012385339',
-    documentType: 'CÉDULA DE CIUDADANÍA'
-  });
+  /** Sin selección todavía: la tarjeta permanece visible pero sin datos hasta elegir la cédula. */
+  readonly assignee = signal<Assignee | null>(null);
 
   readonly form = this.fb.group({
-    fechaSolicitud: [''],
-    fechaExpedicionActa: [''],
-    numOficioSupervisor: [''],
-    fechaOficioSupervisor: [''],
-    numOficioOrdenador: [''],
-    fechaOficioOrdenador: [''],
-    fechaSesion: [''],
+    fechaSolicitud: [todayIso()],
+    fechaExpedicionActa: [todayIso()],
+    numOficioSupervisor: ['', Validators.required],
+    fechaOficioSupervisor: [todayIso()],
+    numOficioOrdenador: ['', Validators.required],
+    fechaOficioOrdenador: [todayIso()],
+    fechaSesion: [todayIso()],
     fechaTerminacionCedente: [{ value: '', disabled: true }],
-    valorDesembolsado: [null as number | null],
-    valorFavorCedente: [null as number | null],
-    diasFaltantes: [null as number | null],
-    cedulaCesionario: [''],
+    valorDesembolsado: [null as number | null, [Validators.required, Validators.min(0)]],
+    valorFavorCedente: [null as number | null, [Validators.required, Validators.min(0)]],
+    diasFaltantes: [null as number | null, Validators.min(0)],
+    cedulaCesionario: ['', Validators.required],
     considerando: this.fb.group({
       activo: [false],
-      posicion: [null as number | null],
+      posicion: [null as number | null, Validators.min(1)],
       texto: ['']
     }),
     clausula: this.fb.group({
@@ -86,13 +86,42 @@ export class CrearCesionComponent extends CreateNoveltyPage {
   get considerando(): FormGroup { return this.form.get('considerando') as FormGroup; }
   get clausula(): FormGroup { return this.form.get('clausula') as FormGroup; }
 
+  constructor() {
+    super();
+
+    // Fecha de terminación del cedente: siempre un día antes de la fecha de cesión.
+    const sesion = this.form.controls.fechaSesion;
+    const terminacionCedente = this.form.controls.fechaTerminacionCedente;
+    sesion.valueChanges.pipe(startWith(sesion.value), takeUntilDestroyed()).subscribe(v => {
+      terminacionCedente.setValue(v ? addDaysToDate(v, -1) : '', { emitEvent: false });
+    });
+
+    // Considerando Adicional: misma regla que Cláusula Adicional (ambos campos obligatorios al activarlo).
+    const considerandoActivo = this.considerando.controls['activo'];
+    const considerandoPosicion = this.considerando.controls['posicion'];
+    const considerandoTexto = this.considerando.controls['texto'];
+    considerandoActivo.valueChanges.pipe(startWith(considerandoActivo.value), takeUntilDestroyed()).subscribe((isActive: boolean) => {
+      considerandoPosicion.setValidators(isActive ? [Validators.required, Validators.min(1)] : [Validators.min(1)]);
+      considerandoTexto.setValidators(isActive ? [Validators.required] : []);
+      considerandoPosicion.updateValueAndValidity({ emitEvent: false });
+      considerandoTexto.updateValueAndValidity({ emitEvent: false });
+    });
+  }
+
   /** Al elegir un cesionario del autocomplete, se refleja en la tarjeta de datos. */
   onCesionarioSelected(assignee: Assignee): void {
     this.assignee.set(assignee);
   }
 
   onClear(): void {
-    this.form.reset();
+    this.assignee.set(null);
+    this.form.reset({
+      fechaSolicitud: todayIso(),
+      fechaExpedicionActa: todayIso(),
+      fechaOficioSupervisor: todayIso(),
+      fechaOficioOrdenador: todayIso(),
+      fechaSesion: todayIso()
+    });
   }
 
   protected buildDraft(): NoveltyDraft {
@@ -124,7 +153,7 @@ export class CrearCesionComponent extends CreateNoveltyPage {
     const v = this.form.getRawValue();
     return [
       { label: 'Cedente', value: c?.contractorName ?? '' },
-      { label: 'Cesionario', value: this.assignee().name },
+      { label: 'Cesionario', value: this.assignee()?.name ?? '' },
       { label: 'Ordenador del Gasto', value: c?.spendingManager ?? '' },
       { label: 'Supervisor', value: c?.supervisor ?? '' },
       { label: 'Fecha de Cesión', value: toDisplayDate(v.fechaSesion) },

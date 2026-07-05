@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError, timer } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { IContractRepository } from '../domain/repositories/contract.repository';
 import { NoveltyDraft } from '../domain/models/novelty-draft.model';
 
@@ -10,11 +11,16 @@ import { NoveltyDraft } from '../domain/models/novelty-draft.model';
 export class NoveltyService {
   private readonly contractRepository = inject(IContractRepository);
 
-  create(contractId: string, draft: NoveltyDraft): Observable<void> {
+  // TEST SWITCH — `forceError` solo existe para el switch de pruebas de los modales
+  // de confirmación/anulación. Borrar el parámetro y el `if` de cada método para quitarlo.
+  // El delay imita la latencia del mock real para que el estado de carga sea visible.
+  create(contractId: string, draft: NoveltyDraft, forceError = false): Observable<void> {
+    if (forceError) return timer(400).pipe(switchMap(() => throwError(() => new Error('[TEST] Falla simulada'))));
     return this.contractRepository.createNovelty(contractId, draft);
   }
 
-  annul(contractId: string, noveltyId: string): Observable<void> {
+  annul(contractId: string, noveltyId: string, forceError = false): Observable<void> {
+    if (forceError) return timer(400).pipe(switchMap(() => throwError(() => new Error('[TEST] Falla simulada'))));
     return this.contractRepository.annulNovelty(contractId, noveltyId);
   }
 }

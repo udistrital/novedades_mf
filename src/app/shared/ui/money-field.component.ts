@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+import { AbstractControl } from '@angular/forms';
 import { FormFieldComponent } from './form-field.component';
 
 /**
@@ -10,7 +11,7 @@ import { FormFieldComponent } from './form-field.component';
   standalone: true,
   imports: [FormFieldComponent],
   template: `
-    <app-form-field [label]="label()" [for]="for()">
+    <app-form-field [label]="label()" [for]="for()" [required]="required()" [control]="control()">
       <div class="relative">
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <span class="text-on-surface-variant text-sm">$</span>
@@ -23,4 +24,6 @@ import { FormFieldComponent } from './form-field.component';
 export class MoneyFieldComponent {
   readonly label = input.required<string>();
   readonly for = input<string>();
+  readonly required = input(false);
+  readonly control = input<AbstractControl | null>(null);
 }

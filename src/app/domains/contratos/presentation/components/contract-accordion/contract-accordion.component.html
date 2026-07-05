@@ -41,7 +41,7 @@
     <div class="mt-4">
       <div class="flex justify-between items-center mb-3">
         <h3 class="text-title-sm font-title-md font-semibold text-primary">Novedades ({{ contract.novelties.length }})</h3>
-        <div class="relative">
+        <div class="relative" #menuRef>
           <button
             type="button"
             (click)="toggleMenu()"
@@ -49,7 +49,6 @@
             aria-haspopup="true"
             class="bg-secondary-container hover:bg-secondary-fixed-dim transition-colors px-4 py-1.5 rounded shadow-sm font-bold text-label-sm flex items-center gap-1 text-on-surface">
             <mat-icon class="text-[16px] flex items-center justify-center">add</mat-icon> Añadir Novedad
-            <mat-icon class="text-[16px] flex items-center justify-center transition-transform duration-200" [class.rotate-180]="isMenuOpen()">arrow_drop_down</mat-icon>
           </button>
 
           @if (isMenuOpen()) {

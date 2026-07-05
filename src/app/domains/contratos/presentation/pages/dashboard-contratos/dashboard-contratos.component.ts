@@ -100,12 +100,13 @@ export class DashboardContratosComponent implements OnInit {
     this.showAnnulConfirm.set(false);
   }
 
-  confirmAnnul(): void {
+  // El parámetro `forceError` es el switch de pruebas del modal de anulación.
+  confirmAnnul(forceError = false): void {
     const target = this.annulTarget();
     if (!target) return;
 
     this.annulling.set(true);
-    this.noveltyService.annul(target.contract.id, target.novelty.id).subscribe({
+    this.noveltyService.annul(target.contract.id, target.novelty.id, forceError).subscribe({
       next: () => {
         this.annulling.set(false);
         this.showAnnulConfirm.set(false);
