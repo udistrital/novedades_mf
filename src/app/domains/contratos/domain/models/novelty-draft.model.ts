@@ -27,14 +27,12 @@ export interface AdicionProrrogaDraft {
     fechaActa: string;
   };
   adicion: {
-    activa: boolean;
     numCdp: string;
     vigencia: string;
     valorAdicional: number | null;
     fechaAdicion: string;
   };
   prorroga: {
-    activa: boolean;
     tiempoDias: number | null;
     fechaProrroga: string;
   };

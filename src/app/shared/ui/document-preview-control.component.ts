@@ -12,7 +12,7 @@ import { FormInputDirective } from './form-input.directive';
   template: `
     <div class="mt-stack-md flex justify-end items-center">
       <div class="mr-4 w-48">
-        <app-form-field label="Tamaño de fuente general" for="font_size_preview">
+        <app-form-field label="Tamaño de fuente documento" for="font_size_preview">
           <input
             appFormInput
             id="font_size_preview"
@@ -27,7 +27,7 @@ import { FormInputDirective } from './form-input.directive';
       <button
         type="button"
         (click)="preview.emit(fontSize())"
-        class="inline-flex items-center gap-2 px-3 py-1.5 border border-primary text-primary rounded hover:bg-primary-fixed transition-colors font-medium text-[10px]">
+        class="inline-flex items-center gap-2 px-3 py-1.5 border border-primary text-primary rounded hover:bg-primary-fixedtransition-colors font-medium text-[10px]">
         <mat-icon class="text-[16px] flex items-center justify-center">visibility</mat-icon> Previsualizar Documento
       </button>
     </div>

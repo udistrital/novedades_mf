@@ -12,6 +12,11 @@ export function formatCop(value: number | null | undefined): string {
   return `$${n.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`;
 }
 
+/** Puntos de separación visuales para NIT/CC: 80732423 → 807.324.23. */
+export function formatDocument(value: string | null | undefined): string {
+  return (value ?? '').replace(/\D/g, '').match(/.{1,3}/g)?.join('.') ?? '';
+}
+
 /** Fecha y hora de ejecución legible: "24 de mayo de 2024 - 10:45 a. m.". */
 export function formatExecutionDate(d: Date = new Date()): string {
   const date = new Intl.DateTimeFormat('es-CO', { day: 'numeric', month: 'long', year: 'numeric' }).format(d);

@@ -6,6 +6,7 @@ import { CreateNoveltyPage } from '../create-novelty-page.base';
 import { NoveltyPageLayoutComponent } from '../../components/novelty-page-layout/novelty-page-layout.component';
 import { AdditionalClauseSectionComponent } from '../../components/additional-clause-section/additional-clause-section.component';
 import { AssigneeInfoCardComponent } from '../../components/assignee-info-card/assignee-info-card.component';
+import { ContractorAutocompleteComponent } from '../../components/contractor-autocomplete/contractor-autocomplete.component';
 import { ConfirmNoveltyModalComponent, NoveltySummaryItem } from '../../components/confirm-novelty-modal/confirm-novelty-modal.component';
 import { NoveltyResultComponent } from '../../components/novelty-result/novelty-result.component';
 import { NoveltyErrorComponent } from '../../components/novelty-error/novelty-error.component';
@@ -31,6 +32,7 @@ import { Assignee } from '../../../domain/models/assignee.model';
     NoveltyPageLayoutComponent,
     AdditionalClauseSectionComponent,
     AssigneeInfoCardComponent,
+    ContractorAutocompleteComponent,
     ConfirmNoveltyModalComponent,
     NoveltyResultComponent,
     NoveltyErrorComponent,
@@ -83,6 +85,11 @@ export class CrearCesionComponent extends CreateNoveltyPage {
 
   get considerando(): FormGroup { return this.form.get('considerando') as FormGroup; }
   get clausula(): FormGroup { return this.form.get('clausula') as FormGroup; }
+
+  /** Al elegir un cesionario del autocomplete, se refleja en la tarjeta de datos. */
+  onCesionarioSelected(assignee: Assignee): void {
+    this.assignee.set(assignee);
+  }
 
   onClear(): void {
     this.form.reset();

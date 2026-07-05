@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { delay, tap } from 'rxjs/operators';
 import { ContractFilters, IContractRepository } from '../domain/repositories/contract.repository';
 import { Contract } from '../domain/models/contract.entity';
+import { Assignee } from '../domain/models/assignee.model';
 import { ContractResponseDto } from './dtos/contract-response.dto';
 import { NoveltyType, NoveltyStatus } from '../domain/models/novelty-type.enum';
 import { NoveltyDraft } from '../domain/models/novelty-draft.model';
@@ -18,7 +19,7 @@ export class MockContractService implements IContractRepository {
       number: '2027123',
       contractType: 'Contrato de Prestación de Servicios Profesionales o Apoyo a la Gestión',
       contractorName: 'DIEGO ANDRES BERNAL SILVA',
-      contractorId: '807.324.23',
+      contractorId: '80732423',
       contractingEntity: 'Universidad Distrital Francisco José de Caldas',
       totalValue: 1450000000,
       object: 'Mantenimiento preventivo y correctivo de la infraestructura física de la sede Macarena A y B, incluyendo suministro de materiales.',
@@ -48,7 +49,7 @@ export class MockContractService implements IContractRepository {
       number: '111327',
       contractType: 'Contrato de Prestación de Servicios Profesionales o Apoyo a la Gestión',
       contractorName: 'Servicios Tecnológicos UD',
-      contractorId: '800.987.654-2',
+      contractorId: '8009876542',
       contractingEntity: 'Universidad Distrital Francisco José de Caldas',
       totalValue: 45000000,
       object: 'Renovación de licencias de software institucional.',
@@ -71,7 +72,7 @@ export class MockContractService implements IContractRepository {
       number: '2024558',
       contractType: 'Contrato de Prestación de Servicios Profesionales o Apoyo a la Gestión',
       contractorName: 'LAURA CAMILA RODRÍGUEZ MORENO',
-      contractorId: '1.012.345.678',
+      contractorId: '1012345678',
       contractingEntity: 'Universidad Distrital Francisco José de Caldas',
       totalValue: 78000000,
       object: 'Apoyo a la gestión documental y archivística de la Secretaría General.',
@@ -95,8 +96,13 @@ export class MockContractService implements IContractRepository {
     let filteredData = [...this.mockData];
 
     if (filters) {
+      if (filters.year) {
+        // La vigencia es el año de la fecha de inicio (dd/mm/aaaa).
+        filteredData = filteredData.filter(c => c.startDate.split('/').pop() === filters.year);
+      }
       if (filters.number) {
-        filteredData = filteredData.filter(c => c.number.includes(filters.number!));
+        // Coincidencia exacta: debe ingresarse el número completo del contrato.
+        filteredData = filteredData.filter(c => c.number === filters.number!.trim());
       }
       if (filters.contractor) {
         filteredData = filteredData.filter(c => c.contractorName.toLowerCase().includes(filters.contractor!.toLowerCase()) || c.contractorId.includes(filters.contractor!));
@@ -105,6 +111,22 @@ export class MockContractService implements IContractRepository {
 
     // Simulate network delay
     return of(filteredData as Contract[]).pipe(delay(500));
+  }
+
+  searchContractors(query: string): Observable<Assignee[]> {
+    const q = query.replace(/\D/g, '');
+    // ponytail: contratistas derivados de los contratos mock; con backend real sería su propio endpoint.
+    const byId = new Map<string, Assignee>();
+    for (const c of this.mockData) {
+      if (q && c.contractorId.includes(q) && !byId.has(c.contractorId)) {
+        byId.set(c.contractorId, {
+          name: c.contractorName,
+          documentNumber: c.contractorId,
+          documentType: 'CÉDULA DE CIUDADANÍA'
+        });
+      }
+    }
+    return of([...byId.values()]).pipe(delay(200));
   }
 
   getContractById(id: string): Observable<Contract | undefined> {

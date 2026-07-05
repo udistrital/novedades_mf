@@ -70,7 +70,14 @@ export class ContractStateService {
       });
   }
 
+  /** Passthrough al repositorio para el autocomplete de contratista/cesionario. */
+  searchContractors(query: string) {
+    return this.contractRepository.searchContractors(query);
+  }
+
   updateFilters(filters: ContractFilters): void {
-    this.state.update(state => ({ ...state, filters: { ...state.filters, ...filters } }));
+    // Reemplaza los filtros (no acumula): cada búsqueda define el conjunto completo,
+    // así "Todos" o cambiar de criterio no arrastra el filtro anterior.
+    this.state.update(state => ({ ...state, filters }));
   }
 }

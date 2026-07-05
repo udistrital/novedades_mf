@@ -9,7 +9,7 @@
   <app-novelty-error [noveltyName]="noveltyName" (retry)="onRetry()" (back)="goBack()" />
 } @else {
 <app-novelty-page-layout
-  title="Crear Acta de Novedad de Adición y/o Prórroga"
+  title="Crear Acta de Novedad de Adición y Prórroga"
   [breadcrumbItems]="breadcrumb()"
   [contract]="state.selectedContract()">
 
@@ -36,7 +36,6 @@
           </app-form-field>
         </div>
       </div>
-      <app-document-preview-control />
     </app-card>
 
     <!-- Configuración de la Novedad -->
@@ -45,10 +44,8 @@
 
         <!-- Adición Presupuestal -->
         <div formGroupName="adicion" class="border border-outline-variant/30 rounded-lg p-4">
-          <app-toggle-section
-            label="Agregar Adición Presupuestal"
-            [active]="!!adicion.controls['activa'].value"
-            (activeChange)="adicion.controls['activa'].setValue($event)">
+          <div class="flex flex-col gap-stack-md">
+            <h3 class="font-title-md text-title-md text-on-surface">Adición Presupuestal</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
               <app-form-field label="Número de CDP" for="num_cdp">
                 <input appFormInput id="num_cdp" type="number" placeholder="Ej. 123" formControlName="numCdp">
@@ -72,15 +69,13 @@
                 </app-form-field>
               </div>
             </div>
-          </app-toggle-section>
+          </div>
         </div>
 
         <!-- Prórroga de Tiempo -->
         <div formGroupName="prorroga" class="border border-outline-variant/30 rounded-lg p-4">
-          <app-toggle-section
-            label="Agregar Prórroga de Tiempo"
-            [active]="!!prorroga.controls['activa'].value"
-            (activeChange)="prorroga.controls['activa'].setValue($event)">
+          <div class="flex flex-col gap-stack-md">
+            <h3 class="font-title-md text-title-md text-on-surface">Prórroga de Tiempo</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-stack-md">
               <app-form-field label="Tiempo de prórroga (Días)" for="tiempo_prorroga">
                 <input appFormInput id="tiempo_prorroga" type="text" placeholder="Ej. 30" formControlName="tiempoDias">
@@ -94,11 +89,13 @@
                 </div>
               </app-form-field>
             </div>
-          </app-toggle-section>
+          </div>
         </div>
 
         <!-- Cláusula Adicional -->
         <app-additional-clause-section [group]="clausula" />
+
+        <app-document-preview-control />
       </div>
     </app-card>
 
@@ -107,7 +104,7 @@
 
   @if (showConfirm()) {
     <app-confirm-novelty-modal
-      noveltyLabel="adición y/o prórroga"
+      noveltyLabel="adición y prórroga"
       [contractNumber]="state.selectedContract()?.number ?? ''"
       [year]="year()"
       [summary]="summary()"

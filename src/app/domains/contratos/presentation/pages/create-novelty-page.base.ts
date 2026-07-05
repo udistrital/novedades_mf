@@ -39,7 +39,7 @@ export abstract class CreateNoveltyPage {
     { label: `Crear ${this.noveltyName}` }
   ]);
 
-  /** Nombre legible de la novedad (p. ej. "Adición y/o Prórroga"). */
+  /** Nombre legible de la novedad (p. ej. "Adición y Prórroga"). */
   abstract readonly noveltyName: string;
   /** Construye el draft a enviar al repositorio. */
   protected abstract buildDraft(): NoveltyDraft;

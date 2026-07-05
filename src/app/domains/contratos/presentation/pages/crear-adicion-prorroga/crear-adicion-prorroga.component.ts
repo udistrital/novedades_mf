@@ -13,7 +13,6 @@ import { CardComponent } from '../../../../../shared/ui/card.component';
 import { FormFieldComponent } from '../../../../../shared/ui/form-field.component';
 import { FormInputDirective } from '../../../../../shared/ui/form-input.directive';
 import { MoneyFieldComponent } from '../../../../../shared/ui/money-field.component';
-import { ToggleSectionComponent } from '../../../../../shared/ui/toggle-section.component';
 import { DocumentPreviewControlComponent } from '../../../../../shared/ui/document-preview-control.component';
 import { NoveltyFormActionsComponent } from '../../../../../shared/ui/novelty-form-actions.component';
 import { formatCop } from '../../../../../shared/util/format.util';
@@ -36,7 +35,6 @@ import { AdicionProrrogaDraft, NoveltyDraft } from '../../../domain/models/novel
     FormFieldComponent,
     FormInputDirective,
     MoneyFieldComponent,
-    ToggleSectionComponent,
     DocumentPreviewControlComponent,
     NoveltyFormActionsComponent
   ],
@@ -45,7 +43,7 @@ import { AdicionProrrogaDraft, NoveltyDraft } from '../../../domain/models/novel
 export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
   private readonly fb = inject(FormBuilder);
 
-  readonly noveltyName = 'Adición y/o Prórroga';
+  readonly noveltyName = 'Adición y Prórroga';
   readonly vigencias = ['2026', '2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017', '2016'];
 
   readonly form = this.fb.group({
@@ -57,14 +55,12 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
       fechaActa: ['']
     }),
     adicion: this.fb.group({
-      activa: [true],
       numCdp: [''],
       vigencia: ['2026'],
       valorAdicional: [null as number | null],
       fechaAdicion: ['']
     }),
     prorroga: this.fb.group({
-      activa: [false],
       tiempoDias: [null as number | null],
       fechaProrroga: ['']
     }),
@@ -84,12 +80,10 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
   });
 
   get solicitud(): FormGroup { return this.form.get('solicitud') as FormGroup; }
-  get adicion(): FormGroup { return this.form.get('adicion') as FormGroup; }
-  get prorroga(): FormGroup { return this.form.get('prorroga') as FormGroup; }
   get clausula(): FormGroup { return this.form.get('clausula') as FormGroup; }
 
   onClear(): void {
-    this.form.reset({ adicion: { activa: true, vigencia: '2026' } });
+    this.form.reset({ adicion: { vigencia: '2026' } });
   }
 
   protected buildDraft(): NoveltyDraft {

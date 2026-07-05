@@ -30,7 +30,11 @@
       </div>
       <div>
         <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">NIT / CC Contratista</span>
-        <span class="text-body-md font-body-md text-on-surface">{{ contract.contractorId }}</span>
+        <span class="text-body-md font-body-md text-on-surface">{{ contractorDocument }}</span>
+      </div>
+      <div>
+        <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">Vigencia</span>
+        <span class="text-body-md font-body-md text-on-surface">{{ vigencia }}</span>
       </div>
     </div>
     <!-- Novedades Section -->
@@ -70,7 +74,6 @@
               <th class="px-3 py-2 text-label-sm font-label-sm text-on-surface-variant font-semibold">Tipo de novedad</th>
               <th class="px-3 py-2 text-label-sm font-label-sm text-on-surface-variant font-semibold">Fecha de expedición</th>
               <th class="px-3 py-2 text-label-sm font-label-sm text-on-surface-variant font-semibold">Estado</th>
-              <th class="px-3 py-2 text-label-sm font-label-sm text-on-surface-variant font-semibold">Enlace</th>
               <th class="px-3 py-2 text-label-sm font-label-sm text-on-surface-variant font-semibold text-right">Acciones</th>
             </tr>
           </thead>
@@ -90,11 +93,6 @@
                     </span>
                   }
                 </td>
-                <td class="px-3 py-2">
-                  <button mat-icon-button class="text-on-surface-variant hover:text-primary hover:bg-primary/10 transition-colors" title="Ver/Descargar">
-                    <mat-icon class="text-[18px]">link</mat-icon>
-                  </button>
-                </td>
                 <td class="px-3 py-2 text-right">
                   <div class="flex justify-end gap-1">
                     <a href="#" target="_blank" class="bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:bg-surface-container-low px-3 py-1 rounded text-label-sm font-bold transition-colors flex items-center gap-1" title="Ver Acta">
@@ -108,7 +106,7 @@
               </tr>
             } @empty {
               <tr>
-                <td colspan="5" class="px-3 py-4 text-center text-on-surface-variant">No hay novedades registradas para este contrato.</td>
+                <td colspan="4" class="px-3 py-4 text-center text-on-surface-variant">No hay novedades registradas para este contrato.</td>
               </tr>
             }
           </tbody>

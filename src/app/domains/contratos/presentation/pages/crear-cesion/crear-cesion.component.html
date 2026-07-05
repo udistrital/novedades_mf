@@ -39,7 +39,6 @@
           <input appFormInput id="fecha_oficio_ord" type="date" formControlName="fechaOficioOrdenador">
         </app-form-field>
       </div>
-      <app-document-preview-control />
     </app-card>
 
     <!-- Configuración de la Novedad -->
@@ -69,12 +68,10 @@
               <input appFormInput id="dias_faltantes" type="number" placeholder="12" formControlName="diasFaltantes">
             </app-form-field>
             <app-form-field label="Cédula cesionario" for="cedula_cesionario">
-              <div class="relative">
-                <input appFormInput class="!pr-10" id="cedula_cesionario" type="text" placeholder="Buscar por número de documento..." formControlName="cedulaCesionario">
-                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                  <mat-icon class="text-on-surface-variant text-[18px] flex items-center justify-center">search</mat-icon>
-                </div>
-              </div>
+              <app-contractor-autocomplete
+                formControlName="cedulaCesionario"
+                placeholder="Buscar por número de documento..."
+                (selected)="onCesionarioSelected($event)" />
             </app-form-field>
           </div>
         </div>
@@ -98,6 +95,8 @@
 
         <!-- Cláusula Adicional -->
         <app-additional-clause-section [group]="clausula" />
+
+        <app-document-preview-control />
       </div>
     </app-card>
 

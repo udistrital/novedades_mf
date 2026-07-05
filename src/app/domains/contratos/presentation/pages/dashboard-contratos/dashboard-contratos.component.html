@@ -45,14 +45,6 @@
         
         <form class="space-y-4" [formGroup]="filterForm" (ngSubmit)="applyFilters()">
           <div>
-            <label class="block text-label-sm font-label-sm text-on-surface-variant mb-1">Número de Contrato</label>
-            <input formControlName="number" class="w-full rounded bg-surface-container-low border-outline-variant text-body-md font-body-md focus:border-primary focus:ring-1 focus:ring-primary h-10 px-3" placeholder="Ej. 1234-2024" type="text">
-          </div>
-          <div>
-            <label class="block text-label-sm font-label-sm text-on-surface-variant mb-1">Contratista</label>
-            <input formControlName="contractor" class="w-full rounded bg-surface-container-low border-outline-variant text-body-md font-body-md focus:border-primary focus:ring-1 focus:ring-primary h-10 px-3" placeholder="NIT o C.C." type="text">
-          </div>
-          <div>
             <label class="block text-label-sm font-label-sm text-on-surface-variant mb-1">Vigencia del contrato (Anual)</label>
             <select formControlName="year" class="w-full rounded bg-surface-container-low border-outline-variant text-body-md font-body-md focus:border-primary focus:ring-1 focus:ring-primary h-10 px-3">
               <option value="">Todos</option>
@@ -62,10 +54,40 @@
               <option value="2022">2022</option>
             </select>
           </div>
+          <div>
+            <label class="block text-label-sm font-label-sm text-on-surface-variant mb-1">Buscar por</label>
+            <div class="grid grid-cols-2 gap-1 p-1 bg-surface-container-low rounded border border-outline-variant">
+              <button type="button" (click)="setSearchBy('number')"
+                class="h-8 rounded text-label-sm font-label-sm transition-colors"
+                [class.bg-primary]="searchBy() === 'number'"
+                [class.text-on-primary]="searchBy() === 'number'"
+                [class.text-on-surface-variant]="searchBy() !== 'number'">
+                Contrato
+              </button>
+              <button type="button" (click)="setSearchBy('contractor')"
+                class="h-8 rounded text-label-sm font-label-sm transition-colors"
+                [class.bg-primary]="searchBy() === 'contractor'"
+                [class.text-on-primary]="searchBy() === 'contractor'"
+                [class.text-on-surface-variant]="searchBy() !== 'contractor'">
+                Contratista
+              </button>
+            </div>
+          </div>
+          <div>
+            <label class="block text-label-sm font-label-sm text-on-surface-variant mb-1">{{ searchBy() === 'number' ? 'Número de Contrato' : 'Contratista' }}</label>
+            @if (searchBy() === 'number') {
+              <input formControlName="term" type="text" class="w-full rounded bg-surface-container-low border-outline-variant text-body-md font-body-md focus:border-primary focus:ring-1 focus:ring-primary h-10 px-3" placeholder="Ej. 1234-2024">
+            } @else {
+              <app-contractor-autocomplete formControlName="term" placeholder="C.C. o NIT" (selected)="applyFilters()" />
+            }
+          </div>
           <button type="submit" class="w-full mt-4 bg-primary text-on-primary rounded h-10 flex items-center justify-center gap-2 text-label-lg font-label-lg hover:bg-primary-container transition-colors disabled:opacity-50" [disabled]="state.isLoading()">
             <mat-icon class="text-[20px] flex items-center justify-center">search</mat-icon>
             Buscar Contratos
           </button>
+          @if (filterError()) {
+            <p class="text-label-sm font-label-sm text-error">{{ filterError() }}</p>
+          }
         </form>
       </div>
     </aside>
@@ -93,41 +115,6 @@
             </div>
           }
         </div>
-
-        <!-- Pagination placeholder -->
-        @if (state.contracts().length > 0) {
-          <div class="p-3 flex flex-col sm:flex-row justify-between items-center gap-4 text-label-sm font-label-sm text-on-surface-variant mt-4 border-t border-outline-variant/50 pt-6">
-            <div class="flex items-center gap-4">
-              <div class="flex items-center gap-2">
-                <span>Resultados por página:</span>
-                <div class="relative">
-                  <select class="appearance-none bg-surface-container-low border border-outline-variant rounded px-2 py-1 pr-8 focus:outline-none focus:ring-1 focus:ring-primary h-8">
-                    <option>10</option>
-                    <option>25</option>
-                    <option>50</option>
-                  </select>
-                  <mat-icon class="absolute right-1 top-1/2 -translate-y-1/2 pointer-events-none text-[18px]">arrow_drop_down</mat-icon>
-                </div>
-              </div>
-              <span class="hidden sm:block">1-{{ state.contracts().length }} de {{ state.contracts().length }}</span>
-            </div>
-            <div class="flex items-center gap-1">
-              <span class="sm:hidden mr-2">1-{{ state.contracts().length }} de {{ state.contracts().length }}</span>
-              <button mat-icon-button class="p-1 rounded hover:bg-surface-container-highest border border-outline-variant disabled:opacity-50" disabled title="Primera página">
-                <mat-icon class="text-[20px]">first_page</mat-icon>
-              </button>
-              <button mat-icon-button class="p-1 rounded hover:bg-surface-container-highest border border-outline-variant disabled:opacity-50" disabled title="Anterior">
-                <mat-icon class="text-[20px]">chevron_left</mat-icon>
-              </button>
-              <button mat-icon-button class="p-1 rounded hover:bg-surface-container-highest border border-outline-variant" title="Siguiente">
-                <mat-icon class="text-[20px]">chevron_right</mat-icon>
-              </button>
-              <button mat-icon-button class="p-1 rounded hover:bg-surface-container-highest border border-outline-variant" title="Última página">
-                <mat-icon class="text-[20px]">last_page</mat-icon>
-              </button>
-            </div>
-          </div>
-        }
       }
     </div>
   </div>

@@ -1,5 +1,5 @@
 export enum NoveltyType {
-  ADDITION_EXTENSION = 'Adición/Prórroga',
+  ADDITION_EXTENSION = 'Adición y Prórroga',
   EXTENSION = 'Prórroga en Tiempo',
   ASSIGNMENT = 'Cesión',
   SUSPENSION = 'Suspensión',

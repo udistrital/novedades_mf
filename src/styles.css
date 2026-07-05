@@ -11,6 +11,19 @@
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
+/* Centra el glifo y ajusta la caja al tamaño de fuente (text-[Npx]) en lugar de los 24px fijos de Material.
+   Selector compuesto (.mat-icon.mat-icon) para ganar en especificidad a los estilos del componente MatIcon. */
+.mat-icon.mat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  overflow: visible;
+  vertical-align: middle;
+}
+
 /* Custom styling to hide default details marker */
 details > summary {
   list-style: none;
