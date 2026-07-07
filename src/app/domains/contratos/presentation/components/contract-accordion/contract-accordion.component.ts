@@ -31,9 +31,9 @@ export class ContractAccordionComponent {
 
   readonly isMenuOpen = signal(false);
 
-  /** Año de vigencia del contrato, derivado de la fecha de inicio (dd/mm/aaaa). */
+  /** Año de vigencia (VigenciaContrato), tomado del id compuesto `${numero}_${vigencia}`. */
   get vigencia(): string {
-    return this.contract.startDate?.split('/').pop() ?? '';
+    return this.contract.id?.split('_').pop() ?? '';
   }
 
   /** NIT/CC con puntos de separación visuales. */

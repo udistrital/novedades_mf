@@ -15,7 +15,7 @@ import { Contract } from '../../../domain/models/contract.entity';
   standalone: true,
   imports: [RouterLink, MatIconModule, BreadcrumbComponent, ContractInfoCardComponent],
   template: `
-    <main class="flex-grow w-full max-w-7xl mx-auto px-container-margin-mobile md:px-container-margin-desktop py-stack-lg flex flex-col gap-stack-md">
+    <main class="flex-grow w-full max-w-7xl mx-auto px-container-margin-mobile md:px-container-margin-desktop pt-2 pb-stack-lg flex flex-col gap-stack-md">
       <div class="flex flex-col gap-stack-sm">
         <app-breadcrumb [items]="breadcrumbItems()" />
         <h1 class="font-headline-lg text-headline-lg text-primary">{{ title() }}</h1>

@@ -48,11 +48,20 @@ export class DashboardContratosComponent implements OnInit {
     term: ['']
   });
 
+  /** Vigencias seleccionables: del año actual hacia atrás hasta 2015. */
+  readonly years = Array.from(
+    { length: new Date().getFullYear() - 2014 },
+    (_, i) => String(new Date().getFullYear() - i)
+  );
+
   /** Criterio activo: se busca por número de contrato o por contratista, nunca por ambos. */
   readonly searchBy = signal<SearchBy>('number');
 
   /** Mensaje de validación del filtro (vacío si la búsqueda es válida). */
   readonly filterError = signal('');
+
+  /** Distingue "aún no se ha buscado" (sin mensaje) de "se buscó y no hubo resultados". */
+  readonly hasSearched = signal(false);
 
   // Flujo de anulación
   readonly view = signal<DashboardView>('list');
@@ -62,7 +71,8 @@ export class DashboardContratosComponent implements OnInit {
   readonly executedAt = signal('');
 
   ngOnInit(): void {
-    this.state.loadContracts();
+    // Sin búsqueda inicial: el backend no soporta "listar todos", así que la vista
+    // arranca en blanco hasta que el usuario aplique un filtro (ver hasSearched).
   }
 
   /** Cambia el criterio de búsqueda y limpia el término anterior para no arrastrar valores. */
@@ -84,6 +94,7 @@ export class DashboardContratosComponent implements OnInit {
     }
 
     this.filterError.set('');
+    this.hasSearched.set(true);
     const filters: ContractFilters = {};
     if (year) filters.year = year;
     filters[this.searchBy()] = trimmedTerm;

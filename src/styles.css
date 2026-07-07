@@ -7,6 +7,52 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Preflight de Tailwind deshabilitado (ver tailwind.config.js): en single-spa este MFE
+ * comparte el DOM con el shell sin aislamiento de estilos, y el reset global de Preflight
+ * (selectores sin ámbito como `table`, `h1`, `*`) rompía elementos del shell (footer, etc.).
+ * Reemplazo equivalente, acotado únicamente al host del MFE (`novedades-mf`) para que no
+ * vuelva a filtrarse hacia afuera.
+ */
+novedades-mf, novedades-mf *, novedades-mf *::before, novedades-mf *::after {
+  box-sizing: border-box;
+  border: 0 solid;
+  margin: 0;
+  padding: 0;
+}
+novedades-mf {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+novedades-mf h1, novedades-mf h2, novedades-mf h3, novedades-mf h4, novedades-mf p, novedades-mf figure {
+  margin: 0;
+}
+novedades-mf button, novedades-mf select, novedades-mf input, novedades-mf textarea, novedades-mf optgroup {
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+}
+novedades-mf button, novedades-mf [type='button'], novedades-mf [type='submit'] {
+  -webkit-appearance: button;
+  background-image: none;
+}
+novedades-mf ul, novedades-mf ol {
+  list-style: none;
+}
+novedades-mf a {
+  color: inherit;
+  text-decoration: inherit;
+}
+novedades-mf table {
+  border-collapse: collapse;
+  border-color: inherit;
+}
+novedades-mf img, novedades-mf svg, novedades-mf video, novedades-mf canvas {
+  display: block;
+  vertical-align: middle;
+  max-width: 100%;
+}
+
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }

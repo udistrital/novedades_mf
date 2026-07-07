@@ -93,5 +93,12 @@ module.exports = {
       }
     }
   },
+  // Sin Preflight: es un reset GLOBAL sin ámbito (table, h1, box-sizing…). En single-spa
+  // este MFE comparte el DOM con el shell sin aislamiento — Preflight se filtraba hacia
+  // afuera y rompía elementos del shell (p. ej. el footer institucional). El reemplazo
+  // equivalente, acotado solo al host del MFE, vive en styles.css.
+  corePlugins: {
+    preflight: false
+  },
   plugins: [],
 }

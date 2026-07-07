@@ -32,7 +32,8 @@ export abstract class CreateNoveltyPage {
   readonly executedAt = signal('');
   readonly summary = signal<NoveltySummaryItem[]>([]);
 
-  readonly year = computed(() => this.state.selectedContract()?.startDate?.split('/').pop() ?? '');
+  /** Vigencia (VigenciaContrato), tomada del id compuesto `${numero}_${vigencia}`. */
+  readonly year = computed(() => this.state.selectedContract()?.id?.split('_').pop() ?? '');
 
   readonly breadcrumb = computed<BreadcrumbItem[]>(() => [
     { label: 'Seguimiento Legal', link: '/' },

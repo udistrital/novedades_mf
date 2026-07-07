@@ -3,13 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4209",
+    "start": "ng serve --configuration development --port 4209",
+    "start:test": "ng serve --configuration test --port 4209",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:novedades-mf": "node dist/novedades-mf/server/server.mjs",
     "build:single-spa:novedades-mf": "ng build novedades-mf --configuration production",
-    "serve:single-spa:novedades-mf": "ng s --project novedades-mf --disable-host-check --port 4209 --live-reload false"
+    "serve:single-spa:novedades-mf": "ng s --project novedades-mf --configuration development --disable-host-check --port 4209 --live-reload false"
   },
   "private": true,
   "dependencies": {

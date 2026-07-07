@@ -35,7 +35,9 @@ const lifecycles = singleSpaAngular({
       ]
     });
   },
-  template: '<novedades-mf class="mat-typography" />',
+  // Sin `class="mat-typography"`: las reglas de tipografía de Material (h1, h2…)
+  // del theme pisan por especificidad a las utilidades Tailwind del MFE al montarse en el shell.
+  template: '<novedades-mf />',
   Router,
   NavigationStart,
   NgZone,
