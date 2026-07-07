@@ -6,6 +6,9 @@ import { Directive, HostListener } from '@angular/core';
  * todo `input[type=number]` que ya declare `min` (ninguno de esos campos admite negativos).
  */
 @Directive({
+  // Sin prefijo a propósito: la directiva se auto-aplica a todo input numérico con `min`,
+  // en lugar de exigir un atributo `appXxx` en cada campo (ese es su diseño).
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: 'input[type=number][min]',
   standalone: true
 })

@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, Input, ViewChild, output, signal } from '@angular/core';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { Contract, NoveltySummary } from '../../../domain/models/contract.entity';
@@ -18,7 +18,7 @@ interface NoveltyMenuOption {
 @Component({
   selector: 'app-contract-accordion',
   standalone: true,
-  imports: [CommonModule, CurrencyPipe, RouterLink, MatIconModule],
+  imports: [CurrencyPipe, RouterLink, MatIconModule],
   templateUrl: './contract-accordion.component.html'
 })
 export class ContractAccordionComponent {

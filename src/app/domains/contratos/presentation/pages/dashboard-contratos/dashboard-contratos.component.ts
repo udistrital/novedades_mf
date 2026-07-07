@@ -1,6 +1,5 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { ContractStateService } from '../../../application/contract-state.service';
 import { NoveltyService } from '../../../application/novelty.service';
@@ -10,6 +9,7 @@ import { ConfirmAnnulModalComponent } from '../../components/confirm-annul-modal
 import { NoveltyResultComponent } from '../../components/novelty-result/novelty-result.component';
 import { NoveltyErrorComponent } from '../../components/novelty-error/novelty-error.component';
 import { Contract, NoveltySummary } from '../../../domain/models/contract.entity';
+import { availableVigencias } from '../../../domain/contract.rules';
 import { ContractFilters } from '../../../domain/repositories/contract.repository';
 import { formatExecutionDate } from '../../../../../shared/util/format.util';
 
@@ -27,7 +27,6 @@ type SearchBy = 'number' | 'contractor';
   selector: 'app-dashboard-contratos',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatIconModule,
     ContractAccordionComponent,
@@ -38,7 +37,7 @@ type SearchBy = 'number' | 'contractor';
   ],
   templateUrl: './dashboard-contratos.component.html'
 })
-export class DashboardContratosComponent implements OnInit {
+export class DashboardContratosComponent {
   readonly state = inject(ContractStateService);
   private readonly fb = inject(FormBuilder);
   private readonly noveltyService = inject(NoveltyService);
@@ -48,11 +47,7 @@ export class DashboardContratosComponent implements OnInit {
     term: ['']
   });
 
-  /** Vigencias seleccionables: del año actual hacia atrás hasta 2015. */
-  readonly years = Array.from(
-    { length: new Date().getFullYear() - 2014 },
-    (_, i) => String(new Date().getFullYear() - i)
-  );
+  readonly years = availableVigencias();
 
   /** Criterio activo: se busca por número de contrato o por contratista, nunca por ambos. */
   readonly searchBy = signal<SearchBy>('number');
@@ -60,7 +55,11 @@ export class DashboardContratosComponent implements OnInit {
   /** Mensaje de validación del filtro (vacío si la búsqueda es válida). */
   readonly filterError = signal('');
 
-  /** Distingue "aún no se ha buscado" (sin mensaje) de "se buscó y no hubo resultados". */
+  /**
+   * Distingue "aún no se ha buscado" (sin mensaje) de "se buscó y no hubo resultados".
+   * No hay búsqueda inicial: el backend no soporta "listar todos", así que la vista
+   * arranca en blanco hasta que el usuario aplique un filtro.
+   */
   readonly hasSearched = signal(false);
 
   // Flujo de anulación
@@ -69,11 +68,6 @@ export class DashboardContratosComponent implements OnInit {
   readonly showAnnulConfirm = signal(false);
   readonly annulling = signal(false);
   readonly executedAt = signal('');
-
-  ngOnInit(): void {
-    // Sin búsqueda inicial: el backend no soporta "listar todos", así que la vista
-    // arranca en blanco hasta que el usuario aplique un filtro (ver hasSearched).
-  }
 
   /** Cambia el criterio de búsqueda y limpia el término anterior para no arrastrar valores. */
   setSearchBy(by: SearchBy): void {

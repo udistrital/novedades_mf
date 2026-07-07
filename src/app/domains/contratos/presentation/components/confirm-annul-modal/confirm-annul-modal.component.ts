@@ -23,5 +23,5 @@ export class ConfirmAnnulModalComponent {
 
   /** Emite `true` si se debe simular una petición fallida (switch de pruebas). */
   readonly confirm = output<boolean>();
-  readonly cancel = output<void>();
+  readonly dismiss = output<void>();
 }

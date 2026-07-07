@@ -20,6 +20,7 @@ import { addDaysToTerm, formatCop, formatCopWords, todayIso } from '../../../../
 
 import { NoveltyType } from '../../../domain/models/novelty-type.enum';
 import { AdicionProrrogaDraft, NoveltyDraft } from '../../../domain/models/novelty-draft.model';
+import { availableVigencias } from '../../../domain/contract.rules';
 
 @Component({
   selector: 'app-crear-adicion-prorroga',
@@ -46,7 +47,7 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
   private readonly fb = inject(FormBuilder);
 
   readonly noveltyName = 'Adición y Prórroga';
-  readonly vigencias = ['2026', '2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017', '2016'];
+  readonly vigencias = availableVigencias();
 
   readonly form = this.fb.group({
     solicitud: this.fb.group({
@@ -58,7 +59,7 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
     }),
     adicion: this.fb.group({
       numCdp: ['', Validators.min(0)],
-      vigencia: ['2026'],
+      vigencia: [this.vigencias[0]],
       valorAdicional: [null as number | null, [Validators.required, Validators.min(0)]],
       fechaAdicion: [todayIso()]
     }),
@@ -100,7 +101,7 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
   onClear(): void {
     this.form.reset({
       solicitud: { fechaSolicitud: todayIso(), fechaOficio: todayIso(), fechaActa: todayIso() },
-      adicion: { vigencia: '2026', fechaAdicion: todayIso() },
+      adicion: { vigencia: this.vigencias[0], fechaAdicion: todayIso() },
       prorroga: { fechaProrroga: todayIso() }
     });
   }

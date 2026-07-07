@@ -5,9 +5,6 @@ import { RouterOutlet } from '@angular/router';
   selector: 'novedades-mf',
   standalone: true,
   imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  templateUrl: './app.component.html'
 })
-export class AppComponent {
-  title = 'novedades_mf';
-}
+export class AppComponent {}

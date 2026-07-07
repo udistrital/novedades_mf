@@ -1,6 +1,15 @@
 import { Contract, NoveltySummary } from './models/contract.entity';
 import { NoveltyType } from './models/novelty-type.enum';
 
+/** Primer año con contratos en el sistema. */
+const PRIMERA_VIGENCIA = 2015;
+
+/** Vigencias seleccionables, del año actual hacia atrás hasta la primera registrada. */
+export function availableVigencias(): string[] {
+  const current = new Date().getFullYear();
+  return Array.from({ length: current - PRIMERA_VIGENCIA + 1 }, (_, i) => String(current - i));
+}
+
 /** Convierte una fecha dd/mm/yyyy en epoch para poder comparar cronológicamente. */
 function parseExpeditionDate(date: string): number {
   const [d, m, y] = date.split('/').map(Number);

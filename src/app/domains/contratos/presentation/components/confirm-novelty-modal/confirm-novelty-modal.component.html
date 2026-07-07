@@ -1,8 +1,8 @@
-<app-modal-shell maxWidth="lg" (dismiss)="cancel.emit()">
+<app-modal-shell maxWidth="lg" (dismiss)="dismiss.emit()">
   <!-- Header -->
   <div class="px-6 py-4 border-b border-outline-variant/30 flex justify-between items-center">
     <h2 class="font-title-lg text-title-lg text-primary">Confirmar Generación de Acta</h2>
-    <button type="button" class="text-on-surface-variant hover:text-primary transition-colors" (click)="cancel.emit()">
+    <button type="button" class="text-on-surface-variant hover:text-primary transition-colors" (click)="dismiss.emit()">
       <mat-icon class="flex items-center justify-center">close</mat-icon>
     </button>
   </div>
@@ -48,7 +48,7 @@
   <div class="px-6 py-4 bg-surface-container-low flex justify-end gap-3">
     <button
       type="button"
-      (click)="cancel.emit()"
+      (click)="dismiss.emit()"
       class="px-4 py-2 border border-outline text-on-surface-variant rounded hover:bg-surface-variant transition-colors font-label-lg">
       Cancelar
     </button>
