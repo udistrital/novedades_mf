@@ -43,6 +43,14 @@ novedades-mf a {
   color: inherit;
   text-decoration: inherit;
 }
+/* Cursor de mano en todo elemento clicable del MFE, en vez de agregar `cursor-pointer`
+   botón por botón (patrón ya inconsistente en el código: algunos lo tenían, otros no). */
+novedades-mf button:not(:disabled), novedades-mf a[href] {
+  cursor: pointer;
+}
+novedades-mf button:disabled {
+  cursor: not-allowed;
+}
 novedades-mf table {
   border-collapse: collapse;
   border-color: inherit;
