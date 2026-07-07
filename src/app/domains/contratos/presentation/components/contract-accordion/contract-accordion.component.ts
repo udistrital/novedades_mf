@@ -15,6 +15,14 @@ interface NoveltyMenuOption {
   path: string;
 }
 
+/**
+ * Fila expandible del listado de contratos: encabezado con los datos clave,
+ * detalle con el historial de novedades y menú de acciones.
+ *
+ * Encapsula la regla de qué novedades ofrece el menú según el estado del
+ * contrato (suspendido → solo Reinicio) y delega la anulación al dashboard
+ * vía el output `annul`.
+ */
 @Component({
   selector: 'app-contract-accordion',
   standalone: true,

@@ -53,14 +53,24 @@ function toNoveltySummary(item: NovedadMidDto): NoveltySummary {
   };
 }
 
+/**
+ * Convierte las novedades del mid aplicando la regla del cliente legado:
+ * solo la última novedad (por fecha de expedición) es anulable.
+ */
 export function toNoveltySummaries(items: NovedadMidDto[]): NoveltySummary[] {
   const list = items.map(toNoveltySummary);
-  // ponytail: regla del cliente legado — solo la última novedad (por fecha) es anulable.
   const dateKey = (n: NoveltySummary) => n.expeditionDate.split('/').reverse().join('');
   const latest = list.reduce<NoveltySummary | null>((a, b) => (!a || dateKey(b) >= dateKey(a) ? b : a), null);
   return list.map(n => (n === latest ? n : { ...n, canAnnul: false }));
 }
 
+/**
+ * Convierte una fila cruda de `contrato_general` (más su proveedor y novedades
+ * ya resueltos) en la entidad de dominio `Contract`.
+ *
+ * Concentra la tolerancia al esquema laxo del backend legado: campos con
+ * nombres alternativos, valores como string u objeto, y datos ausentes.
+ */
 export function toContract(
   row: ContratoGeneralDto,
   proveedor: InformacionProveedorDto | null,
@@ -89,6 +99,7 @@ export function toContract(
   };
 }
 
+/** Convierte un proveedor del backend en el cesionario que muestra el autocomplete. */
 export function toAssignee(p: InformacionProveedorDto): Assignee {
   return {
     name: p.NomProveedor ?? '',

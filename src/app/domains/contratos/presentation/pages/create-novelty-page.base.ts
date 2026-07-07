@@ -28,8 +28,11 @@ export abstract class CreateNoveltyPage {
 
   readonly submitting = signal(false);
   readonly showConfirm = signal(false);
+  /** Máquina de estados de la vista: formulario → pantalla de éxito o de error. */
   readonly pageState = signal<NoveltyPageState>('form');
+  /** Fecha/hora legible del registro, mostrada en la pantalla de éxito. */
   readonly executedAt = signal('');
+  /** Campos del resumen mostrados en el modal de confirmación. */
   readonly summary = signal<NoveltySummaryItem[]>([]);
 
   /** Vigencia (VigenciaContrato), tomada del id compuesto `${numero}_${vigencia}`. */
@@ -54,6 +57,11 @@ export abstract class CreateNoveltyPage {
     this.state.loadContract(this.contractId);
   }
 
+  /**
+   * Submit del formulario: si es válido abre el modal de confirmación con el
+   * resumen de la página concreta; si no, marca los controles y lleva el foco
+   * al primer campo inválido.
+   */
   onSubmit(event: Event): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -75,7 +83,12 @@ export abstract class CreateNoveltyPage {
     this.showConfirm.set(false);
   }
 
-  // El parámetro `forceError` es el switch de pruebas del modal de confirmación.
+  /**
+   * Confirmación definitiva: envía el draft al caso de uso de creación y
+   * transiciona la vista a éxito o error según el resultado.
+   *
+   * @param forceError Switch de pruebas del modal para simular una falla.
+   */
   onConfirm(forceError = false): void {
     this.submitting.set(true);
     this.noveltyService.create(this.contractId, this.buildDraft(), forceError).subscribe({

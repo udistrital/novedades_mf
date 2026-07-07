@@ -22,6 +22,14 @@ import { NoveltyType } from '../../../domain/models/novelty-type.enum';
 import { AdicionProrrogaDraft, NoveltyDraft } from '../../../domain/models/novelty-draft.model';
 import { availableVigencias } from '../../../domain/contract.rules';
 
+/**
+ * Página de creación de la novedad de Adición y Prórroga: incrementa el valor
+ * del contrato y/o extiende su plazo.
+ *
+ * Deriva en vivo el nuevo valor (contrato + adición, también en letras) y el
+ * nuevo plazo (regla mes = 30 días) que se muestran en el resumen de
+ * confirmación.
+ */
 @Component({
   selector: 'app-crear-adicion-prorroga',
   standalone: true,

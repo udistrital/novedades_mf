@@ -2,11 +2,13 @@ import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 
+/** Miga de pan; sin `link` (o en la última posición) se muestra como texto plano. */
 export interface BreadcrumbItem {
   label: string;
   link?: string | unknown[];
 }
 
+/** Migas de pan de las páginas internas del microfrontend. */
 @Component({
   selector: 'app-breadcrumb',
   standalone: true,

@@ -20,6 +20,13 @@ import { NoveltyType } from '../../../domain/models/novelty-type.enum';
 import { ReinicioDraft, NoveltyDraft } from '../../../domain/models/novelty-draft.model';
 import { getLatestNovelty } from '../../../domain/contract.rules';
 
+/**
+ * Página de creación de la novedad de Reinicio tras una suspensión.
+ *
+ * Solo es alcanzable cuando la última novedad del contrato es una Suspensión:
+ * precarga sus fechas y deriva período y fecha de reinicio (fin + 1 día) como
+ * campos de solo lectura.
+ */
 @Component({
   selector: 'app-crear-reinicio',
   standalone: true,

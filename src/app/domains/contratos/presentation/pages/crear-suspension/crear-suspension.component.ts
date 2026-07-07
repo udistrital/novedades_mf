@@ -27,6 +27,13 @@ function setExtraError(control: AbstractControl, key: string, hasError: boolean)
   control.setErrors(Object.keys(errors).length ? errors : null);
 }
 
+/**
+ * Página de creación de la novedad de Suspensión.
+ *
+ * Reglas propias: el período mínimo es de 1 día (inicio < fin), el inicio no
+ * puede ser anterior al inicio del contrato + 1, y período/fecha de reinicio
+ * son campos derivados de solo lectura (reinicio = fin + 1 día).
+ */
 @Component({
   selector: 'app-crear-suspension',
   standalone: true,

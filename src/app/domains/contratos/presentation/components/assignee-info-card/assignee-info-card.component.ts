@@ -2,6 +2,10 @@ import { Component, input } from '@angular/core';
 import { CardComponent } from '../../../../../shared/ui/card.component';
 import { Assignee } from '../../../domain/models/assignee.model';
 
+/**
+ * Tarjeta de contexto de la página de Cesión: refleja el cesionario elegido
+ * en el autocomplete (muestra guiones mientras no hay selección).
+ */
 @Component({
   selector: 'app-assignee-info-card',
   standalone: true,

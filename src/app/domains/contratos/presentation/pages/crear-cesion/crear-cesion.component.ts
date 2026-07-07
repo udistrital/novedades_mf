@@ -26,6 +26,14 @@ import { NoveltyType } from '../../../domain/models/novelty-type.enum';
 import { CesionDraft, NoveltyDraft } from '../../../domain/models/novelty-draft.model';
 import { Assignee } from '../../../domain/models/assignee.model';
 
+/**
+ * Página de creación de la novedad de Cesión: transfiere el contrato del
+ * contratista actual (cedente) a un cesionario elegido por documento.
+ *
+ * Reglas propias: la fecha de terminación del cedente se deriva de la fecha de
+ * cesión (−1 día, solo lectura) y el Considerando Adicional replica la
+ * obligatoriedad condicional de la Cláusula Adicional.
+ */
 @Component({
   selector: 'app-crear-cesion',
   standalone: true,

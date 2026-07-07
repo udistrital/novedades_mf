@@ -1,5 +1,10 @@
 import { NoveltyType, NoveltyStatus } from '../../domain/models/novelty-type.enum';
 
+/**
+ * Forma de respuesta que usa `MockContractService` para sus datos quemados.
+ * Es deliberadamente paralela al modelo de dominio; las APIs reales usan
+ * `legacy-api.dto.ts` + mapper.
+ */
 export interface NoveltySummaryDto {
   id: string;
   type: NoveltyType;

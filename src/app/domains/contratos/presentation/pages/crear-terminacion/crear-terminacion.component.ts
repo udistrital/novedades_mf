@@ -20,6 +20,11 @@ import { toDisplayDate, todayIso } from '../../../../../shared/util/format.util'
 import { NoveltyType } from '../../../domain/models/novelty-type.enum';
 import { TerminacionDraft, NoveltyDraft } from '../../../domain/models/novelty-draft.model';
 
+/**
+ * Página de creación de la novedad de Terminación Anticipada
+ * (liquidación bilateral): captura el valor desembolsado y los saldos a favor
+ * del contratista y de la universidad.
+ */
 @Component({
   selector: 'app-crear-terminacion',
   standalone: true,

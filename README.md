@@ -1,14 +1,35 @@
-# novedades_mf-
+# novedades_mf
 
-Cliente para la gestión, registro, actualización y consulta de novedades. Este proyecto está desarrollado con Angular.
+Microcliente para la gestión, registro, actualización y consulta de novedades poscontractuales de la Universidad Distrital Francisco José de Caldas. Forma parte de la arquitectura de microfrontends del sistema de gestión contractual y se integra en el cliente contenedor mediante [single-spa](https://single-spa.js.org/).
 
 ## Especificaciones Técnicas
 
+### Tecnologías Implementadas y Versiones
+
+* [Angular 18](https://angular.dev/) (standalone components, signals, zoneless)
+* [single-spa](https://single-spa.js.org/) >= 4
+* [single-spa-angular](https://single-spa.js.org/docs/ecosystem-angular/) 9.2
+* [Angular Material 18](https://material.angular.io/)
+* [TailwindCSS 3.4](https://tailwindcss.com/)
+* [TypeScript 5.5](https://www.typescriptlang.org/)
+* [RxJS 7.8](https://rxjs.dev/)
 
 ### Variables de Entorno
-```bash
-# Does not apply
-```
+
+La configuración por ambiente vive en `src/environments/`:
+
+| Variable | Descripción |
+| --- | --- |
+| `ADMINISTRATIVA_PRUEBAS_SERVICE` | API `administrativa_amazon_api` — contratos generales y proveedores |
+| `NOVEDADES_MID_SERVICE` | API `novedades_mid` — novedades por contrato |
+| `NOVEDADES_SERVICE` | API `novedades_crud` — persistencia de novedades (fase de escrituras) |
+| `TOKEN` | Configuración OAuth2 de WSO2 (client id, redirect, scopes, logout) |
+
+| Ambiente | Archivo | Compilación |
+| --- | --- | --- |
+| Producción | `src/environments/environment.ts` | `npm run build` |
+| Local | `src/environments/environment.development.ts` | `npm start` |
+| Pruebas | `src/environments/environment.test.ts` | `npm run start:test` |
 
 ## Ejecución del Proyecto
 
@@ -16,9 +37,9 @@ Este proyecto es parte de una infraestructura de microfrontend implementada con 
 
 ### Root
 
-El Root contiene la lógica de Argo
+El Root contiene la lógica de Argo.
 
-### Pasos para la Ejecución del Root
+#### Pasos para la Ejecución del Root
 
 1. Clonar el repositorio del Root:
 
@@ -47,7 +68,7 @@ El Root contiene la lógica de Argo
 
 El Core contiene componentes generales que construyen el layout y administran aspectos como la autenticación.
 
-### Pasos para la Ejecución del Core
+#### Pasos para la Ejecución del Core
 
 1. Clonar el repositorio del Core:
 
@@ -75,9 +96,9 @@ El Core contiene componentes generales que construyen el layout y administran as
 
 ### novedades_mf
 
-Microcliente de gestion de novedades
+Microcliente de gestión de novedades.
 
-### Pasos para la Ejecución de novedades_mf
+#### Pasos para la Ejecución de novedades_mf
 
 1. Clonar el repositorio:
 
@@ -97,13 +118,13 @@ Microcliente de gestion de novedades
    npm install
    ```
 
-4. Iniciar usuario_mf:
+4. Iniciar novedades_mf:
 
    ```bash
    npm start
    ```
 
-Con estos pasos, se tendrán las partes mínimas necesarias para ejecutar el proyecto en un entorno local.
+Con estos pasos, se tendrán las partes mínimas necesarias para ejecutar el proyecto en un entorno local. El microcliente queda publicado en `http://localhost:4209/main.js`, listo para ser consumido por el Root.
 
 ## Ejecución Dockerfile
 
@@ -119,23 +140,25 @@ Con estos pasos, se tendrán las partes mínimas necesarias para ejecutar el pro
 
 ## Ejecución Pruebas
 
+Pruebas unitarias (Karma + Jasmine) y análisis estático:
+
 ```bash
-# Developing
+npm test
+npm run lint
 ```
 
 ## Estado CI
 
 ```bash
-# Developing
+# Pendiente de configuración del pipeline
 ```
-|
+
 ## Licencia
 
 [This file is part of novedades_mf](LICENSE)
 
-novedades_mf is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (atSara Sampaio your option) any later version.
+novedades_mf is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-auditoria_plan_mejoramiento_usuario_mf is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+novedades_mf is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with novedades_mf. If not, see https://www.gnu.org/licenses/.
-

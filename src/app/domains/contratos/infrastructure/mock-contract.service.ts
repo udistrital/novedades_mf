@@ -8,6 +8,13 @@ import { ContractResponseDto } from './dtos/contract-response.dto';
 import { NoveltyType, NoveltyStatus } from '../domain/models/novelty-type.enum';
 import { NoveltyDraft } from '../domain/models/novelty-draft.model';
 
+/**
+ * Implementación en memoria de `IContractRepository` para desarrollo sin backend.
+ *
+ * Devuelve datos quemados con latencias simuladas para que los estados de
+ * carga sean visibles. Para activarla, cambiar el binding del token en
+ * `app.config.ts` (`useClass: MockContractService`).
+ */
 @Injectable({
   providedIn: 'root'
 })

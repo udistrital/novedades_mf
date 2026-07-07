@@ -17,6 +17,7 @@ export interface AdditionalClause {
   texto: string;
 }
 
+/** Solicitud de adición de valor y/o prórroga de plazo sobre el contrato. */
 export interface AdicionProrrogaDraft {
   type: NoveltyType.ADDITION_EXTENSION;
   solicitud: {
@@ -39,6 +40,7 @@ export interface AdicionProrrogaDraft {
   clausula: AdditionalClause;
 }
 
+/** Solicitud de suspensión temporal de la ejecución del contrato. */
 export interface SuspensionDraft {
   type: NoveltyType.SUSPENSION;
   solicitud: RequestData;
@@ -50,6 +52,7 @@ export interface SuspensionDraft {
   clausula: AdditionalClause;
 }
 
+/** Solicitud de cesión: transfiere el contrato del cedente a un cesionario. */
 export interface CesionDraft {
   type: NoveltyType.ASSIGNMENT;
   solicitud: RequestData;
@@ -63,6 +66,7 @@ export interface CesionDraft {
   clausula: AdditionalClause;
 }
 
+/** Solicitud de terminación anticipada (liquidación bilateral) con sus saldos. */
 export interface TerminacionDraft {
   type: NoveltyType.EARLY_TERMINATION;
   solicitud: RequestData;
@@ -74,6 +78,7 @@ export interface TerminacionDraft {
   clausula: AdditionalClause;
 }
 
+/** Solicitud de reinicio tras una suspensión; sus fechas derivan de la suspensión vigente. */
 export interface ReinicioDraft {
   type: NoveltyType.RESTART;
   solicitud: {
@@ -86,6 +91,12 @@ export interface ReinicioDraft {
   fechaReinicio: string; // Solo lectura: calculada a partir de la suspensión.
 }
 
+/**
+ * Unión discriminada (por `type`) de todas las solicitudes de novedad.
+ *
+ * Es el contrato entre los formularios de creación y el repositorio: cada
+ * página construye su draft y el backend recibe una única forma tipada.
+ */
 export type NoveltyDraft =
   | AdicionProrrogaDraft
   | SuspensionDraft

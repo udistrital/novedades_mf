@@ -4,7 +4,13 @@ import { switchMap } from 'rxjs/operators';
 import { IContractRepository } from '../domain/repositories/contract.repository';
 import { NoveltyDraft } from '../domain/models/novelty-draft.model';
 
-/** Caso de uso: crear una novedad (adición/prórroga, suspensión, cesión, terminación). */
+/**
+ * Casos de uso de escritura sobre novedades: crear y anular.
+ *
+ * Separa a las páginas de creación y al dashboard del repositorio, de modo que
+ * el manejo transaccional que defina el backend (réplica, compensación) tenga
+ * un único punto de entrada en la aplicación.
+ */
 @Injectable({
   providedIn: 'root'
 })

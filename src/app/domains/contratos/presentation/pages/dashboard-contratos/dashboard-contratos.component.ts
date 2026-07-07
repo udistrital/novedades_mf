@@ -23,6 +23,13 @@ type DashboardView = 'list' | 'annul-success' | 'annul-error';
 /** Criterios de búsqueda excluyentes entre sí. */
 type SearchBy = 'number' | 'contractor';
 
+/**
+ * Vista principal del microfrontend (Seguimiento Legal): búsqueda de
+ * contratos, listado expandible con sus novedades y flujo de anulación.
+ *
+ * Desde aquí se navega a las páginas de creación de cada novedad según el
+ * estado del contrato.
+ */
 @Component({
   selector: 'app-dashboard-contratos',
   standalone: true,
