@@ -2,6 +2,7 @@ import { Observable } from 'rxjs';
 import { Contract } from '../models/contract.entity';
 import { NoveltyDraft } from '../models/novelty-draft.model';
 import { Assignee } from '../models/assignee.model';
+import { Aseguradora, Poliza, PolizaUpdate } from '../models/poliza.model';
 
 /** Criterios de búsqueda del dashboard; `number` y `contractor` son excluyentes entre sí. */
 export interface ContractFilters {
@@ -26,4 +27,12 @@ export abstract class IContractRepository {
   abstract annulNovelty(contractId: string, noveltyId: string): Observable<void>;
   /** Busca contratistas por cédula/NIT para el autocomplete (cédula + nombre). */
   abstract searchContractors(query: string): Observable<Assignee[]>;
+  /** Reapertura administrativa de un contrato Finalizado: lo devuelve a "En ejecución". */
+  abstract activateContract(contractId: string): Observable<void>;
+  /** Catálogo de entidades aseguradoras (registro de póliza post-cesión). */
+  abstract getAseguradoras(): Observable<Aseguradora[]>;
+  /** Póliza asociada a una novedad (la cesión crea el registro; el acta de inicio lo completa). */
+  abstract getPolizaDeNovedad(noveltyId: string): Observable<Poliza | undefined>;
+  /** Completa/actualiza el registro de póliza existente. */
+  abstract updatePoliza(polizaId: string, cambios: PolizaUpdate): Observable<void>;
 }

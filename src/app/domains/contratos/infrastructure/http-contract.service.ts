@@ -1,26 +1,59 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin, of } from 'rxjs';
-import { catchError, delay, map, switchMap, tap } from 'rxjs/operators';
+import { Observable, forkJoin, of, throwError } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
 import { ContractFilters, IContractRepository } from '../domain/repositories/contract.repository';
 import { Contract, NoveltySummary } from '../domain/models/contract.entity';
+import { ContractStatus } from '../domain/models/contract-status.enum';
 import { Assignee } from '../domain/models/assignee.model';
 import { NoveltyDraft } from '../domain/models/novelty-draft.model';
-import { AlertResponse, ContratoGeneralDto, InformacionProveedorDto, NovedadMidDto } from './dtos/legacy-api.dto';
-import { toAssignee, toContract, toNoveltySummaries } from './mappers/contract.mapper';
+import { Aseguradora, Poliza, PolizaUpdate } from '../domain/models/poliza.model';
+import { currentContractorDocument } from '../domain/contract.rules';
+import { UserSessionService } from '../../../shared/auth/user-session.service';
+import {
+  AlertResponse,
+  ApiResponseDto,
+  ContratoEstadoDto,
+  ContratoGeneralDto,
+  EntidadAseguradoraDto,
+  InformacionProveedorDto,
+  NovedadMidDto,
+  PolizaDto
+} from './dtos/legacy-api.dto';
+import {
+  toAseguradora,
+  toAssignee,
+  toContract,
+  toContractStatus,
+  toNoveltySummaries,
+  toPoliza
+} from './mappers/contract.mapper';
+import {
+  ESTADO_CONTRATO_ID,
+  targetStateId,
+  toCambioEstadoPayload,
+  toNoveltyPayload
+} from './mappers/novelty-payload.mapper';
 
 /**
- * Repositorio contra las APIs institucionales (administrativa_amazon_api + novedades_mid).
- * Solo las lecturas están conectadas; las escrituras (crear/anular novedad) siguen
- * simuladas hasta que se aborde esa fase.
+ * Repositorio contra las APIs institucionales (administrativa_amazon_api,
+ * novedades_mid, novedades_crud y core_amazon_crud).
+ *
+ * Escrituras: el flujo replica la coreografía del cliente legado
+ * (validar cambio de estado → crear novedad → registrar estado) SIN la réplica
+ * hacia Ágora/Titan ni su compensación manual — esa orquestación queda del
+ * lado del backend según TD-007/ADR-014.
  */
 @Injectable({ providedIn: 'root' })
 export class HttpContractService implements IContractRepository {
   private readonly http = inject(HttpClient);
+  private readonly session = inject(UserSessionService);
   private readonly adm = environment.ADMINISTRATIVA_PRUEBAS_SERVICE;
   private readonly mid = environment.NOVEDADES_MID_SERVICE;
+  private readonly crud = environment.NOVEDADES_SERVICE;
+  private readonly core = environment.CORE_AMAZON_SERVICE;
 
   getContracts(filters?: ContractFilters): Observable<Contract[]> {
     const number = filters?.number?.trim();
@@ -41,10 +74,7 @@ export class HttpContractService implements IContractRepository {
   }
 
   getContractById(id: string): Observable<Contract | undefined> {
-    // Id compuesto `${numero}_${vigencia}` generado por el mapper.
-    const sep = id.lastIndexOf('_');
-    const numero = sep > 0 ? id.slice(0, sep) : id;
-    const vigencia = sep > 0 ? id.slice(sep + 1) : '';
+    const { numero, vigencia } = splitContractId(id);
     return this.contratosPorQuery(`ContratoSuscrito.NumeroContratoSuscrito:${numero}`, vigencia).pipe(
       switchMap(rows => (rows.length ? this.toDomain(rows[0]) : of(undefined)))
     );
@@ -65,23 +95,102 @@ export class HttpContractService implements IContractRepository {
       );
   }
 
+  /**
+   * Crea la novedad replicando la cascada del legado: (1) para las novedades
+   * que cambian el estado del contrato, valida primero la transición en el mid;
+   * (2) POST de la novedad; (3) registra el nuevo estado en Ágora.
+   * Sin réplica a Titan ni compensación (TD-007/ADR-014).
+   */
   createNovelty(contractId: string, draft: NoveltyDraft): Observable<void> {
-    // TODO(escrituras): POST {novedadesMid}novedad/ — pendiente; por ahora solo lecturas.
-    return of(undefined).pipe(
-      delay(400),
-      tap(() => console.warn('[HttpContractService] createNovelty aún no conectado', contractId, draft))
+    const { numero, vigencia } = splitContractId(contractId);
+    const usuario = this.session.usuarioRegistro();
+    const estadoDestino = targetStateId(draft);
+
+    const validar$ = estadoDestino !== null
+      ? this.validarCambioEstado(estadoDestino, numero, vigencia, usuario)
+      : of(undefined);
+
+    return validar$.pipe(
+      switchMap(() =>
+        this.http.post<AlertResponse<unknown>>(`${this.mid}novedad/`, toNoveltyPayload(draft, numero, vigencia, usuario))
+      ),
+      switchMap(res => (esAlertaExitosa(res) ? of(undefined) : throwError(() => new Error(alertaError(res))))),
+      switchMap(() =>
+        estadoDestino !== null ? this.registrarEstado(estadoDestino, numero, vigencia, usuario) : of(undefined)
+      ),
+      map(() => undefined)
     );
   }
 
-  annulNovelty(contractId: string, noveltyId: string): Observable<void> {
-    // TODO(escrituras): PATCH {novedadesMid}novedad/{id} — pendiente; por ahora solo lecturas.
-    return of(undefined).pipe(
-      delay(400),
-      tap(() => console.warn('[HttpContractService] annulNovelty aún no conectado', contractId, noveltyId))
+  /**
+   * Anula la novedad vía PATCH del mid: el backend marca `Activo=false` y
+   * revierte el estado del contrato en cascada (AnularNovedadYRevertirEstado).
+   */
+  annulNovelty(_contractId: string, noveltyId: string): Observable<void> {
+    return this.http
+      .patch<ApiResponseDto>(`${this.mid}novedad/${noveltyId}`, { usuario: this.session.usuarioRegistro() })
+      .pipe(
+        switchMap(res =>
+          res?.Success !== false ? of(undefined) : throwError(() => new Error(res?.Message || 'Anulación rechazada'))
+        )
+      );
+  }
+
+  /** Reapertura administrativa (contrato Finalizado → En ejecución): validar + registrar estado. */
+  activateContract(contractId: string): Observable<void> {
+    const { numero, vigencia } = splitContractId(contractId);
+    const usuario = this.session.usuarioRegistro();
+    return this.validarCambioEstado(ESTADO_CONTRATO_ID.EN_EJECUCION, numero, vigencia, usuario).pipe(
+      switchMap(() => this.registrarEstado(ESTADO_CONTRATO_ID.EN_EJECUCION, numero, vigencia, usuario))
     );
+  }
+
+  getAseguradoras(): Observable<Aseguradora[]> {
+    return this.http
+      .get<EntidadAseguradoraDto[]>(`${this.core}entidad_aseguradora`, { params: { limit: 0 } })
+      .pipe(
+        map(rows => nonEmpty(rows).map(toAseguradora)),
+        catchError(() => of([]))
+      );
+  }
+
+  getPolizaDeNovedad(noveltyId: string): Observable<Poliza | undefined> {
+    return this.http
+      .get<PolizaDto[]>(`${this.crud}poliza`, { params: { query: `IdNovedadesPoscontractuales:${noveltyId}` } })
+      .pipe(
+        map(rows => {
+          const row = nonEmpty(rows)[0];
+          return row ? toPoliza(row) : undefined;
+        }),
+        catchError(() => of(undefined))
+      );
+  }
+
+  updatePoliza(polizaId: string, cambios: PolizaUpdate): Observable<void> {
+    // El registro lo crea la cesión; el acta de inicio solo lo completa (PUT, no POST).
+    return this.http
+      .put(`${this.crud}poliza/${polizaId}`, {
+        EntidadAseguradoraId: cambios.entidadAseguradoraId,
+        NumeroPolizaId: cambios.numeroPoliza
+      })
+      .pipe(map(() => undefined));
   }
 
   // --- Privados ---
+
+  private validarCambioEstado(estadoId: number, numero: string, vigencia: string, usuario: string): Observable<void> {
+    return this.http
+      .post<AlertResponse<unknown>>(`${this.mid}validarCambioEstado/`, toCambioEstadoPayload(estadoId, numero, vigencia, usuario))
+      .pipe(
+        switchMap(res => (esAlertaExitosa(res) ? of(undefined) : throwError(() => new Error(alertaError(res)))))
+      );
+  }
+
+  private registrarEstado(estadoId: number, numero: string, vigencia: string, usuario: string): Observable<void> {
+    return this.http
+      .post(`${this.adm}contrato_estado`, toCambioEstadoPayload(estadoId, numero, vigencia, usuario))
+      .pipe(map(() => undefined));
+  }
 
   private contratosPorQuery(baseQuery: string, year?: string): Observable<ContratoGeneralDto[]> {
     const query = year ? `${baseQuery},VigenciaContrato:${year}` : baseQuery;
@@ -104,7 +213,11 @@ export class HttpContractService implements IContractRepository {
       );
   }
 
-  /** Completa una fila de contrato con el nombre del contratista y sus novedades. */
+  /**
+   * Completa una fila de contrato con el contratista, sus novedades y su estado
+   * real; si el historial registra cesiones, el contratista vigente pasa a ser
+   * el último cesionario (requerimientos §5.5).
+   */
   private toDomain(row: ContratoGeneralDto): Observable<Contract> {
     const suscrito = row.ContratoSuscrito?.[0];
     const numero = String(suscrito?.NumeroContratoSuscrito ?? row.NumeroContrato ?? '');
@@ -112,14 +225,52 @@ export class HttpContractService implements IContractRepository {
     const contratistaId = typeof row.Contratista === 'object' ? row.Contratista?.Id : row.Contratista;
     return forkJoin({
       proveedor: this.proveedorPorId(contratistaId),
-      novelties: this.novedadesDeContrato(numero, vigencia)
-    }).pipe(map(({ proveedor, novelties }) => toContract(row, proveedor, novelties)));
+      novelties: this.novedadesDeContrato(numero, vigencia),
+      status: this.estadoDeContrato(numero, vigencia)
+    }).pipe(
+      switchMap(({ proveedor, novelties, status }) => {
+        const contract = toContract(row, proveedor, novelties, status);
+        const cesionarioDoc = currentContractorDocument(contract);
+        if (!cesionarioDoc) return of(contract);
+        // Contratista vigente tras cesión: se sobreescribe con el último cesionario.
+        return this.proveedorPorDocumento(cesionarioDoc).pipe(
+          map(cesionario =>
+            cesionario
+              ? { ...contract, contractorName: cesionario.NomProveedor ?? '', contractorId: String(cesionario.NumDocumento ?? '') }
+              : contract
+          )
+        );
+      })
+    );
+  }
+
+  /** Último estado registrado del contrato (`contrato_estado`, orden Id desc). */
+  private estadoDeContrato(numero: string, vigencia: string): Observable<ContractStatus | undefined> {
+    if (!numero || !vigencia) return of(undefined);
+    return this.http
+      .get<ContratoEstadoDto[]>(`${this.adm}contrato_estado`, {
+        params: { query: `NumeroContrato:${numero},Vigencia:${vigencia}`, sortby: 'Id', order: 'desc', limit: 1 }
+      })
+      .pipe(
+        map(rows => toContractStatus(nonEmpty(rows))),
+        // Sin registro de estado no se bloquea el contrato: el dominio infiere.
+        catchError(() => of(undefined))
+      );
   }
 
   private proveedorPorId(id: number | string | undefined): Observable<InformacionProveedorDto | null> {
     if (id === undefined || id === null || id === '') return of(null);
     return this.http
       .get<InformacionProveedorDto[]>(`${this.adm}informacion_proveedor`, { params: { query: `Id:${id}` } })
+      .pipe(
+        map(rows => nonEmpty(rows)[0] ?? null),
+        catchError(() => of(null))
+      );
+  }
+
+  private proveedorPorDocumento(doc: string): Observable<InformacionProveedorDto | null> {
+    return this.http
+      .get<InformacionProveedorDto[]>(`${this.adm}informacion_proveedor`, { params: { query: `NumDocumento:${doc}` } })
       .pipe(
         map(rows => nonEmpty(rows)[0] ?? null),
         catchError(() => of(null))
@@ -134,6 +285,24 @@ export class HttpContractService implements IContractRepository {
       catchError(() => of<NoveltySummary[]>([]))
     );
   }
+}
+
+/** Id compuesto `${numero}_${vigencia}` generado por el mapper. */
+function splitContractId(id: string): { numero: string; vigencia: string } {
+  const sep = id.lastIndexOf('_');
+  return sep > 0 ? { numero: id.slice(0, sep), vigencia: id.slice(sep + 1) } : { numero: id, vigencia: '' };
+}
+
+/** El mid responde 200 con `{Type:"ERROR"}` en fallos de negocio: no basta el status HTTP. */
+function esAlertaExitosa(res: AlertResponse<unknown> | null | undefined): boolean {
+  if (!res) return false;
+  const type = (res.Type ?? '').toUpperCase();
+  const code = String(res.Code ?? '');
+  return type !== 'ERROR' && !code.startsWith('4') && !code.startsWith('5');
+}
+
+function alertaError(res: AlertResponse<unknown> | null | undefined): string {
+  return `El servicio de novedades rechazó la operación (código ${res?.Code ?? 'desconocido'}).`;
 }
 
 /** Los CRUD legados devuelven `[{}]` cuando no hay filas: se filtran los objetos vacíos. */

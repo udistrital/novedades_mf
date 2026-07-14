@@ -9,7 +9,8 @@ const TOKEN_KEYS = ['access_token', 'id_token', 'token'];
 const API_BASES = [
   environment.ADMINISTRATIVA_PRUEBAS_SERVICE,
   environment.NOVEDADES_MID_SERVICE,
-  environment.NOVEDADES_SERVICE
+  environment.NOVEDADES_SERVICE,
+  environment.CORE_AMAZON_SERVICE
 ];
 
 /**

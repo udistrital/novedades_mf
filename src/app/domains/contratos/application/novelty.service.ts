@@ -29,4 +29,9 @@ export class NoveltyService {
     if (forceError) return timer(400).pipe(switchMap(() => throwError(() => new Error('[TEST] Falla simulada'))));
     return this.contractRepository.annulNovelty(contractId, noveltyId);
   }
+
+  /** Reapertura administrativa de un contrato Finalizado (vuelve a "En ejecución"). */
+  activate(contractId: string): Observable<void> {
+    return this.contractRepository.activateContract(contractId);
+  }
 }

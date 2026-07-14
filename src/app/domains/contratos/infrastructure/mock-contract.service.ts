@@ -4,6 +4,7 @@ import { delay, tap } from 'rxjs/operators';
 import { ContractFilters, IContractRepository } from '../domain/repositories/contract.repository';
 import { Contract } from '../domain/models/contract.entity';
 import { Assignee } from '../domain/models/assignee.model';
+import { Aseguradora, Poliza, PolizaUpdate } from '../domain/models/poliza.model';
 import { ContractResponseDto } from './dtos/contract-response.dto';
 import { NoveltyType, NoveltyStatus } from '../domain/models/novelty-type.enum';
 import { NoveltyDraft } from '../domain/models/novelty-draft.model';
@@ -154,6 +155,31 @@ export class MockContractService implements IContractRepository {
     return of(undefined).pipe(
       delay(400),
       tap(() => console.log('[Mock] Novedad anulada', contractId, noveltyId))
+    );
+  }
+
+  activateContract(contractId: string): Observable<void> {
+    return of(undefined).pipe(
+      delay(400),
+      tap(() => console.log('[Mock] Contrato activado', contractId))
+    );
+  }
+
+  getAseguradoras(): Observable<Aseguradora[]> {
+    return of([
+      { id: 1, nombre: 'SEGUROS DEL ESTADO S.A.' },
+      { id: 2, nombre: 'ASEGURADORA SOLIDARIA DE COLOMBIA' }
+    ]).pipe(delay(200));
+  }
+
+  getPolizaDeNovedad(noveltyId: string): Observable<Poliza | undefined> {
+    return of({ id: `p-${noveltyId}`, numeroPoliza: '', entidadAseguradoraId: null }).pipe(delay(200));
+  }
+
+  updatePoliza(polizaId: string, cambios: PolizaUpdate): Observable<void> {
+    return of(undefined).pipe(
+      delay(400),
+      tap(() => console.log('[Mock] Póliza actualizada', polizaId, cambios))
     );
   }
 }
