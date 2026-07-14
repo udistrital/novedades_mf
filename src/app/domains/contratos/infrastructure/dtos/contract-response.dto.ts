@@ -27,6 +27,7 @@ export interface ContractResponseDto {
   initialTerm: string;
   startDate: string;
   supervisor: string;
+  supervisorDocument?: string;
   spendingManager: string;
   novelties: NoveltySummaryDto[];
 }

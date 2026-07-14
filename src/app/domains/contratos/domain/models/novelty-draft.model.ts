@@ -17,7 +17,14 @@ export interface AdditionalClause {
   texto: string;
 }
 
-/** Solicitud de adición de valor y/o prórroga de plazo sobre el contrato. */
+/**
+ * Solicitud de adición de valor y prórroga de plazo sobre el contrato.
+ *
+ * Por requerimiento actualizado ambas secciones son obligatorias (la página
+ * siempre envía `activa: true` en las dos). El campo se conserva porque el
+ * repositorio discrimina con él el tipo enviado al backend
+ * (NP_ADI / NP_PRO / NP_ADPRO) — hoy siempre NP_ADPRO.
+ */
 export interface AdicionProrrogaDraft {
   type: NoveltyType.ADDITION_EXTENSION;
   solicitud: {
@@ -28,12 +35,14 @@ export interface AdicionProrrogaDraft {
     fechaActa: string;
   };
   adicion: {
+    activa: boolean;
     numCdp: string;
     vigencia: string;
     valorAdicional: number | null;
     fechaAdicion: string;
   };
   prorroga: {
+    activa: boolean;
     tiempoDias: number | null;
     fechaProrroga: string;
   };

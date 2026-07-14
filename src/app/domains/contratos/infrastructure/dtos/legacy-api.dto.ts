@@ -28,8 +28,44 @@ export interface ContratoGeneralDto {
   PlazoEjecucion?: number | string;
   UnidadEjecucion?: { Nombre?: string } | string;
   FechaRegistro?: string;
-  Supervisor?: { Nombre?: string } | string;
+  Supervisor?: { Nombre?: string; Documento?: number | string } | string;
   OrdenadorGasto?: { Nombre?: string } | string;
+}
+
+/** Registro del historial `contrato_estado` (Ágora); el último por Id es el estado vigente. */
+export interface ContratoEstadoDto {
+  Id?: number;
+  Estado?: { Id?: number; NombreEstado?: string } | number | string;
+  NombreEstado?: string;
+  NumeroContrato?: string | number;
+  Vigencia?: number | string;
+  FechaRegistro?: string;
+  Usuario?: string;
+}
+
+/** Entidad aseguradora del catálogo `entidad_aseguradora` (core_amazon_crud). */
+export interface EntidadAseguradoraDto {
+  Id?: number;
+  Nombre?: string;
+  NomAseguradora?: string;
+  Descripcion?: string;
+}
+
+/** Registro de póliza (`poliza` de novedades_crud), asociado a la novedad de cesión. */
+export interface PolizaDto {
+  Id?: number;
+  NumeroPolizaId?: string;
+  EntidadAseguradoraId?: number;
+  Activo?: boolean;
+  IdNovedadesPoscontractuales?: { Id?: number } | number;
+}
+
+/** Respuesta de `PATCH {mid}novedad/{id}` (lib utils_oas), distinta del envoltorio Alert. */
+export interface ApiResponseDto {
+  Success?: boolean;
+  Status?: number | string;
+  Data?: unknown;
+  Message?: string;
 }
 
 export interface InformacionProveedorDto {
@@ -46,7 +82,13 @@ export interface AlertResponse<T> {
   Body?: T;
 }
 
-/** Ítem de `GET novedad/{numero}/{vigencia}`; puede venir plano o anidado. */
+/**
+ * Ítem de `GET novedad/{numero}/{vigencia}`; puede venir plano o anidado.
+ * Las funciones `GetNovedad*` del mid agregan campos de negocio (valor de
+ * adición, días de prórroga, cesionario) cuyos nombres exactos no están
+ * documentados (viven en models/*.go del backend): el índice laxo permite al
+ * mapper leerlos por candidatos sin acoplarse a un nombre.
+ */
 export interface NovedadMidDto {
   Id?: number | string;
   TipoNovedad?: number | string;
@@ -55,4 +97,5 @@ export interface NovedadMidDto {
   Activo?: boolean;
   EnlaceDocumento?: string;
   NovedadPoscontractual?: NovedadMidDto;
+  [key: string]: unknown;
 }

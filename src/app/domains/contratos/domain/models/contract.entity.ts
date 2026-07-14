@@ -1,4 +1,5 @@
 import { NoveltyType, NoveltyStatus } from './novelty-type.enum';
+import { ContractStatus } from './contract-status.enum';
 
 /**
  * Novedad poscontractual ya registrada sobre un contrato, en la forma
@@ -13,6 +14,12 @@ export interface NoveltySummary {
   status: NoveltyStatus;
   documentUrl?: string;
   canAnnul: boolean;
+  /** Valor adicionado por esta novedad (solo adiciones); alimenta el valor vigente acumulado. */
+  valorAdicion?: number;
+  /** Días de prórroga de esta novedad (solo prórrogas); alimenta el plazo vigente acumulado. */
+  diasProrroga?: number;
+  /** Documento del cesionario (solo cesiones); resuelve el contratista vigente tras una cesión. */
+  cesionarioDocumento?: string;
 }
 
 /**
@@ -35,6 +42,14 @@ export interface Contract {
   initialTerm: string; // Ej. "NUEVE ( 9 ) MESES"
   startDate: string; // Ej. "01/01/2024"
   supervisor: string;
+  /** Documento del supervisor; la regla de rol SUPERVISOR exige que coincida con el del usuario. */
+  supervisorDocument: string;
   spendingManager: string; // Ordenador del gasto
+  /**
+   * Estado real del contrato leído de `contrato_estado` (último registro).
+   * `undefined` cuando el backend no tiene registros: las reglas caen al
+   * comportamiento inferido (última novedad = suspensión ⇒ suspendido).
+   */
+  status?: ContractStatus;
   novelties: NoveltySummary[];
 }

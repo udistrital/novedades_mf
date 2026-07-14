@@ -114,6 +114,19 @@ function parseMonthsTerm(term: string | null | undefined): number {
 }
 
 /**
+ * Plazo total en días de un término "NUEVE ( 9 ) MESES [Y QUINCE ( 15 ) DÍAS]",
+ * aplicando la regla mes = 30 días. Si la unidad del primer grupo es DÍAS
+ * (contratos pactados en días), no multiplica por 30.
+ */
+export function termToDays(term: string | null | undefined): number {
+  const t = term ?? '';
+  const grupos = [...t.matchAll(/\(\s*(-?\d+)\s*\)\s*(MES(?:ES)?|D[ÍI]AS?)/gi)];
+  if (!grupos.length) return parseMonthsTerm(t) * DIAS_POR_MES;
+  return grupos.reduce((total, [, n, unidad]) =>
+    total + Number(n) * (unidad.toUpperCase().startsWith('MES') ? DIAS_POR_MES : 1), 0);
+}
+
+/**
  * Suma días de prórroga a un plazo inicial ("NUEVE ( 9 ) MESES") y devuelve el nuevo
  * plazo en el mismo formato, aplicando la regla de mes = 30 días.
  */
