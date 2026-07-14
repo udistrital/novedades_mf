@@ -121,7 +121,9 @@
                 </td>
                 <td class="px-3 py-2 text-right">
                   <div class="flex justify-end gap-1">
-                    <a href="#" target="_blank" class="bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:bg-surface-container-low px-3 py-1 rounded text-label-sm font-bold transition-colors flex items-center gap-1" title="Ver Acta">
+                    <a [href]="novelty.documentUrl" target="_blank" rel="noopener"
+                      [class.opacity-50]="!novelty.documentUrl" [class.pointer-events-none]="!novelty.documentUrl"
+                      class="bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:bg-surface-container-low px-3 py-1 rounded text-label-sm font-bold transition-colors flex items-center gap-1" title="Ver Acta">
                       <mat-icon class="text-[16px]">visibility</mat-icon> Ver Acta
                     </a>
                     @if (!readOnly) {

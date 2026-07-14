@@ -139,9 +139,9 @@ export function addDaysToTerm(initialTerm: string | null | undefined, extraDays:
   return days === 0 ? monthsPart : `${monthsPart} Y ${numberToWords(days)} ( ${days} ) ${days === 1 ? 'DÍA' : 'DÍAS'}`;
 }
 
-/** Puntos de separación visuales para NIT/CC: 80732423 → 807.324.23. */
+/** Puntos de separación visuales para NIT/CC, agrupando de a 3 desde el último dígito: 80732423 → 80.732.423. */
 export function formatDocument(value: string | null | undefined): string {
-  return (value ?? '').replace(/\D/g, '').match(/.{1,3}/g)?.join('.') ?? '';
+  return (value ?? '').replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
 /** Fecha y hora de ejecución legible: "24 de mayo de 2024 - 10:45 a. m.". */

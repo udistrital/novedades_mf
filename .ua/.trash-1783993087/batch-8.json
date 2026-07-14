@@ -1,0 +1,279 @@
+{
+  "nodes": [
+    {
+      "id": "config:.ua/.understandignore",
+      "type": "config",
+      "name": ".understandignore",
+      "filePath": ".ua/.understandignore",
+      "summary": "Understand-Anything tool ignore-pattern configuration, not part of the application",
+      "tags": ["configuration", "tooling", "ignore-patterns"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:eslint.config.js",
+      "type": "file",
+      "name": "eslint.config.js",
+      "filePath": "eslint.config.js",
+      "summary": "ESLint flat-config for the Angular workspace: applies TypeScript/Angular recommended and stylistic rules to .ts files (enforcing app/novedades-mf selector prefixes) and Angular template rules to .html files.",
+      "tags": ["configuration", "linting", "angular", "code-quality", "build-system"],
+      "complexity": "simple",
+      "languageNotes": "Uses tseslint.config() flat-config composition with a processor for inline Angular templates."
+    },
+    {
+      "id": "file:extra-webpack.config.js",
+      "type": "file",
+      "name": "extra-webpack.config.js",
+      "filePath": "extra-webpack.config.js",
+      "summary": "Custom webpack override for the single-spa Angular build: wraps single-spa-angular's generated webpack config and suppresses a style-loader runtime deprecation warning.",
+      "tags": ["build-system", "webpack", "single-spa", "configuration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/app.component.html",
+      "type": "file",
+      "name": "app.component.html",
+      "filePath": "src/app/app.component.html",
+      "summary": "Root application template: renders only a router-outlet to host the routed views of the microfrontend.",
+      "tags": ["template", "routing", "root-component", "entry-point"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/components/confirm-annul-modal/confirm-annul-modal.component.html",
+      "type": "file",
+      "name": "confirm-annul-modal.component.html",
+      "filePath": "src/app/domains/contratos/presentation/components/confirm-annul-modal/confirm-annul-modal.component.html",
+      "summary": "Template for the confirm-annul-modal component: a warning-styled confirmation dialog showing contract/novelty details before annulling a novedad, with a debug-only 'force error' test switch.",
+      "tags": ["template", "modal", "confirmation-dialog", "component"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.html",
+      "type": "file",
+      "name": "confirm-novelty-modal.component.html",
+      "filePath": "src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.html",
+      "summary": "Template for the confirm-novelty-modal component: a generic confirmation dialog summarizing a novedad (acta) before generation, with a warning banner and a debug-only 'force error' test switch.",
+      "tags": ["template", "modal", "confirmation-dialog", "component"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/components/contract-accordion/contract-accordion.component.html",
+      "type": "file",
+      "name": "contract-accordion.component.html",
+      "filePath": "src/app/domains/contratos/presentation/components/contract-accordion/contract-accordion.component.html",
+      "summary": "Template for the contract-accordion component: a collapsible <details> card showing contract summary/details and a table of its novedades, with an 'add novedad' action menu and per-row annul/view-acta actions.",
+      "tags": ["template", "accordion", "component", "contract-listing"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/components/contract-info-card/contract-info-card.component.html",
+      "type": "file",
+      "name": "contract-info-card.component.html",
+      "filePath": "src/app/domains/contratos/presentation/components/contract-info-card/contract-info-card.component.html",
+      "summary": "Template for the contract-info-card component: displays read-only contract metadata (type, number, object, value, contractor, term, supervisor) inside an app-card.",
+      "tags": ["template", "component", "contract-info", "read-only"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.html",
+      "type": "file",
+      "name": "crear-adicion-prorroga.component.html",
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.html",
+      "summary": "Page template for creating a contract addition-and-extension (adición y prórroga) novedad: a multi-section reactive form for budget addition and time extension, plus success/error/confirmation states.",
+      "tags": ["template", "page", "reactive-form", "contratos"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.html",
+      "type": "file",
+      "name": "crear-cesion.component.html",
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.html",
+      "summary": "Page template for creating a contract assignment (cesión) novedad: reactive form capturing assignee, disbursement values, and an optional additional 'considerando' clause, plus success/error/confirmation states.",
+      "tags": ["template", "page", "reactive-form", "contratos"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.html",
+      "type": "file",
+      "name": "crear-poliza.component.html",
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.html",
+      "summary": "Page template for registering the assignee's insurance policy (póliza) left pending after a cesión: form to pick the insurer and enter the policy number, plus success/error/confirmation states.",
+      "tags": ["template", "page", "reactive-form", "contratos"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.html",
+      "type": "file",
+      "name": "crear-reinicio.component.html",
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.html",
+      "summary": "Page template for creating a contract restart (reinicio) novedad after a suspension: reactive form for request/suspension/restart dates, plus success/error/confirmation states.",
+      "tags": ["template", "page", "reactive-form", "contratos"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.html",
+      "type": "file",
+      "name": "crear-suspension.component.html",
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.html",
+      "summary": "Page template for creating a contract suspension novedad: reactive form for office/date fields, suspension start/end dates with min-date constraints, motive text, and an optional additional clause, plus success/error/confirmation states.",
+      "tags": ["template", "page", "reactive-form", "contratos"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.html",
+      "type": "file",
+      "name": "crear-terminacion.component.html",
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.html",
+      "summary": "Page template for creating an early-termination (terminación anticipada) novedad: reactive form for termination/certification dates and settlement amounts owed to contractor/university, plus success/error/confirmation states.",
+      "tags": ["template", "page", "reactive-form", "contratos"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/dashboard-contratos/dashboard-contratos.component.html",
+      "type": "file",
+      "name": "dashboard-contratos.component.html",
+      "filePath": "src/app/domains/contratos/presentation/pages/dashboard-contratos/dashboard-contratos.component.html",
+      "summary": "Main contracts dashboard template: search/filter panel (by year, contract number or contractor) plus a results list of contract-accordion cards, with modals for annulling a novedad and reactivating a finalized contract.",
+      "tags": ["template", "page", "dashboard", "contratos", "search-filter"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/environments/environment.development.ts",
+      "type": "file",
+      "name": "environment.development.ts",
+      "filePath": "src/environments/environment.development.ts",
+      "summary": "Development environment configuration providing legacy UD backend API base URLs (novedades, core-amazon, administrativa) and OAuth2/OIDC token settings for local runs.",
+      "tags": ["configuration", "environment", "api-urls", "oauth", "legacy-integration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/environments/environment.test.ts",
+      "type": "file",
+      "name": "environment.test.ts",
+      "filePath": "src/environments/environment.test.ts",
+      "summary": "Test/staging environment configuration mirroring development, but pointing the OAuth redirect and sign-out URLs at the pruebasnovedades staging host.",
+      "tags": ["configuration", "environment", "api-urls", "oauth", "staging"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/index.html",
+      "type": "file",
+      "name": "index.html",
+      "filePath": "src/index.html",
+      "summary": "Application HTML shell that loads Roboto and Material Icons fonts and mounts the <novedades-mf> root single-spa web component.",
+      "tags": ["entry-point", "html-shell", "single-spa", "fonts"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/styles.css",
+      "type": "file",
+      "name": "styles.css",
+      "filePath": "src/styles.css",
+      "summary": "Global stylesheet importing the Angular Material theme and web fonts, enabling Tailwind layers, and re-implementing a scoped Preflight-equivalent reset limited to the <novedades-mf> host so it doesn't leak into the single-spa shell.",
+      "tags": ["styling", "tailwind", "css-reset", "single-spa", "theming"],
+      "complexity": "moderate",
+      "languageNotes": "Scopes what would normally be Tailwind's global Preflight reset to the novedades-mf host element selector, since the MFE shares the DOM with the single-spa shell without style isolation."
+    },
+    {
+      "id": "file:tailwind.config.js",
+      "type": "file",
+      "name": "tailwind.config.js",
+      "filePath": "tailwind.config.js",
+      "summary": "Tailwind CSS configuration defining the design-system color palette, spacing, border-radius, and typography scale, and disabling Preflight (replaced by a scoped reset in styles.css) to avoid style leakage into the single-spa shell.",
+      "tags": ["configuration", "tailwind", "design-system", "theming", "build-system"],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/app/app.component.html",
+      "target": "file:src/app/app.component.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/confirm-annul-modal/confirm-annul-modal.component.html",
+      "target": "file:src/app/domains/contratos/presentation/components/confirm-annul-modal/confirm-annul-modal.component.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.html",
+      "target": "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/contract-accordion/contract-accordion.component.html",
+      "target": "file:src/app/domains/contratos/presentation/components/contract-accordion/contract-accordion.component.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/contract-info-card/contract-info-card.component.html",
+      "target": "file:src/app/domains/contratos/presentation/components/contract-info-card/contract-info-card.component.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.html",
+      "target": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.html",
+      "target": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.html",
+      "target": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.html",
+      "target": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.html",
+      "target": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.html",
+      "target": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/dashboard-contratos/dashboard-contratos.component.html",
+      "target": "file:src/app/domains/contratos/presentation/pages/dashboard-contratos/dashboard-contratos.component.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:tailwind.config.js",
+      "target": "file:src/styles.css",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

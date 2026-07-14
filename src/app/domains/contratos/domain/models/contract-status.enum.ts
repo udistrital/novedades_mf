@@ -10,6 +10,8 @@
  */
 export enum ContractStatus {
   INICIO = 'Inicio',
+  /** Contrato suscrito sin acta de inicio registrada aún; en la UI se muestra como "Sin acta de inicio". */
+  SUSCRITO = 'Suscrito',
   EN_EJECUCION = 'En ejecución',
   SUSPENDIDO = 'Suspendido',
   CESION_PENDIENTE_POLIZA = 'Cesión pendiente de póliza',

@@ -46,6 +46,15 @@ export function effectiveStatus(contract: Contract): ContractStatus {
     ?? (isContractSuspended(contract) ? ContractStatus.SUSPENDIDO : ContractStatus.EN_EJECUCION);
 }
 
+/**
+ * Etiqueta visible del estado del contrato: coincide con el valor del enum
+ * salvo "Suscrito", cuyo nombre de negocio en la UI es "Sin acta de inicio"
+ * (el contrato aún no tiene acta de inicio registrada).
+ */
+export function contractStatusLabel(status: ContractStatus): string {
+  return status === ContractStatus.SUSCRITO ? 'Sin acta de inicio' : status;
+}
+
 /** Hay una novedad "en curso" (estado ENTR del legado) cuando la última está En trámite. */
 export function hasNoveltyInProgress(contract: Contract): boolean {
   return getLatestNovelty(contract)?.status === NoveltyStatus.IN_PROCESS;
@@ -136,15 +145,16 @@ export function maxExtensionDays(contract: Contract): number {
 // --- Contratista vigente tras cesión (requerimientos §5.5) ---
 
 /**
- * Documento del contratista vigente: el último cesionario registrado si hubo
- * cesión, o `undefined` si el contratista sigue siendo el original.
+ * Id (en `informacion_proveedor`) del contratista vigente: el del último
+ * cesionario registrado si hubo cesión, o `undefined` si el contratista
+ * sigue siendo el original.
  */
-export function currentContractorDocument(contract: Contract): string | undefined {
-  const cesiones = contract.novelties.filter(n => n.type === NoveltyType.ASSIGNMENT && n.cesionarioDocumento);
+export function currentContractorId(contract: Contract): string | undefined {
+  const cesiones = contract.novelties.filter(n => n.type === NoveltyType.ASSIGNMENT && n.cesionarioId);
   if (!cesiones.length) return undefined;
   return cesiones.reduce((a, b) =>
     parseExpeditionDate(b.expeditionDate) >= parseExpeditionDate(a.expeditionDate) ? b : a
-  ).cesionarioDocumento;
+  ).cesionarioId;
 }
 
 // --- Control de acceso por rol (requerimientos §4) ---

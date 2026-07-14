@@ -1,0 +1,567 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "type": "file",
+      "name": "create-novelty-page.base.ts",
+      "filePath": "src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "summary": "Shared base class for novelty-creation pages, encapsulating the submit/confirm/retry lifecycle, contract loading, and abstract draft/summary building delegated to subclasses.",
+      "tags": [
+        "base-class",
+        "novelty",
+        "shared-logic",
+        "template-method"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts:CreateNoveltyPage",
+      "type": "class",
+      "name": "CreateNoveltyPage",
+      "filePath": "src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "lineRange": [
+        21,
+        117
+      ],
+      "summary": "Template-method base class implementing the common novelty submission workflow (validate, confirm, submit via NoveltyService, handle success/error) reused by concrete novelty page components.",
+      "tags": [
+        "base-class",
+        "novelty",
+        "shared-logic"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/app/shared/ui/breadcrumb.component.ts",
+      "type": "file",
+      "name": "breadcrumb.component.ts",
+      "filePath": "src/app/shared/ui/breadcrumb.component.ts",
+      "summary": "Simple presentational breadcrumb navigation component rendering a list of items.",
+      "tags": [
+        "component",
+        "ui",
+        "navigation",
+        "shared"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/app/shared/ui/breadcrumb.component.ts:BreadcrumbComponent",
+      "type": "class",
+      "name": "BreadcrumbComponent",
+      "filePath": "src/app/shared/ui/breadcrumb.component.ts",
+      "lineRange": [
+        35,
+        37
+      ],
+      "summary": "Renders a breadcrumb trail from an input list of items.",
+      "tags": [
+        "component",
+        "ui",
+        "navigation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/shared/ui/card.component.ts",
+      "type": "file",
+      "name": "card.component.ts",
+      "filePath": "src/app/shared/ui/card.component.ts",
+      "summary": "Generic reusable card UI component with title, icon and style-variant inputs, used across contract and novelty views.",
+      "tags": [
+        "component",
+        "ui",
+        "shared"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/app/shared/ui/card.component.ts:CardComponent",
+      "type": "class",
+      "name": "CardComponent",
+      "filePath": "src/app/shared/ui/card.component.ts",
+      "lineRange": [
+        29,
+        45
+      ],
+      "summary": "Renders a styled card container with computed classes based on the selected variant.",
+      "tags": [
+        "component",
+        "ui",
+        "shared"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/shared/ui/document-preview-control.component.ts",
+      "type": "file",
+      "name": "document-preview-control.component.ts",
+      "filePath": "src/app/shared/ui/document-preview-control.component.ts",
+      "summary": "Control component that previews a generated document and lets the user adjust its preview font size.",
+      "tags": [
+        "component",
+        "ui",
+        "document-preview"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/app/shared/ui/document-preview-control.component.ts:DocumentPreviewControlComponent",
+      "type": "class",
+      "name": "DocumentPreviewControlComponent",
+      "filePath": "src/app/shared/ui/document-preview-control.component.ts",
+      "lineRange": [
+        37,
+        45
+      ],
+      "summary": "Manages a font-size signal for adjusting the readability of a document preview.",
+      "tags": [
+        "component",
+        "ui",
+        "document-preview"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/shared/ui/feedback-card.component.ts",
+      "type": "file",
+      "name": "feedback-card.component.ts",
+      "filePath": "src/app/shared/ui/feedback-card.component.ts",
+      "summary": "Generic feedback/status card component used by success and error result pages to display a title, message and icon variant.",
+      "tags": [
+        "component",
+        "ui",
+        "feedback",
+        "shared"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/app/shared/ui/feedback-card.component.ts:FeedbackCardComponent",
+      "type": "class",
+      "name": "FeedbackCardComponent",
+      "filePath": "src/app/shared/ui/feedback-card.component.ts",
+      "lineRange": [
+        41,
+        56
+      ],
+      "summary": "Renders a styled feedback card whose classes are derived from the success/error variant input.",
+      "tags": [
+        "component",
+        "ui",
+        "feedback"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/shared/ui/form-field.component.ts",
+      "type": "file",
+      "name": "form-field.component.ts",
+      "filePath": "src/app/shared/ui/form-field.component.ts",
+      "summary": "Generic reusable form field wrapper component providing a label, required indicator and validation error message display.",
+      "tags": [
+        "component",
+        "ui",
+        "form",
+        "shared"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/app/shared/ui/form-field.component.ts:FormFieldComponent",
+      "type": "class",
+      "name": "FormFieldComponent",
+      "filePath": "src/app/shared/ui/form-field.component.ts",
+      "lineRange": [
+        22,
+        43
+      ],
+      "summary": "Wraps a form control with a label and computed error message based on control state.",
+      "tags": [
+        "component",
+        "ui",
+        "form"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/shared/ui/form-input.directive.ts",
+      "type": "file",
+      "name": "form-input.directive.ts",
+      "filePath": "src/app/shared/ui/form-input.directive.ts",
+      "summary": "Directive applying shared styling/behavior conventions to native form input elements across the app.",
+      "tags": [
+        "directive",
+        "ui",
+        "form",
+        "shared"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/app/shared/ui/form-input.directive.ts:FormInputDirective",
+      "type": "class",
+      "name": "FormInputDirective",
+      "filePath": "src/app/shared/ui/form-input.directive.ts",
+      "lineRange": [
+        19,
+        19
+      ],
+      "summary": "Marker/styling directive attached to form input elements.",
+      "tags": [
+        "directive",
+        "ui",
+        "form"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/shared/ui/money-field.component.ts",
+      "type": "file",
+      "name": "money-field.component.ts",
+      "filePath": "src/app/shared/ui/money-field.component.ts",
+      "summary": "Specialized currency input field wrapper built on top of the shared form-field component.",
+      "tags": [
+        "component",
+        "ui",
+        "form",
+        "currency"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/app/shared/ui/money-field.component.ts:MoneyFieldComponent",
+      "type": "class",
+      "name": "MoneyFieldComponent",
+      "filePath": "src/app/shared/ui/money-field.component.ts",
+      "lineRange": [
+        24,
+        29
+      ],
+      "summary": "Composes the shared form-field component to present a labeled money/currency input.",
+      "tags": [
+        "component",
+        "ui",
+        "currency"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/shared/ui/no-negative-number.directive.ts",
+      "type": "file",
+      "name": "no-negative-number.directive.ts",
+      "filePath": "src/app/shared/ui/no-negative-number.directive.ts",
+      "summary": "Input-restriction directive that blocks keystrokes, paste and drop actions which would introduce a negative number into a numeric field.",
+      "tags": [
+        "directive",
+        "validation",
+        "input-restriction"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/app/shared/ui/no-negative-number.directive.ts:NoNegativeNumberDirective",
+      "type": "class",
+      "name": "NoNegativeNumberDirective",
+      "filePath": "src/app/shared/ui/no-negative-number.directive.ts",
+      "lineRange": [
+        15,
+        30
+      ],
+      "summary": "Intercepts keydown, paste and drop DOM events to prevent negative values in numeric inputs.",
+      "tags": [
+        "directive",
+        "validation",
+        "input-restriction"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/shared/ui/novelty-form-actions.component.ts",
+      "type": "file",
+      "name": "novelty-form-actions.component.ts",
+      "filePath": "src/app/shared/ui/novelty-form-actions.component.ts",
+      "summary": "Shared submit/clear action button row used at the bottom of every novelty creation form.",
+      "tags": [
+        "component",
+        "ui",
+        "form-actions",
+        "shared"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/app/shared/ui/novelty-form-actions.component.ts:NoveltyFormActionsComponent",
+      "type": "class",
+      "name": "NoveltyFormActionsComponent",
+      "filePath": "src/app/shared/ui/novelty-form-actions.component.ts",
+      "lineRange": [
+        30,
+        34
+      ],
+      "summary": "Renders submit and clear buttons, disabling submit while a submission is in progress.",
+      "tags": [
+        "component",
+        "ui",
+        "form-actions"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/shared/ui/toggle-section.component.ts",
+      "type": "file",
+      "name": "toggle-section.component.ts",
+      "filePath": "src/app/shared/ui/toggle-section.component.ts",
+      "summary": "Collapsible/toggleable section wrapper UI component used to show or hide optional form content.",
+      "tags": [
+        "component",
+        "ui",
+        "shared"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/app/shared/ui/toggle-section.component.ts:ToggleSectionComponent",
+      "type": "class",
+      "name": "ToggleSectionComponent",
+      "filePath": "src/app/shared/ui/toggle-section.component.ts",
+      "lineRange": [
+        33,
+        36
+      ],
+      "summary": "Renders a labeled section that can be toggled active/inactive.",
+      "tags": [
+        "component",
+        "ui",
+        "shared"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "target": "class:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts:CreateNoveltyPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "target": "class:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts:CreateNoveltyPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "target": "file:src/app/domains/contratos/application/contract-state.service.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "target": "file:src/app/domains/contratos/application/novelty.service.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "target": "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "target": "file:src/app/shared/ui/breadcrumb.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "target": "file:src/app/shared/util/format.util.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/shared/ui/breadcrumb.component.ts",
+      "target": "class:src/app/shared/ui/breadcrumb.component.ts:BreadcrumbComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/shared/ui/breadcrumb.component.ts",
+      "target": "class:src/app/shared/ui/breadcrumb.component.ts:BreadcrumbComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/shared/ui/card.component.ts",
+      "target": "class:src/app/shared/ui/card.component.ts:CardComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/shared/ui/card.component.ts",
+      "target": "class:src/app/shared/ui/card.component.ts:CardComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/shared/ui/document-preview-control.component.ts",
+      "target": "class:src/app/shared/ui/document-preview-control.component.ts:DocumentPreviewControlComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/shared/ui/document-preview-control.component.ts",
+      "target": "class:src/app/shared/ui/document-preview-control.component.ts:DocumentPreviewControlComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/shared/ui/document-preview-control.component.ts",
+      "target": "file:src/app/shared/ui/form-field.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/shared/ui/document-preview-control.component.ts",
+      "target": "file:src/app/shared/ui/form-input.directive.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/shared/ui/document-preview-control.component.ts",
+      "target": "file:src/app/shared/ui/no-negative-number.directive.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/shared/ui/feedback-card.component.ts",
+      "target": "class:src/app/shared/ui/feedback-card.component.ts:FeedbackCardComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/shared/ui/feedback-card.component.ts",
+      "target": "class:src/app/shared/ui/feedback-card.component.ts:FeedbackCardComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/shared/ui/form-field.component.ts",
+      "target": "class:src/app/shared/ui/form-field.component.ts:FormFieldComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/shared/ui/form-field.component.ts",
+      "target": "class:src/app/shared/ui/form-field.component.ts:FormFieldComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/shared/ui/form-input.directive.ts",
+      "target": "class:src/app/shared/ui/form-input.directive.ts:FormInputDirective",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/shared/ui/form-input.directive.ts",
+      "target": "class:src/app/shared/ui/form-input.directive.ts:FormInputDirective",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/shared/ui/money-field.component.ts",
+      "target": "class:src/app/shared/ui/money-field.component.ts:MoneyFieldComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/shared/ui/money-field.component.ts",
+      "target": "class:src/app/shared/ui/money-field.component.ts:MoneyFieldComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/shared/ui/money-field.component.ts",
+      "target": "file:src/app/shared/ui/form-field.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/shared/ui/no-negative-number.directive.ts",
+      "target": "class:src/app/shared/ui/no-negative-number.directive.ts:NoNegativeNumberDirective",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/shared/ui/no-negative-number.directive.ts",
+      "target": "class:src/app/shared/ui/no-negative-number.directive.ts:NoNegativeNumberDirective",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/shared/ui/novelty-form-actions.component.ts",
+      "target": "class:src/app/shared/ui/novelty-form-actions.component.ts:NoveltyFormActionsComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/shared/ui/novelty-form-actions.component.ts",
+      "target": "class:src/app/shared/ui/novelty-form-actions.component.ts:NoveltyFormActionsComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/shared/ui/toggle-section.component.ts",
+      "target": "class:src/app/shared/ui/toggle-section.component.ts:ToggleSectionComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/shared/ui/toggle-section.component.ts",
+      "target": "class:src/app/shared/ui/toggle-section.component.ts:ToggleSectionComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

@@ -75,11 +75,11 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
     adicion: this.fb.group({
       numCdp: ['', Validators.min(0)],
       vigencia: [this.vigencias[0]],
-      valorAdicional: [null as number | null, [Validators.required, Validators.min(0)]],
+      valorAdicional: [null as number | null, [Validators.required, Validators.min(1)]],
       fechaAdicion: [todayIso()]
     }),
     prorroga: this.fb.group({
-      tiempoDias: [null as number | null, [Validators.required, Validators.min(0)]],
+      tiempoDias: [null as number | null, [Validators.required, Validators.min(1)]],
       fechaProrroga: [todayIso()]
     }),
     clausula: this.fb.group({
@@ -116,6 +116,9 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
     const diasNuevos = Number(this.formValue()?.prorroga?.tiempoDias) || 0;
     return addDaysToTerm(c?.initialTerm, diasHistoricos + diasNuevos);
   });
+
+  /** El legado exige un Ordenador del Gasto asignado para tramitar esta novedad (§5.2). */
+  readonly sinOrdenadorGasto = computed(() => !this.state.selectedContract()?.spendingManager?.trim());
 
   get solicitud(): FormGroup { return this.form.get('solicitud') as FormGroup; }
   get adicion(): FormGroup { return this.form.get('adicion') as FormGroup; }
@@ -181,7 +184,7 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
     const c = this.state.selectedContract();
     return [
       { label: 'Contratista', value: c?.contractorName ?? '' },
-      { label: 'Ordenador del Gasto', value: c?.spendingManager ?? '' },
+      { label: 'Ordenador del Gasto', value: c?.spendingManager?.trim() || 'Sin Ordenador del Gasto asignado' },
       { label: 'Nuevo Valor del Contrato', value: formatCop(this.nuevoValor()), highlight: true },
       { label: 'Nuevo Plazo', value: this.nuevoPlazo() }
     ];

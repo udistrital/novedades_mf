@@ -43,6 +43,12 @@ export interface ContratoEstadoDto {
   Usuario?: string;
 }
 
+/** Catálogo `estado_contrato` (Ágora); da el id de un estado a partir de su nombre. */
+export interface EstadoContratoDto {
+  Id?: number;
+  NombreEstado?: string;
+}
+
 /** Entidad aseguradora del catálogo `entidad_aseguradora` (core_amazon_crud). */
 export interface EntidadAseguradoraDto {
   Id?: number;
@@ -92,6 +98,8 @@ export interface AlertResponse<T> {
 export interface NovedadMidDto {
   Id?: number | string;
   TipoNovedad?: number | string;
+  /** Fecha de expedición del acta; `FechaCreacion` es el nombre alternativo que algunos registros usan. */
+  FechaExpedicion?: string;
   FechaCreacion?: string;
   Estado?: string;
   Activo?: boolean;

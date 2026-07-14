@@ -59,13 +59,13 @@
               <input appFormInput id="fecha_term_cedente" type="date" formControlName="fechaTerminacionCedente">
             </app-form-field>
             <app-money-field label="Valor desembolsado" for="valor_desembolsado" [required]="true" [control]="form.controls['valorDesembolsado']">
-              <input appFormInput class="!pl-7" id="valor_desembolsado" type="number" min="0" placeholder="0.00" formControlName="valorDesembolsado">
+              <input appFormInput class="!pl-7" id="valor_desembolsado" type="number" min="1" placeholder="0.00" formControlName="valorDesembolsado">
             </app-money-field>
             <app-money-field label="Valor a favor de cedente" for="valor_favor_cedente" [required]="true" [control]="form.controls['valorFavorCedente']">
-              <input appFormInput class="!pl-7" id="valor_favor_cedente" type="number" min="0" placeholder="0.00" formControlName="valorFavorCedente">
+              <input appFormInput class="!pl-7" id="valor_favor_cedente" type="number" min="1" placeholder="0.00" formControlName="valorFavorCedente">
             </app-money-field>
             <app-form-field label="Días faltantes por pago (cedente)" for="dias_faltantes" [control]="form.controls['diasFaltantes']">
-              <input appFormInput id="dias_faltantes" type="number" min="0" placeholder="12" formControlName="diasFaltantes">
+              <input appFormInput id="dias_faltantes" type="number" min="1" placeholder="12" formControlName="diasFaltantes">
             </app-form-field>
             <app-form-field label="Cédula cesionario" for="cedula_cesionario" [required]="true" [control]="form.controls['cedulaCesionario']">
               <app-contractor-autocomplete

@@ -1,0 +1,15 @@
+{
+  "fixedSectionOk": true,
+  "nodesRecovered": 0,
+  "edgesRestored": 3,
+  "crossBatchEdgesAdded": 0,
+  "typesRemapped": 0,
+  "complexityRemapped": 0,
+  "notes": [
+    "No 'Fixed' section with pattern counts was present in this merge run (only Tested-by linker, Could not fix, and Imports recovery sections) — nothing to sanity-check there.",
+    "3 of 9 dropped 'documents' edges were retargeted and restored: batch-6's doc-analyzer guessed a 'config:' prefix for tailwind.config.js and eslint.config.js, but both .js files are categorized as fileCategory 'code' by the scan script, so their real node IDs are 'file:tailwind.config.js' and 'file:eslint.config.js'. Verified both nodes exist, verified the 3 edges (docs/CODING_STANDARDS.md->tailwind, docs/DECISION_LOG.md->tailwind, docs/DECISION_LOG.md->eslint) were not already present, and added them with the standard 'documents' edge shape (direction: forward, weight: 0.5).",
+    "5 dropped edges targeting document:info/MIGRATION_PLAN.md and document:info/referencias/COMPLIANCE_REPORT.md were left dropped, not recreated: info/ is gitignored and intentionally out of scan scope, so no placeholder nodes were created for it, per project convention of only graphing in-scope files.",
+    "Cross-batch import gap check: scanned all 39 non-empty importMap entries from scan-result.json. Every (source, target) pair already had a matching 'imports' edge in the assembled graph (211 imports edges total, all 39*n entries covered) — 0 missing edges found, so 0 were added. This is consistent with the merge script's own 'Recovered 0 imports edges' note; the batches already captured these edges directly, so there was nothing left for either the script or this review to recover.",
+    "No unknown node types or unknown complexity values were reported by the merge script, so no remapping was needed."
+  ]
+}

@@ -57,7 +57,7 @@
               <input appFormInput id="fecha_certificacion" type="date" formControlName="fechaCertificacion">
             </app-form-field>
             <app-money-field label="Valor desembolsado" for="valor_desembolsado" [required]="true" [control]="form.controls['valorDesembolsado']">
-              <input appFormInput class="!pl-7" id="valor_desembolsado" type="number" min="0" placeholder="0.00" formControlName="valorDesembolsado">
+              <input appFormInput class="!pl-7" id="valor_desembolsado" type="number" min="1" placeholder="0.00" formControlName="valorDesembolsado">
             </app-money-field>
             <app-money-field label="Saldo a favor del contratista" for="saldo_contratista" [required]="true" [control]="form.controls['saldoFavorContratista']">
               <input appFormInput class="!pl-7" id="saldo_contratista" type="number" min="0" placeholder="0.00" formControlName="saldoFavorContratista">

@@ -63,7 +63,7 @@ export class CrearTerminacionComponent extends CreateNoveltyPage {
     fechaOficioOrdenador: [todayIso()],
     fechaTerminacion: [todayIso()],
     fechaCertificacion: [todayIso()],
-    valorDesembolsado: [null as number | null, [Validators.required, Validators.min(0)]],
+    valorDesembolsado: [null as number | null, [Validators.required, Validators.min(1)]],
     saldoFavorContratista: [null as number | null, [Validators.required, Validators.min(0)]],
     saldoFavorUniversidad: [null as number | null, [Validators.required, Validators.min(0)]],
     clausula: this.fb.group({

@@ -10,7 +10,7 @@ import { ContractStatus } from '../domain/models/contract-status.enum';
 import { Assignee } from '../domain/models/assignee.model';
 import { NoveltyDraft } from '../domain/models/novelty-draft.model';
 import { Aseguradora, Poliza, PolizaUpdate } from '../domain/models/poliza.model';
-import { currentContractorDocument } from '../domain/contract.rules';
+import { currentContractorId } from '../domain/contract.rules';
 import { UserSessionService } from '../../../shared/auth/user-session.service';
 import {
   AlertResponse,
@@ -18,6 +18,7 @@ import {
   ContratoEstadoDto,
   ContratoGeneralDto,
   EntidadAseguradoraDto,
+  EstadoContratoDto,
   InformacionProveedorDto,
   NovedadMidDto,
   PolizaDto
@@ -31,7 +32,6 @@ import {
   toPoliza
 } from './mappers/contract.mapper';
 import {
-  ESTADO_CONTRATO_ID,
   targetStateId,
   toCambioEstadoPayload,
   toNoveltyPayload
@@ -98,7 +98,9 @@ export class HttpContractService implements IContractRepository {
   /**
    * Crea la novedad replicando la cascada del legado: (1) para las novedades
    * que cambian el estado del contrato, valida primero la transición en el mid;
-   * (2) POST de la novedad; (3) registra el nuevo estado en Ágora.
+   * (2) POST de la novedad; (3) registra el nuevo estado en Ágora — deshabilitado
+   * por ahora (ver comentario en el paso 3): `administrativa_amazon_api` es la
+   * misma URL en todos los ambientes, no hay instancia de pruebas separada.
    * Sin réplica a Titan ni compensación (TD-007/ADR-014).
    */
   createNovelty(contractId: string, draft: NoveltyDraft): Observable<void> {
@@ -115,9 +117,12 @@ export class HttpContractService implements IContractRepository {
         this.http.post<AlertResponse<unknown>>(`${this.mid}novedad/`, toNoveltyPayload(draft, numero, vigencia, usuario))
       ),
       switchMap(res => (esAlertaExitosa(res) ? of(undefined) : throwError(() => new Error(alertaError(res))))),
-      switchMap(() =>
-        estadoDestino !== null ? this.registrarEstado(estadoDestino, numero, vigencia, usuario) : of(undefined)
-      ),
+      switchMap(() => {
+        // Paso 3 deshabilitado: `administrativa_amazon_api` (contrato_estado) apunta a
+        // datos reales en todos los ambientes. Descomentar al pasar a producción.
+        // return estadoDestino !== null ? this.registrarEstado(estadoDestino, numero, vigencia, usuario) : of(undefined);
+        return of(undefined);
+      }),
       map(() => undefined)
     );
   }
@@ -136,12 +141,30 @@ export class HttpContractService implements IContractRepository {
       );
   }
 
-  /** Reapertura administrativa (contrato Finalizado → En ejecución): validar + registrar estado. */
+  /**
+   * Reapertura administrativa (contrato Finalizado → En ejecución): resuelve el
+   * id del estado "En ejecución" en el catálogo (`estado_contrato`) y valida el
+   * cambio. El registro en Ágora (`POST contrato_estado`) queda deshabilitado
+   * por ahora (ver comentario abajo): esa URL es la misma en todos los
+   * ambientes, no hay instancia de pruebas separada.
+   */
   activateContract(contractId: string): Observable<void> {
     const { numero, vigencia } = splitContractId(contractId);
     const usuario = this.session.usuarioRegistro();
-    return this.validarCambioEstado(ESTADO_CONTRATO_ID.EN_EJECUCION, numero, vigencia, usuario).pipe(
-      switchMap(() => this.registrarEstado(ESTADO_CONTRATO_ID.EN_EJECUCION, numero, vigencia, usuario))
+    return this.estadoContratoId('En ejecucion').pipe(
+      switchMap(estadoId => {
+        if (estadoId === undefined) {
+          return throwError(() => new Error('No se encontró el estado "En ejecución" en el catálogo.'));
+        }
+        return this.validarCambioEstado(estadoId, numero, vigencia, usuario).pipe(
+          switchMap(() => {
+            // Deshabilitado: `administrativa_amazon_api` (contrato_estado) apunta a datos
+            // reales en todos los ambientes. Descomentar al pasar a producción.
+            // return this.registrarEstado(estadoId, numero, vigencia, usuario);
+            return of(undefined);
+          })
+        );
+      })
     );
   }
 
@@ -177,6 +200,16 @@ export class HttpContractService implements IContractRepository {
   }
 
   // --- Privados ---
+
+  /** Id de un estado del catálogo `estado_contrato` a partir de su nombre (p. ej. "En ejecucion"). */
+  private estadoContratoId(nombreEstado: string): Observable<number | undefined> {
+    return this.http
+      .get<EstadoContratoDto[]>(`${this.adm}estado_contrato`, { params: { query: `NombreEstado:${nombreEstado}` } })
+      .pipe(
+        map(rows => nonEmpty(rows)[0]?.Id),
+        catchError(() => of(undefined))
+      );
+  }
 
   private validarCambioEstado(estadoId: number, numero: string, vigencia: string, usuario: string): Observable<void> {
     return this.http
@@ -226,14 +259,14 @@ export class HttpContractService implements IContractRepository {
     return forkJoin({
       proveedor: this.proveedorPorId(contratistaId),
       novelties: this.novedadesDeContrato(numero, vigencia),
-      status: this.estadoDeContrato(numero, vigencia)
+      status: this.estadoDeContrato(row.Id, vigencia)
     }).pipe(
       switchMap(({ proveedor, novelties, status }) => {
         const contract = toContract(row, proveedor, novelties, status);
-        const cesionarioDoc = currentContractorDocument(contract);
-        if (!cesionarioDoc) return of(contract);
+        const cesionarioId = currentContractorId(contract);
+        if (!cesionarioId) return of(contract);
         // Contratista vigente tras cesión: se sobreescribe con el último cesionario.
-        return this.proveedorPorDocumento(cesionarioDoc).pipe(
+        return this.proveedorPorId(cesionarioId).pipe(
           map(cesionario =>
             cesionario
               ? { ...contract, contractorName: cesionario.NomProveedor ?? '', contractorId: String(cesionario.NumDocumento ?? '') }
@@ -244,12 +277,16 @@ export class HttpContractService implements IContractRepository {
     );
   }
 
-  /** Último estado registrado del contrato (`contrato_estado`, orden Id desc). */
-  private estadoDeContrato(numero: string, vigencia: string): Observable<ContractStatus | undefined> {
-    if (!numero || !vigencia) return of(undefined);
+  /**
+   * Último estado registrado del contrato (`contrato_estado`, orden Id desc).
+   * El campo `NumeroContrato` del query es en realidad el id principal de
+   * `contrato_general` (`row.Id`), no el número humano del contrato.
+   */
+  private estadoDeContrato(contratoId: number | string | undefined, vigencia: string): Observable<ContractStatus | undefined> {
+    if (contratoId === undefined || contratoId === null || contratoId === '' || !vigencia) return of(undefined);
     return this.http
       .get<ContratoEstadoDto[]>(`${this.adm}contrato_estado`, {
-        params: { query: `NumeroContrato:${numero},Vigencia:${vigencia}`, sortby: 'Id', order: 'desc', limit: 1 }
+        params: { query: `NumeroContrato:${contratoId},Vigencia:${vigencia}`, sortby: 'Id', order: 'desc', limit: 1 }
       })
       .pipe(
         map(rows => toContractStatus(nonEmpty(rows))),
@@ -262,15 +299,6 @@ export class HttpContractService implements IContractRepository {
     if (id === undefined || id === null || id === '') return of(null);
     return this.http
       .get<InformacionProveedorDto[]>(`${this.adm}informacion_proveedor`, { params: { query: `Id:${id}` } })
-      .pipe(
-        map(rows => nonEmpty(rows)[0] ?? null),
-        catchError(() => of(null))
-      );
-  }
-
-  private proveedorPorDocumento(doc: string): Observable<InformacionProveedorDto | null> {
-    return this.http
-      .get<InformacionProveedorDto[]>(`${this.adm}informacion_proveedor`, { params: { query: `NumDocumento:${doc}` } })
       .pipe(
         map(rows => nonEmpty(rows)[0] ?? null),
         catchError(() => of(null))

@@ -76,9 +76,9 @@ export class CrearCesionComponent extends CreateNoveltyPage {
     fechaOficioOrdenador: [todayIso()],
     fechaSesion: [todayIso()],
     fechaTerminacionCedente: [{ value: '', disabled: true }],
-    valorDesembolsado: [null as number | null, [Validators.required, Validators.min(0)]],
-    valorFavorCedente: [null as number | null, [Validators.required, Validators.min(0)]],
-    diasFaltantes: [null as number | null, Validators.min(0)],
+    valorDesembolsado: [null as number | null, [Validators.required, Validators.min(1)]],
+    valorFavorCedente: [null as number | null, [Validators.required, Validators.min(1)]],
+    diasFaltantes: [null as number | null, Validators.min(1)],
     cedulaCesionario: ['', Validators.required],
     considerando: this.fb.group({
       activo: [false],

@@ -1,4 +1,4 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, computed, input, output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ModalShellComponent } from '../../../../../shared/ui/modal-shell.component';
 
@@ -25,9 +25,18 @@ export class ConfirmNoveltyModalComponent {
   readonly year = input<string>('');
   readonly summary = input.required<NoveltySummaryItem[]>();
   readonly submitting = input(false);
+  /** Cuando es `true`, bloquea la confirmación y muestra `blockedMessage` en vez de la advertencia genérica. */
+  readonly blocked = input(false);
+  readonly blockedMessage = input('No se puede generar la novedad.');
 
   // TEST SWITCH — borrar esta línea y el bloque en el HTML para quitarlo.
   readonly forceError = signal(false);
+
+  // TEST SWITCH — borrar esta línea, `effectiveBlocked` y el bloque en el HTML para quitarlo.
+  readonly ignoreBlocked = signal(false);
+
+  /** `blocked` real ya aplicado el switch de pruebas que lo ignora. */
+  readonly effectiveBlocked = computed(() => this.blocked() && !this.ignoreBlocked());
 
   /** Emite `true` si se debe simular una petición fallida (switch de pruebas). */
   readonly confirm = output<boolean>();

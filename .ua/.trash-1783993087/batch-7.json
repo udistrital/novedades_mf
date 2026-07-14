@@ -1,0 +1,153 @@
+{
+  "nodes": [
+    {
+      "id": "document:docs/adr/ADR-001-reescritura-angular18.md",
+      "type": "document",
+      "name": "ADR-001-reescritura-angular18.md",
+      "filePath": "docs/adr/ADR-001-reescritura-angular18.md",
+      "summary": "Decides to fully rewrite the legacy AngularJS 1.7.9/Grunt/Bower 'novedades_cliente' module as a new Angular 18 application rather than doing an incremental ngUpgrade migration, since the AngularJS-to-modern-Angular gap makes a hybrid bridge as costly as a rewrite. Only functional behavior is migrated from the gathered legacy requirements, not code; functional parity is tracked explicitly in MIGRATION_PLAN.md, and upgrading Angular further requires an explicit new decision.",
+      "tags": ["architecture-decision", "angular", "migration", "framework-rewrite"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:docs/adr/ADR-002-parcel-single-spa.md",
+      "type": "document",
+      "name": "ADR-002-parcel-single-spa.md",
+      "filePath": "docs/adr/ADR-002-parcel-single-spa.md",
+      "summary": "Decides to package the app as a single-spa UMD parcel ('novedades-mf') via @angular-builders/custom-webpack + single-spa-angular, per OAS institutional guidelines, instead of Module Federation or iframes. main.single-spa.ts is the sole entry point exporting bootstrap/mount/unmount and auto-bootstraps standalone only via its own index.html; APP_BASE_HREF is '/novedades' and zone.js is excluded from the bundle (provided by the root via CDN). Establishes permanent constraints: no unscoped global styles (see ADR-007), no mat-typography on the root template, and deployUrl-driven chunk resolution (see ADR-010).",
+      "tags": ["architecture-decision", "single-spa", "microfrontend", "module-bundling"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:docs/adr/ADR-003-standalone-zoneless-signals.md",
+      "type": "document",
+      "name": "ADR-003-standalone-zoneless-signals.md",
+      "filePath": "docs/adr/ADR-003-standalone-zoneless-signals.md",
+      "summary": "Decides to build the whole microfrontend with standalone components, zoneless change detection, and signals as the reactive state model, diverging deliberately from the institutional guide project (solicitudes_sabaticos_mf) which uses NgModules + zone.js. RxJS is reserved for I/O (HTTP, valueChanges); the divergence was validated as an acceptable equivalence in COMPLIANCE_REPORT.md. Derived rule: never depend on zone.js as a patch (e.g. no detectChanges() workaround) — if a view doesn't react, the state wasn't a signal.",
+      "tags": ["architecture-decision", "standalone-components", "zoneless", "signals"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:docs/adr/ADR-004-ddd-dominio-unico.md",
+      "type": "document",
+      "name": "ADR-004-ddd-dominio-unico.md",
+      "filePath": "docs/adr/ADR-004-ddd-dominio-unico.md",
+      "summary": "Decides to organize the codebase as layered DDD within a single domain folder (src/app/domains/contratos/: domain/application/infrastructure/presentation) instead of a flat Angular components/services structure (which repeats the legacy defect of business logic embedded in components) or full tactical DDD (aggregates, domain events, judged over-engineered for current scope). Future domains replicate the same four-layer pattern as sibling folders; shared/ stays outside the layers and holds no business logic. Explicitly forbids adding more DDD concepts without demonstrated need.",
+      "tags": ["architecture-decision", "ddd", "domain-layering", "architecture"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/adr/ADR-005-repositorio-como-puerto.md",
+      "type": "document",
+      "name": "ADR-005-repositorio-como-puerto.md",
+      "filePath": "docs/adr/ADR-005-repositorio-como-puerto.md",
+      "summary": "Decides to model IContractRepository as an abstract class used simultaneously as a DI token and a port, with HttpContractService (real) and MockContractService (dev) as swappable implementations bound in a single line in app.config.ts. All tolerance for the legacy backend's messy, undocumented schema lives in infrastructure/dtos + infrastructure/mappers (anti-corruption layer) — the domain never sees a DTO. Consequence: every new operation must be implemented twice (real and mock), a documented obligation in AI_GUIDE.md.",
+      "tags": ["architecture-decision", "dependency-injection", "repository-pattern", "anti-corruption-layer"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/adr/ADR-006-estado-con-signals.md",
+      "type": "document",
+      "name": "ADR-006-estado-con-signals.md",
+      "filePath": "docs/adr/ADR-006-estado-con-signals.md",
+      "summary": "Decides to manage shared UI state (search results, selected contract, loading/error flags) with signals inside application services rather than adopting NgRx (disproportionate ceremony for ~2 state slices) or BehaviorSubject-based services (double reactivity mechanism, clashes with zoneless per ADR-003). Canonical example is ContractStateService: a private signal plus public computed selectors and action methods; RxJS is only a transport converted at the edge. BehaviorSubject as a view store is an explicitly forbidden anti-pattern in CODING_STANDARDS.md.",
+      "tags": ["architecture-decision", "signals", "state-management", "ngrx-avoidance"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:docs/adr/ADR-007-tailwind-tokens.md",
+      "type": "document",
+      "name": "ADR-007-tailwind-tokens.md",
+      "filePath": "docs/adr/ADR-007-tailwind-tokens.md",
+      "summary": "Decides to style the microfrontend with Tailwind and custom semantic design tokens (the 'Stitch' garnet/gold visual redesign) rather than a full Angular Material theme (would fight the non-Material design) or per-component SCSS (no token system, prone to divergence); Angular Material is kept only where it adds behavior (icons, accessible autocomplete). Tailwind's Preflight reset is disabled because its unscoped global reset leaked into the single-spa shell and broke root elements; an equivalent reset is scoped to the 'novedades-mf' host in styles.css. Permanent rules: never re-enable Preflight, no unscoped global selectors, no new Material surface components.",
+      "tags": ["architecture-decision", "tailwind", "design-tokens", "angular-material"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/adr/ADR-008-clase-base-paginas-novedad.md",
+      "type": "document",
+      "name": "ADR-008-clase-base-paginas-novedad.md",
+      "filePath": "docs/adr/ADR-008-clase-base-paginas-novedad.md",
+      "summary": "Decides to introduce an abstract base class CreateNoveltyPage (a @Directive() for DI support) shared by the five novelty-creation pages (adición/prórroga, suspensión, cesión, terminación, reinicio) so they don't each duplicate the load-contract/breadcrumb/validate/confirm-modal/submit lifecycle. Each page only defines noveltyName, form, buildDraft(), and buildSummary(); visual composition remains component-based. Explicitly documented as an exceptional, deliberate use of inheritance — not a general pattern — and no further component hierarchies should be added without a new ADR.",
+      "tags": ["architecture-decision", "inheritance", "base-class", "presentation-layer"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/adr/ADR-009-autenticacion-delegada.md",
+      "type": "document",
+      "name": "ADR-009-autenticacion-delegada.md",
+      "filePath": "docs/adr/ADR-009-autenticacion-delegada.md",
+      "summary": "Decides that this microfrontend only consumes the OAuth2/WSO2 access token from localStorage rather than implementing its own login flow, preserving the shell's single-session model. auth.interceptor.ts re-reads access_token/id_token/token on every request (supporting shell-driven renewal, unlike the guide project's RequestManager which captures it once) and attaches it only to allowlisted URLs (environment *_SERVICE), preventing token leakage to third parties. dev-token.ts is a temporary local-dev hook that must stay empty in commits. Role-based access control from token contents is deferred to MIG-010 in MIGRATION_PLAN.md.",
+      "tags": ["architecture-decision", "authentication", "oauth2", "http-interceptor"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/adr/ADR-010-deployurl-por-ambiente.md",
+      "type": "document",
+      "name": "ADR-010-deployurl-por-ambiente.md",
+      "filePath": "docs/adr/ADR-010-deployurl-por-ambiente.md",
+      "summary": "Fixes a bug where production builds emitted lazy-chunk/asset URLs pointing at localhost:4209 (the shared deployUrl in angular.json) instead of each environment's public single-spa host. Decides to set deployUrl per build configuration to the real public URL (production/test/development), matching the institutional guide project's pattern, rather than deriving the public path at runtime via a generic set-public-path.ts. If deployment hosting changed frequently, the runtime-derivation alternative should be reconsidered via a new ADR.",
+      "tags": ["architecture-decision", "single-spa", "deployment", "environment-config"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:docs/adr/ADR-011-escrituras-simuladas.md",
+      "type": "document",
+      "name": "ADR-011-escrituras-simuladas.md",
+      "filePath": "docs/adr/ADR-011-escrituras-simuladas.md",
+      "summary": "Decides on a phased backend integration: connect read endpoints (contracts, providers, novedades) to the real backend immediately, while write operations (create/annul novelty) stay simulated behind HttpContractService (delay(400) + console.warn + TODO(escrituras) markers) until the POST/PATCH payload contract and the Ágora replication mechanism are defined with the backend team. forceError test switches let the UI's error paths be exercised meanwhile. Documented as the #1 production-blocking risk in MIGRATION_PLAN.md. Superseded by ADR-014 once real writes were connected (2026-07-07, closing MIG-001).",
+      "tags": ["architecture-decision", "migration-strategy", "mocking", "phased-rollout"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:docs/adr/ADR-012-regla-mes-30-dias.md",
+      "type": "document",
+      "name": "ADR-012-regla-mes-30-dias.md",
+      "filePath": "docs/adr/ADR-012-regla-mes-30-dias.md",
+      "summary": "Decides to preserve the legacy system's fixed 30-days-per-month arithmetic for contract term calculations (DIAS_POR_MES = 30 in format.util.ts's addDaysToTerm) rather than switching to real calendar-month arithmetic, to keep parity with historical actas and the still-live production system. This is explicitly a business/legal decision pending formal ratification (tracked as technical debt TD-010 in MIGRATION_PLAN.md); format.util.ts is the single change point if business later decides otherwise.",
+      "tags": ["architecture-decision", "business-rules", "date-arithmetic", "legacy-parity"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:docs/adr/ADR-013-normalizacion-fechas-legado.md",
+      "type": "document",
+      "name": "ADR-013-normalizacion-fechas-legado.md",
+      "filePath": "docs/adr/ADR-013-normalizacion-fechas-legado.md",
+      "summary": "Decides NOT to replicate two legacy date behaviors (normalizing to noon, and auto-correcting day 31 to the 1st of the next month), concluding they were technical workarounds for JavaScript Date/timezone bugs rather than real business rules. The microfrontend's date arithmetic parses yyyy-mm-dd/dd/mm/yyyy strings to local Date objects (format.util.ts#parseAnyDate), where the midnight/UTC offset bug doesn't apply, so only the visible correct result is preserved, not the literal legacy mechanism. Edge cases (Jan 31 + 1 day/month, leap-year Feb) are covered by format.util.spec.ts.",
+      "tags": ["architecture-decision", "date-normalization", "bug-fix", "legacy-parity"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:docs/adr/ADR-014-escrituras-reales-sin-replica.md",
+      "type": "document",
+      "name": "ADR-014-escrituras-reales-sin-replica.md",
+      "filePath": "docs/adr/ADR-014-escrituras-reales-sin-replica.md",
+      "summary": "Decides to connect real writes to novedades_mid with a minimal documented cascade — validate state transition, create the novelty (novelty-payload.mapper.ts, discriminated by tiponovedad), then register the resulting contract state — deliberately NOT replicating the legacy client's full choreography of replica-to-Ágora plus manual compensation on failure (that transactionality is deferred to the backend as TD-007). Annulment lets the mid revert state in cascade. The mid's {Type, Code, Body} envelope is validated explicitly since it can return HTTP 200 with a business error. Supersedes ADR-011; forceError test switches are kept since there's still no way to exercise UI error paths otherwise. Known accepted risk: without backend-side replication, created novedades are not yet reflected in Titan/preliquidación.",
+      "tags": ["architecture-decision", "http-integration", "transactional-writes", "technical-debt"],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    { "source": "document:docs/adr/ADR-002-parcel-single-spa.md", "target": "document:docs/adr/ADR-007-tailwind-tokens.md", "type": "related", "direction": "forward", "weight": 0.6 },
+    { "source": "document:docs/adr/ADR-002-parcel-single-spa.md", "target": "document:docs/adr/ADR-010-deployurl-por-ambiente.md", "type": "related", "direction": "forward", "weight": 0.6 },
+    { "source": "document:docs/adr/ADR-004-ddd-dominio-unico.md", "target": "document:docs/adr/ADR-005-repositorio-como-puerto.md", "type": "related", "direction": "forward", "weight": 0.6 },
+    { "source": "document:docs/adr/ADR-006-estado-con-signals.md", "target": "document:docs/adr/ADR-003-standalone-zoneless-signals.md", "type": "related", "direction": "forward", "weight": 0.6 },
+    { "source": "document:docs/adr/ADR-013-normalizacion-fechas-legado.md", "target": "document:docs/adr/ADR-012-regla-mes-30-dias.md", "type": "related", "direction": "forward", "weight": 0.6 },
+    { "source": "document:docs/adr/ADR-014-escrituras-reales-sin-replica.md", "target": "document:docs/adr/ADR-011-escrituras-simuladas.md", "type": "related", "direction": "forward", "weight": 0.7 },
+    { "source": "document:docs/adr/ADR-004-ddd-dominio-unico.md", "target": "document:docs/ARCHITECTURE.md", "type": "documents", "direction": "forward", "weight": 0.5 },
+    { "source": "document:docs/adr/ADR-008-clase-base-paginas-novedad.md", "target": "document:docs/ARCHITECTURE.md", "type": "documents", "direction": "forward", "weight": 0.5 },
+    { "source": "document:docs/adr/ADR-003-standalone-zoneless-signals.md", "target": "document:docs/CODING_STANDARDS.md", "type": "documents", "direction": "forward", "weight": 0.5 },
+    { "source": "document:docs/adr/ADR-006-estado-con-signals.md", "target": "document:docs/CODING_STANDARDS.md", "type": "documents", "direction": "forward", "weight": 0.5 },
+    { "source": "document:docs/adr/ADR-007-tailwind-tokens.md", "target": "document:docs/CODING_STANDARDS.md", "type": "documents", "direction": "forward", "weight": 0.5 },
+    { "source": "document:docs/adr/ADR-005-repositorio-como-puerto.md", "target": "document:docs/AI_GUIDE.md", "type": "documents", "direction": "forward", "weight": 0.5 },
+    { "source": "document:docs/adr/ADR-011-escrituras-simuladas.md", "target": "document:docs/AI_GUIDE.md", "type": "documents", "direction": "forward", "weight": 0.5 },
+    { "source": "document:docs/adr/ADR-014-escrituras-reales-sin-replica.md", "target": "document:docs/AI_GUIDE.md", "type": "documents", "direction": "forward", "weight": 0.5 },
+    { "source": "document:docs/adr/ADR-009-autenticacion-delegada.md", "target": "document:docs/DEVELOPMENT_GUIDE.md", "type": "documents", "direction": "forward", "weight": 0.5 },
+    { "source": "document:docs/adr/ADR-001-reescritura-angular18.md", "target": "document:info/MIGRATION_PLAN.md", "type": "documents", "direction": "forward", "weight": 0.5 },
+    { "source": "document:docs/adr/ADR-009-autenticacion-delegada.md", "target": "document:info/MIGRATION_PLAN.md", "type": "documents", "direction": "forward", "weight": 0.5 },
+    { "source": "document:docs/adr/ADR-011-escrituras-simuladas.md", "target": "document:info/MIGRATION_PLAN.md", "type": "documents", "direction": "forward", "weight": 0.5 },
+    { "source": "document:docs/adr/ADR-012-regla-mes-30-dias.md", "target": "document:info/MIGRATION_PLAN.md", "type": "documents", "direction": "forward", "weight": 0.5 },
+    { "source": "document:docs/adr/ADR-007-tailwind-tokens.md", "target": "document:info/referencias/COMPLIANCE_REPORT.md", "type": "documents", "direction": "forward", "weight": 0.5 },
+    { "source": "document:docs/adr/ADR-003-standalone-zoneless-signals.md", "target": "document:info/referencias/COMPLIANCE_REPORT.md", "type": "documents", "direction": "forward", "weight": 0.5 }
+  ]
+}

@@ -5,6 +5,7 @@ import { Assignee } from '../../domain/models/assignee.model';
 import { Aseguradora, Poliza } from '../../domain/models/poliza.model';
 import { canAnnulNovelty } from '../../domain/contract.rules';
 import { numberToWords, toDisplayDate } from '../../../../shared/util/format.util';
+import { environment } from '../../../../../environments/environment';
 import {
   ContratoEstadoDto,
   ContratoGeneralDto,
@@ -39,6 +40,7 @@ function normalizado(value: string): string {
 }
 
 const ESTADOS_CONTRATO: ReadonlyArray<[string, ContractStatus]> = [
+  ['SUSCRITO', ContractStatus.SUSCRITO],
   ['EN EJECUCION', ContractStatus.EN_EJECUCION],
   ['SUSPENDIDO', ContractStatus.SUSPENDIDO],
   ['CESION', ContractStatus.CESION_PENDIENTE_POLIZA], // "Cesión pendiente de póliza" o variantes.
@@ -101,17 +103,20 @@ function toNoveltySummary(item: NovedadMidDto): NoveltySummary {
   const raw = item.NovedadPoscontractual ?? item;
   const valorAdicion = Number(readCandidate(item, ['ValorAdicion', 'valor_adicion', 'ValorNovedad', 'Valor', 'valor']));
   const diasProrroga = Number(readCandidate(item, ['DiasProrroga', 'dias_prorroga', 'Dias', 'dias', 'PeriodoProrroga']));
-  const cesionario = readCandidate(item, ['Cesionario', 'cesionario', 'DocumentoNuevo', 'documento_nuevo']);
+  const cesionarioId = readCandidate(item, ['Cesionario', 'cesionario', 'DocumentoNuevo', 'documento_nuevo']);
+  const enlace = readCandidate(raw, ['Enlace', 'EnlaceDocumento']);
+  const fechaExpedicion = readCandidate(raw, ['FechaExpedicion', 'FechaCreacion']);
   return {
     id: String(raw.Id ?? ''),
     type: TIPO_NOVEDAD[Number(raw.TipoNovedad)] ?? NoveltyType.ADDITION_EXTENSION,
-    expeditionDate: toDdMmYyyy(raw.FechaCreacion),
+    expeditionDate: toDdMmYyyy(String(fechaExpedicion ?? '')),
     status: toStatus(raw.Estado),
-    documentUrl: raw.EnlaceDocumento || undefined,
+    // El acta se sirve desde novedades_mid; el query de la novedad solo trae el enlace (id del documento).
+    documentUrl: enlace ? `${environment.NOVEDADES_MID_SERVICE}gestor_documental/${String(enlace)}` : undefined,
     canAnnul: raw.Activo !== false,
     valorAdicion: Number.isFinite(valorAdicion) && valorAdicion > 0 ? valorAdicion : undefined,
     diasProrroga: Number.isFinite(diasProrroga) && diasProrroga > 0 ? diasProrroga : undefined,
-    cesionarioDocumento: cesionario !== undefined ? String(cesionario) : undefined
+    cesionarioId: cesionarioId !== undefined ? String(cesionarioId) : undefined
   };
 }
 

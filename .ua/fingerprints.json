@@ -1,0 +1,4206 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "c6c6dea885a0948a2eaa034cdf9c43cd79586d2c",
+  "generatedAt": "2026-07-14T01:37:54.751Z",
+  "files": {
+    ".ua/.understandignore": {
+      "filePath": ".ua/.understandignore",
+      "contentHash": "e3f78c4522fd4f44b25c4ac72d7067c5e66440e0332bd7f73d1bd98f5a258b06",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 75,
+      "hasStructuralAnalysis": false
+    },
+    "eslint.config.js": {
+      "filePath": "eslint.config.js",
+      "contentHash": "ac4f9d6457fdd94c1ee52507e7bd1e8c9fc4b4899106ed7ad7f8e91cfa2d58cb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 51,
+      "hasStructuralAnalysis": true
+    },
+    "extra-webpack.config.js": {
+      "filePath": "extra-webpack.config.js",
+      "contentHash": "01bcec358f85ad942d69e17fe64f88bf8045f8bc6b7a14b778a879b593c45fe5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/app.component.spec.ts": {
+      "filePath": "src/app/app.component.spec.ts",
+      "contentHash": "05b30385a48f142c5d4826a00105f3bdccd6041edeb198c843913d6fbaf5b1c8",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@angular/core/testing",
+          "specifiers": [
+            "TestBed"
+          ]
+        },
+        {
+          "source": "@angular/router",
+          "specifiers": [
+            "provideRouter"
+          ]
+        },
+        {
+          "source": "./app.component",
+          "specifiers": [
+            "AppComponent"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 24,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/app.component.ts": {
+      "filePath": "src/app/app.component.ts",
+      "contentHash": "72198598d10639e8d0b8cc31ad4019113731ab21ac8a269bdc014d789bc66c1c",
+      "functions": [],
+      "classes": [
+        {
+          "name": "AppComponent",
+          "methods": [],
+          "properties": [],
+          "exported": true,
+          "lineCount": 1
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component"
+          ]
+        },
+        {
+          "source": "@angular/router",
+          "specifiers": [
+            "RouterOutlet"
+          ]
+        }
+      ],
+      "exports": [
+        "AppComponent"
+      ],
+      "totalLines": 16,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/app.config.ts": {
+      "filePath": "src/app/app.config.ts",
+      "contentHash": "b347dc95bf3a6e3eb8137df048192f655f6135ea6440d67a8d18b528f7f04ac7",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "ApplicationConfig",
+            "provideExperimentalZonelessChangeDetection"
+          ]
+        },
+        {
+          "source": "@angular/router",
+          "specifiers": [
+            "provideRouter"
+          ]
+        },
+        {
+          "source": "@angular/platform-browser/animations/async",
+          "specifiers": [
+            "provideAnimationsAsync"
+          ]
+        },
+        {
+          "source": "@angular/common/http",
+          "specifiers": [
+            "provideHttpClient",
+            "withFetch",
+            "withInterceptors"
+          ]
+        },
+        {
+          "source": "./app.routes",
+          "specifiers": [
+            "routes"
+          ]
+        },
+        {
+          "source": "./shared/http/auth.interceptor",
+          "specifiers": [
+            "authInterceptor"
+          ]
+        },
+        {
+          "source": "./domains/contratos/domain/repositories/contract.repository",
+          "specifiers": [
+            "IContractRepository"
+          ]
+        },
+        {
+          "source": "./domains/contratos/infrastructure/http-contract.service",
+          "specifiers": [
+            "HttpContractService"
+          ]
+        }
+      ],
+      "exports": [
+        "appConfig"
+      ],
+      "totalLines": 28,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/app.routes.ts": {
+      "filePath": "src/app/app.routes.ts",
+      "contentHash": "b26cc412b19d82c5c0501af6bbdacfc61c05761af1f1f7c36b168725b43b4d46",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@angular/router",
+          "specifiers": [
+            "Routes"
+          ]
+        },
+        {
+          "source": "./shared/auth/contract-access.guard",
+          "specifiers": [
+            "contractAccessGuard"
+          ]
+        }
+      ],
+      "exports": [
+        "routes"
+      ],
+      "totalLines": 50,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/application/contract-state.service.ts": {
+      "filePath": "src/app/domains/contratos/application/contract-state.service.ts",
+      "contentHash": "c13d1f245ed14b725cab52df0c84a8cd360f22215d2c09baa4258c3dccb2f675",
+      "functions": [],
+      "classes": [
+        {
+          "name": "ContractStateService",
+          "methods": [
+            "loadContracts",
+            "loadContract",
+            "searchContractors",
+            "updateFilters"
+          ],
+          "properties": [
+            "contractRepository",
+            "state",
+            "selectedContractState",
+            "isLoadingContractState",
+            "contracts",
+            "isLoading",
+            "error",
+            "filters",
+            "selectedContract",
+            "isLoadingContract"
+          ],
+          "exported": true,
+          "lineCount": 81
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Injectable",
+            "signal",
+            "computed",
+            "inject"
+          ]
+        },
+        {
+          "source": "../domain/models/contract.entity",
+          "specifiers": [
+            "Contract"
+          ]
+        },
+        {
+          "source": "../domain/repositories/contract.repository",
+          "specifiers": [
+            "IContractRepository",
+            "ContractFilters"
+          ]
+        },
+        {
+          "source": "rxjs/operators",
+          "specifiers": [
+            "finalize"
+          ]
+        }
+      ],
+      "exports": [
+        "ContractStateService"
+      ],
+      "totalLines": 107,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/application/novelty.service.ts": {
+      "filePath": "src/app/domains/contratos/application/novelty.service.ts",
+      "contentHash": "784dd3fc59b1839fbaa5980905bf272c29a8b8568f83381fcac49d5afdbd7bd1",
+      "functions": [],
+      "classes": [
+        {
+          "name": "NoveltyService",
+          "methods": [
+            "create",
+            "annul",
+            "activate"
+          ],
+          "properties": [
+            "contractRepository"
+          ],
+          "exported": true,
+          "lineCount": 21
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Injectable",
+            "inject"
+          ]
+        },
+        {
+          "source": "rxjs",
+          "specifiers": [
+            "Observable",
+            "throwError",
+            "timer"
+          ]
+        },
+        {
+          "source": "rxjs/operators",
+          "specifiers": [
+            "switchMap"
+          ]
+        },
+        {
+          "source": "../domain/repositories/contract.repository",
+          "specifiers": [
+            "IContractRepository"
+          ]
+        },
+        {
+          "source": "../domain/models/novelty-draft.model",
+          "specifiers": [
+            "NoveltyDraft"
+          ]
+        }
+      ],
+      "exports": [
+        "NoveltyService"
+      ],
+      "totalLines": 38,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/domain/contract.rules.spec.ts": {
+      "filePath": "src/app/domains/contratos/domain/contract.rules.spec.ts",
+      "contentHash": "d0f31e90a11c2408cf8804d816fdd5d550bad607254495765f3e542751d88ce6",
+      "functions": [
+        {
+          "name": "novelty",
+          "params": [
+            "overrides"
+          ],
+          "returnType": "NoveltySummary",
+          "exported": false,
+          "lineCount": 10
+        },
+        {
+          "name": "contract",
+          "params": [
+            "overrides"
+          ],
+          "returnType": "Contract",
+          "exported": false,
+          "lineCount": 19
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "./models/contract.entity",
+          "specifiers": [
+            "Contract",
+            "NoveltySummary"
+          ]
+        },
+        {
+          "source": "./models/contract-status.enum",
+          "specifiers": [
+            "ContractAction",
+            "ContractStatus"
+          ]
+        },
+        {
+          "source": "./models/novelty-type.enum",
+          "specifiers": [
+            "NoveltyStatus",
+            "NoveltyType"
+          ]
+        },
+        {
+          "source": "./contract.rules",
+          "specifiers": [
+            "availableActions",
+            "canAnnulNovelty",
+            "canManageContract",
+            "currentContractValue",
+            "currentContractorDocument",
+            "currentTermDays",
+            "effectiveStatus",
+            "hasNoveltyInProgress",
+            "maxAdditionValue",
+            "maxExtensionDays"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 177,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/domain/contract.rules.ts": {
+      "filePath": "src/app/domains/contratos/domain/contract.rules.ts",
+      "contentHash": "54ba7b316e6f96891c4e3e0992105eb8d1401dafe3cbda2ba115abcaa3e6a515",
+      "functions": [
+        {
+          "name": "availableVigencias",
+          "params": [],
+          "returnType": "string[]",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "parseExpeditionDate",
+          "params": [
+            "date"
+          ],
+          "returnType": "number",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "getLatestNovelty",
+          "params": [
+            "contract"
+          ],
+          "returnType": "NoveltySummary | undefined",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "isContractSuspended",
+          "params": [
+            "contract"
+          ],
+          "returnType": "boolean",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "effectiveStatus",
+          "params": [
+            "contract"
+          ],
+          "returnType": "ContractStatus",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "hasNoveltyInProgress",
+          "params": [
+            "contract"
+          ],
+          "returnType": "boolean",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "availableActions",
+          "params": [
+            "contract"
+          ],
+          "returnType": "ContractAction[]",
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "canAnnulNovelty",
+          "params": [
+            "contract",
+            "novelty"
+          ],
+          "returnType": "boolean",
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "currentContractValue",
+          "params": [
+            "contract"
+          ],
+          "returnType": "number",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "currentTermDays",
+          "params": [
+            "contract"
+          ],
+          "returnType": "number",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "maxAdditionValue",
+          "params": [
+            "contract"
+          ],
+          "returnType": "number",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "maxExtensionDays",
+          "params": [
+            "contract"
+          ],
+          "returnType": "number",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "currentContractorDocument",
+          "params": [
+            "contract"
+          ],
+          "returnType": "string | undefined",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "canManageContract",
+          "params": [
+            "userRoles",
+            "userDocument",
+            "contract"
+          ],
+          "returnType": "boolean",
+          "exported": true,
+          "lineCount": 7
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "./models/contract.entity",
+          "specifiers": [
+            "Contract",
+            "NoveltySummary"
+          ]
+        },
+        {
+          "source": "./models/novelty-type.enum",
+          "specifiers": [
+            "NoveltyType",
+            "NoveltyStatus"
+          ]
+        },
+        {
+          "source": "./models/contract-status.enum",
+          "specifiers": [
+            "ContractAction",
+            "ContractStatus"
+          ]
+        },
+        {
+          "source": "../../../shared/util/format.util",
+          "specifiers": [
+            "termToDays"
+          ]
+        }
+      ],
+      "exports": [
+        "availableVigencias",
+        "getLatestNovelty",
+        "isContractSuspended",
+        "effectiveStatus",
+        "hasNoveltyInProgress",
+        "availableActions",
+        "canAnnulNovelty",
+        "currentContractValue",
+        "currentTermDays",
+        "TOPE_ADICION",
+        "TOPE_PRORROGA",
+        "maxAdditionValue",
+        "maxExtensionDays",
+        "currentContractorDocument",
+        "ROL_SUPERVISOR",
+        "canManageContract"
+      ],
+      "totalLines": 169,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/domain/models/assignee.model.ts": {
+      "filePath": "src/app/domains/contratos/domain/models/assignee.model.ts",
+      "contentHash": "26d9ed22e53fde433e64d3406dfe10dc350216be65762aadef20a41796d148d3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 7,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/domain/models/contract-status.enum.ts": {
+      "filePath": "src/app/domains/contratos/domain/models/contract-status.enum.ts",
+      "contentHash": "e98a3e052ed1a97e08603ff584f1f8094ccee50d33e2519b154b68c64a63ab2e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 35,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/domain/models/contract.entity.ts": {
+      "filePath": "src/app/domains/contratos/domain/models/contract.entity.ts",
+      "contentHash": "88dcb97e45709d4c989faf6902b81a353ba6d6bee5aaf9cc3fc5b291d0649a4c",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "./novelty-type.enum",
+          "specifiers": [
+            "NoveltyType",
+            "NoveltyStatus"
+          ]
+        },
+        {
+          "source": "./contract-status.enum",
+          "specifiers": [
+            "ContractStatus"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 56,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/domain/models/novelty-draft.model.ts": {
+      "filePath": "src/app/domains/contratos/domain/models/novelty-draft.model.ts",
+      "contentHash": "e17ad113b23c2938fbec5e0a1cc581273b1bb0d4c582e5f008444896e751efd4",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "./novelty-type.enum",
+          "specifiers": [
+            "NoveltyType"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 115,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/domain/models/novelty-type.enum.ts": {
+      "filePath": "src/app/domains/contratos/domain/models/novelty-type.enum.ts",
+      "contentHash": "6a4a03e6a4e6ec17820a1a0b1f4af57c3176b7242aaa4083a403b499b2750d92",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 22,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/domain/models/poliza.model.ts": {
+      "filePath": "src/app/domains/contratos/domain/models/poliza.model.ts",
+      "contentHash": "5e6f280b84b4d207e98fea2491c8aed474f2c3d342ac8a1bea26d5c650a64db5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 19,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/domain/repositories/contract.repository.ts": {
+      "filePath": "src/app/domains/contratos/domain/repositories/contract.repository.ts",
+      "contentHash": "a59f2e52da4c99aefc238b0b991ddd7b68f20eb862c75c032e6f4fca387fdcc8",
+      "functions": [],
+      "classes": [
+        {
+          "name": "IContractRepository",
+          "methods": [
+            "getContracts",
+            "getContractById",
+            "createNovelty",
+            "annulNovelty",
+            "searchContractors",
+            "activateContract",
+            "getAseguradoras",
+            "getPolizaDeNovedad",
+            "updatePoliza"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 16
+        }
+      ],
+      "imports": [
+        {
+          "source": "rxjs",
+          "specifiers": [
+            "Observable"
+          ]
+        },
+        {
+          "source": "../models/contract.entity",
+          "specifiers": [
+            "Contract"
+          ]
+        },
+        {
+          "source": "../models/novelty-draft.model",
+          "specifiers": [
+            "NoveltyDraft"
+          ]
+        },
+        {
+          "source": "../models/assignee.model",
+          "specifiers": [
+            "Assignee"
+          ]
+        },
+        {
+          "source": "../models/poliza.model",
+          "specifiers": [
+            "Aseguradora",
+            "Poliza",
+            "PolizaUpdate"
+          ]
+        }
+      ],
+      "exports": [
+        "IContractRepository"
+      ],
+      "totalLines": 39,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/infrastructure/dtos/contract-response.dto.ts": {
+      "filePath": "src/app/domains/contratos/infrastructure/dtos/contract-response.dto.ts",
+      "contentHash": "afaa22d6da1741d8744b9041521cf7b9072f219f0195559e45d957b432e61a50",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../../domain/models/novelty-type.enum",
+          "specifiers": [
+            "NoveltyType",
+            "NoveltyStatus"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 34,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/infrastructure/dtos/legacy-api.dto.ts": {
+      "filePath": "src/app/domains/contratos/infrastructure/dtos/legacy-api.dto.ts",
+      "contentHash": "b764bac3cc554b54bed50b167ef1186b6420c183d5107f09171a9bfa143033ef",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 102,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/infrastructure/http-contract.service.ts": {
+      "filePath": "src/app/domains/contratos/infrastructure/http-contract.service.ts",
+      "contentHash": "abf6a624635049562e137709b34e23ca60b1518ffd3bc4459c9f8f2094721ff8",
+      "functions": [
+        {
+          "name": "splitContractId",
+          "params": [
+            "id"
+          ],
+          "returnType": "{ numero: string; vigencia: string }",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "esAlertaExitosa",
+          "params": [
+            "res"
+          ],
+          "returnType": "boolean",
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "alertaError",
+          "params": [
+            "res"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "nonEmpty",
+          "params": [
+            "rows"
+          ],
+          "returnType": "T[]",
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "vigenciaOf",
+          "params": [
+            "row"
+          ],
+          "returnType": "number",
+          "exported": false,
+          "lineCount": 3
+        }
+      ],
+      "classes": [
+        {
+          "name": "HttpContractService",
+          "methods": [
+            "getContracts",
+            "getContractById",
+            "searchContractors",
+            "createNovelty",
+            "annulNovelty",
+            "activateContract",
+            "getAseguradoras",
+            "getPolizaDeNovedad",
+            "updatePoliza",
+            "validarCambioEstado",
+            "registrarEstado",
+            "contratosPorQuery",
+            "contratosDeContratista",
+            "toDomain",
+            "estadoDeContrato",
+            "proveedorPorId",
+            "proveedorPorDocumento",
+            "novedadesDeContrato"
+          ],
+          "properties": [
+            "http",
+            "session",
+            "adm",
+            "mid",
+            "crud",
+            "core"
+          ],
+          "exported": true,
+          "lineCount": 239
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Injectable",
+            "inject"
+          ]
+        },
+        {
+          "source": "@angular/common/http",
+          "specifiers": [
+            "HttpClient"
+          ]
+        },
+        {
+          "source": "rxjs",
+          "specifiers": [
+            "Observable",
+            "forkJoin",
+            "of",
+            "throwError"
+          ]
+        },
+        {
+          "source": "rxjs/operators",
+          "specifiers": [
+            "catchError",
+            "map",
+            "switchMap"
+          ]
+        },
+        {
+          "source": "../../../../environments/environment",
+          "specifiers": [
+            "environment"
+          ]
+        },
+        {
+          "source": "../domain/repositories/contract.repository",
+          "specifiers": [
+            "ContractFilters",
+            "IContractRepository"
+          ]
+        },
+        {
+          "source": "../domain/models/contract.entity",
+          "specifiers": [
+            "Contract",
+            "NoveltySummary"
+          ]
+        },
+        {
+          "source": "../domain/models/contract-status.enum",
+          "specifiers": [
+            "ContractStatus"
+          ]
+        },
+        {
+          "source": "../domain/models/assignee.model",
+          "specifiers": [
+            "Assignee"
+          ]
+        },
+        {
+          "source": "../domain/models/novelty-draft.model",
+          "specifiers": [
+            "NoveltyDraft"
+          ]
+        },
+        {
+          "source": "../domain/models/poliza.model",
+          "specifiers": [
+            "Aseguradora",
+            "Poliza",
+            "PolizaUpdate"
+          ]
+        },
+        {
+          "source": "../domain/contract.rules",
+          "specifiers": [
+            "currentContractorDocument"
+          ]
+        },
+        {
+          "source": "../../../shared/auth/user-session.service",
+          "specifiers": [
+            "UserSessionService"
+          ]
+        },
+        {
+          "source": "./dtos/legacy-api.dto",
+          "specifiers": [
+            "AlertResponse",
+            "ApiResponseDto",
+            "ContratoEstadoDto",
+            "ContratoGeneralDto",
+            "EntidadAseguradoraDto",
+            "InformacionProveedorDto",
+            "NovedadMidDto",
+            "PolizaDto"
+          ]
+        },
+        {
+          "source": "./mappers/contract.mapper",
+          "specifiers": [
+            "toAseguradora",
+            "toAssignee",
+            "toContract",
+            "toContractStatus",
+            "toNoveltySummaries",
+            "toPoliza"
+          ]
+        },
+        {
+          "source": "./mappers/novelty-payload.mapper",
+          "specifiers": [
+            "ESTADO_CONTRATO_ID",
+            "targetStateId",
+            "toCambioEstadoPayload",
+            "toNoveltyPayload"
+          ]
+        }
+      ],
+      "exports": [
+        "HttpContractService"
+      ],
+      "totalLines": 317,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts": {
+      "filePath": "src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts",
+      "contentHash": "1ff3ae20ce40605be7683d1bb68808c3be11f80b68d22ee0bf387959edffebdd",
+      "functions": [
+        {
+          "name": "toStatus",
+          "params": [
+            "estado"
+          ],
+          "returnType": "NoveltyStatus",
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "normalizado",
+          "params": [
+            "value"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "toContractStatus",
+          "params": [
+            "rows"
+          ],
+          "returnType": "ContractStatus | undefined",
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "toDdMmYyyy",
+          "params": [
+            "value"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "readNombre",
+          "params": [
+            "value"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "toInitialTerm",
+          "params": [
+            "plazo",
+            "unidad"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "readCandidate",
+          "params": [
+            "raw",
+            "keys"
+          ],
+          "returnType": "unknown",
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "toNoveltySummary",
+          "params": [
+            "item"
+          ],
+          "returnType": "NoveltySummary",
+          "exported": false,
+          "lineCount": 17
+        },
+        {
+          "name": "toNoveltySummaries",
+          "params": [
+            "items"
+          ],
+          "returnType": "NoveltySummary[]",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "toContract",
+          "params": [
+            "row",
+            "proveedor",
+            "novelties",
+            "status"
+          ],
+          "returnType": "Contract",
+          "exported": true,
+          "lineCount": 35
+        },
+        {
+          "name": "toPoliza",
+          "params": [
+            "dto"
+          ],
+          "returnType": "Poliza",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "toAseguradora",
+          "params": [
+            "dto"
+          ],
+          "returnType": "Aseguradora",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "toAssignee",
+          "params": [
+            "p"
+          ],
+          "returnType": "Assignee",
+          "exported": true,
+          "lineCount": 8
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../../domain/models/contract.entity",
+          "specifiers": [
+            "Contract",
+            "NoveltySummary"
+          ]
+        },
+        {
+          "source": "../../domain/models/novelty-type.enum",
+          "specifiers": [
+            "NoveltyStatus",
+            "NoveltyType"
+          ]
+        },
+        {
+          "source": "../../domain/models/contract-status.enum",
+          "specifiers": [
+            "ContractStatus"
+          ]
+        },
+        {
+          "source": "../../domain/models/assignee.model",
+          "specifiers": [
+            "Assignee"
+          ]
+        },
+        {
+          "source": "../../domain/models/poliza.model",
+          "specifiers": [
+            "Aseguradora",
+            "Poliza"
+          ]
+        },
+        {
+          "source": "../../domain/contract.rules",
+          "specifiers": [
+            "canAnnulNovelty"
+          ]
+        },
+        {
+          "source": "../../../../shared/util/format.util",
+          "specifiers": [
+            "numberToWords",
+            "toDisplayDate"
+          ]
+        },
+        {
+          "source": "../dtos/legacy-api.dto",
+          "specifiers": [
+            "ContratoEstadoDto",
+            "ContratoGeneralDto",
+            "EntidadAseguradoraDto",
+            "InformacionProveedorDto",
+            "NovedadMidDto",
+            "PolizaDto"
+          ]
+        }
+      ],
+      "exports": [
+        "toContractStatus",
+        "toNoveltySummaries",
+        "toContract",
+        "toPoliza",
+        "toAseguradora",
+        "toAssignee"
+      ],
+      "totalLines": 192,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts": {
+      "filePath": "src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts",
+      "contentHash": "a4a2f8c4adb29ee7f28aeada78e7867b1539ecc167d58e918fd0a85bf108175b",
+      "functions": [
+        {
+          "name": "targetStateId",
+          "params": [
+            "draft"
+          ],
+          "returnType": "number | null",
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "tipoNovedadMid",
+          "params": [
+            "draft"
+          ],
+          "returnType": "TipoNovedadMid",
+          "exported": false,
+          "lineCount": 12
+        },
+        {
+          "name": "toNoveltyPayload",
+          "params": [
+            "draft",
+            "numeroContrato",
+            "vigencia",
+            "usuario"
+          ],
+          "returnType": "Record<string, unknown>",
+          "exported": true,
+          "lineCount": 79
+        },
+        {
+          "name": "clausula",
+          "params": [
+            "c"
+          ],
+          "returnType": "unknown",
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "toCambioEstadoPayload",
+          "params": [
+            "estadoId",
+            "numeroContrato",
+            "vigencia",
+            "usuario"
+          ],
+          "returnType": "Record<string, unknown>",
+          "exported": true,
+          "lineCount": 14
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../../domain/models/novelty-draft.model",
+          "specifiers": [
+            "NoveltyDraft"
+          ]
+        },
+        {
+          "source": "../../domain/models/novelty-type.enum",
+          "specifiers": [
+            "NoveltyType"
+          ]
+        }
+      ],
+      "exports": [
+        "ESTADO_CONTRATO_ID",
+        "targetStateId",
+        "toNoveltyPayload",
+        "toCambioEstadoPayload"
+      ],
+      "totalLines": 157,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/infrastructure/mock-contract.service.ts": {
+      "filePath": "src/app/domains/contratos/infrastructure/mock-contract.service.ts",
+      "contentHash": "29d4296e2131fc1e2e5a9e0106bae70cc044611abe0c906035700f44d689894a",
+      "functions": [],
+      "classes": [
+        {
+          "name": "MockContractService",
+          "methods": [
+            "getContracts",
+            "searchContractors",
+            "getContractById",
+            "createNovelty",
+            "annulNovelty",
+            "activateContract",
+            "getAseguradoras",
+            "getPolizaDeNovedad",
+            "updatePoliza"
+          ],
+          "properties": [
+            "mockData"
+          ],
+          "exported": true,
+          "lineCount": 164
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Injectable"
+          ]
+        },
+        {
+          "source": "rxjs",
+          "specifiers": [
+            "Observable",
+            "of"
+          ]
+        },
+        {
+          "source": "rxjs/operators",
+          "specifiers": [
+            "delay",
+            "tap"
+          ]
+        },
+        {
+          "source": "../domain/repositories/contract.repository",
+          "specifiers": [
+            "ContractFilters",
+            "IContractRepository"
+          ]
+        },
+        {
+          "source": "../domain/models/contract.entity",
+          "specifiers": [
+            "Contract"
+          ]
+        },
+        {
+          "source": "../domain/models/assignee.model",
+          "specifiers": [
+            "Assignee"
+          ]
+        },
+        {
+          "source": "../domain/models/poliza.model",
+          "specifiers": [
+            "Aseguradora",
+            "Poliza",
+            "PolizaUpdate"
+          ]
+        },
+        {
+          "source": "./dtos/contract-response.dto",
+          "specifiers": [
+            "ContractResponseDto"
+          ]
+        },
+        {
+          "source": "../domain/models/novelty-type.enum",
+          "specifiers": [
+            "NoveltyType",
+            "NoveltyStatus"
+          ]
+        },
+        {
+          "source": "../domain/models/novelty-draft.model",
+          "specifiers": [
+            "NoveltyDraft"
+          ]
+        }
+      ],
+      "exports": [
+        "MockContractService"
+      ],
+      "totalLines": 186,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts": {
+      "filePath": "src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts",
+      "contentHash": "0ad55cab46a9997e57503405f068963494c342328832c2c2bd14df789fcfd5e3",
+      "functions": [],
+      "classes": [
+        {
+          "name": "AdditionalClauseSectionComponent",
+          "methods": [
+            "ngOnInit"
+          ],
+          "properties": [
+            "group",
+            "destroyRef"
+          ],
+          "exported": true,
+          "lineCount": 14
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "DestroyRef",
+            "inject",
+            "input",
+            "OnInit"
+          ]
+        },
+        {
+          "source": "@angular/forms",
+          "specifiers": [
+            "FormGroup",
+            "ReactiveFormsModule",
+            "Validators"
+          ]
+        },
+        {
+          "source": "rxjs",
+          "specifiers": [
+            "startWith"
+          ]
+        },
+        {
+          "source": "@angular/core/rxjs-interop",
+          "specifiers": [
+            "takeUntilDestroyed"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/toggle-section.component",
+          "specifiers": [
+            "ToggleSectionComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/form-field.component",
+          "specifiers": [
+            "FormFieldComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/form-input.directive",
+          "specifiers": [
+            "FormInputDirective"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/no-negative-number.directive",
+          "specifiers": [
+            "NoNegativeNumberDirective"
+          ]
+        }
+      ],
+      "exports": [
+        "AdditionalClauseSectionComponent"
+      ],
+      "totalLines": 60,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/presentation/components/assignee-info-card/assignee-info-card.component.ts": {
+      "filePath": "src/app/domains/contratos/presentation/components/assignee-info-card/assignee-info-card.component.ts",
+      "contentHash": "87ca287aaccd755e30d34fd21929fd48ce525e748f29646c97906cf046d6c968",
+      "functions": [],
+      "classes": [
+        {
+          "name": "AssigneeInfoCardComponent",
+          "methods": [],
+          "properties": [
+            "assignee"
+          ],
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "input"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/card.component",
+          "specifiers": [
+            "CardComponent"
+          ]
+        },
+        {
+          "source": "../../../domain/models/assignee.model",
+          "specifiers": [
+            "Assignee"
+          ]
+        }
+      ],
+      "exports": [
+        "AssigneeInfoCardComponent"
+      ],
+      "totalLines": 35,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/presentation/components/confirm-annul-modal/confirm-annul-modal.component.ts": {
+      "filePath": "src/app/domains/contratos/presentation/components/confirm-annul-modal/confirm-annul-modal.component.ts",
+      "contentHash": "9406c20f6b5a076690fed02dafb3500bb484829bb7dfb35844debc240480e900",
+      "functions": [],
+      "classes": [
+        {
+          "name": "ConfirmAnnulModalComponent",
+          "methods": [],
+          "properties": [
+            "contractNumber",
+            "vigencia",
+            "tipo",
+            "fecha",
+            "estado",
+            "submitting",
+            "forceError",
+            "confirm",
+            "dismiss"
+          ],
+          "exported": true,
+          "lineCount": 15
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "input",
+            "output",
+            "signal"
+          ]
+        },
+        {
+          "source": "@angular/material/icon",
+          "specifiers": [
+            "MatIconModule"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/modal-shell.component",
+          "specifiers": [
+            "ModalShellComponent"
+          ]
+        }
+      ],
+      "exports": [
+        "ConfirmAnnulModalComponent"
+      ],
+      "totalLines": 28,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts": {
+      "filePath": "src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts",
+      "contentHash": "59fb932ac3ff9ed2cf1692928f6a68fd55c3d7ea774c5e0b3c2478563b74fa86",
+      "functions": [],
+      "classes": [
+        {
+          "name": "ConfirmNoveltyModalComponent",
+          "methods": [],
+          "properties": [
+            "noveltyLabel",
+            "contractNumber",
+            "year",
+            "summary",
+            "submitting",
+            "forceError",
+            "confirm",
+            "dismiss"
+          ],
+          "exported": true,
+          "lineCount": 14
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "input",
+            "output",
+            "signal"
+          ]
+        },
+        {
+          "source": "@angular/material/icon",
+          "specifiers": [
+            "MatIconModule"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/modal-shell.component",
+          "specifiers": [
+            "ModalShellComponent"
+          ]
+        }
+      ],
+      "exports": [
+        "ConfirmNoveltyModalComponent"
+      ],
+      "totalLines": 36,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/presentation/components/contract-accordion/contract-accordion.component.ts": {
+      "filePath": "src/app/domains/contratos/presentation/components/contract-accordion/contract-accordion.component.ts",
+      "contentHash": "63e0333d2127271d981c871c479dc68eff9e7ba832b1c84c13a36b788d613882",
+      "functions": [],
+      "classes": [
+        {
+          "name": "ContractAccordionComponent",
+          "methods": [
+            "vigencia",
+            "contractorDocument",
+            "estado",
+            "valorVigente",
+            "readOnly",
+            "bloqueadoPorTramite",
+            "noveltyMenuOptions",
+            "showActions",
+            "onActivate",
+            "toggleMenu",
+            "closeMenu",
+            "onDocumentClick",
+            "onEscape"
+          ],
+          "properties": [
+            "contract",
+            "userSession",
+            "annul",
+            "activate",
+            "menuRef",
+            "isMenuOpen"
+          ],
+          "exported": true,
+          "lineCount": 80
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "ElementRef",
+            "HostListener",
+            "Input",
+            "ViewChild",
+            "inject",
+            "output",
+            "signal"
+          ]
+        },
+        {
+          "source": "@angular/common",
+          "specifiers": [
+            "CurrencyPipe"
+          ]
+        },
+        {
+          "source": "@angular/router",
+          "specifiers": [
+            "RouterLink"
+          ]
+        },
+        {
+          "source": "@angular/material/icon",
+          "specifiers": [
+            "MatIconModule"
+          ]
+        },
+        {
+          "source": "../../../domain/models/contract.entity",
+          "specifiers": [
+            "Contract",
+            "NoveltySummary"
+          ]
+        },
+        {
+          "source": "../../../domain/models/contract-status.enum",
+          "specifiers": [
+            "ContractAction"
+          ]
+        },
+        {
+          "source": "../../../domain/contract.rules",
+          "specifiers": [
+            "availableActions",
+            "canManageContract",
+            "currentContractValue",
+            "effectiveStatus",
+            "hasNoveltyInProgress"
+          ]
+        },
+        {
+          "source": "../../../../../shared/auth/user-session.service",
+          "specifiers": [
+            "UserSessionService"
+          ]
+        },
+        {
+          "source": "../../../../../shared/util/format.util",
+          "specifiers": [
+            "formatDocument"
+          ]
+        }
+      ],
+      "exports": [
+        "ContractAccordionComponent"
+      ],
+      "totalLines": 130,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/presentation/components/contract-info-card/contract-info-card.component.ts": {
+      "filePath": "src/app/domains/contratos/presentation/components/contract-info-card/contract-info-card.component.ts",
+      "contentHash": "e3b2336ec5ddbc643df27d2104b57cedca21c8112fdd88e699adb37cc0aac861",
+      "functions": [],
+      "classes": [
+        {
+          "name": "ContractInfoCardComponent",
+          "methods": [
+            "contractorDocument"
+          ],
+          "properties": [
+            "contract",
+            "valorVigente"
+          ],
+          "exported": true,
+          "lineCount": 11
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "computed",
+            "input"
+          ]
+        },
+        {
+          "source": "@angular/common",
+          "specifiers": [
+            "CurrencyPipe"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/card.component",
+          "specifiers": [
+            "CardComponent"
+          ]
+        },
+        {
+          "source": "../../../domain/models/contract.entity",
+          "specifiers": [
+            "Contract"
+          ]
+        },
+        {
+          "source": "../../../domain/contract.rules",
+          "specifiers": [
+            "currentContractValue"
+          ]
+        },
+        {
+          "source": "../../../../../shared/util/format.util",
+          "specifiers": [
+            "formatDocument"
+          ]
+        }
+      ],
+      "exports": [
+        "ContractInfoCardComponent"
+      ],
+      "totalLines": 29,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/presentation/components/contractor-autocomplete/contractor-autocomplete.component.ts": {
+      "filePath": "src/app/domains/contratos/presentation/components/contractor-autocomplete/contractor-autocomplete.component.ts",
+      "contentHash": "bd1bde8dd54daa335e02c23128d2bc1ce586cf24442cc464ed2d529c5b09bc3e",
+      "functions": [],
+      "classes": [
+        {
+          "name": "ContractorAutocompleteComponent",
+          "methods": [
+            "constructor",
+            "onSelected",
+            "writeValue",
+            "registerOnChange",
+            "registerOnTouched",
+            "setDisabledState",
+            "validate"
+          ],
+          "properties": [
+            "state",
+            "placeholder",
+            "soloNaturales",
+            "selected",
+            "query",
+            "isRealSelection",
+            "onChange",
+            "onTouched",
+            "opciones",
+            "display"
+          ],
+          "exported": true,
+          "lineCount": 62
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "forwardRef",
+            "inject",
+            "input",
+            "output"
+          ]
+        },
+        {
+          "source": "@angular/forms",
+          "specifiers": [
+            "ControlValueAccessor",
+            "FormControl",
+            "NG_VALIDATORS",
+            "NG_VALUE_ACCESSOR",
+            "ReactiveFormsModule",
+            "ValidationErrors",
+            "Validator"
+          ]
+        },
+        {
+          "source": "@angular/material/autocomplete",
+          "specifiers": [
+            "MatAutocompleteModule",
+            "MatAutocompleteSelectedEvent"
+          ]
+        },
+        {
+          "source": "@angular/core/rxjs-interop",
+          "specifiers": [
+            "takeUntilDestroyed",
+            "toSignal"
+          ]
+        },
+        {
+          "source": "rxjs",
+          "specifiers": [
+            "of"
+          ]
+        },
+        {
+          "source": "rxjs/operators",
+          "specifiers": [
+            "debounceTime",
+            "distinctUntilChanged",
+            "map",
+            "switchMap"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/form-input.directive",
+          "specifiers": [
+            "FormInputDirective"
+          ]
+        },
+        {
+          "source": "../../../application/contract-state.service",
+          "specifiers": [
+            "ContractStateService"
+          ]
+        },
+        {
+          "source": "../../../domain/models/assignee.model",
+          "specifiers": [
+            "Assignee"
+          ]
+        }
+      ],
+      "exports": [
+        "ContractorAutocompleteComponent"
+      ],
+      "totalLines": 106,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts": {
+      "filePath": "src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts",
+      "contentHash": "940b8fb9738011c0cda8f2b781347af8370bfcb164966af589bd8b8a2500aaa5",
+      "functions": [],
+      "classes": [
+        {
+          "name": "NoveltyErrorComponent",
+          "methods": [],
+          "properties": [
+            "noveltyName",
+            "errorCode",
+            "errorDetail",
+            "title",
+            "message",
+            "retry",
+            "back",
+            "displayMessage"
+          ],
+          "exported": true,
+          "lineCount": 17
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "computed",
+            "input",
+            "output"
+          ]
+        },
+        {
+          "source": "@angular/material/icon",
+          "specifiers": [
+            "MatIconModule"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/feedback-card.component",
+          "specifiers": [
+            "FeedbackCardComponent"
+          ]
+        }
+      ],
+      "exports": [
+        "NoveltyErrorComponent"
+      ],
+      "totalLines": 67,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts": {
+      "filePath": "src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts",
+      "contentHash": "fb6215b85157439c34f90743dbbed70bc4ec0e84f90c669bcc0134e6992b1567",
+      "functions": [],
+      "classes": [
+        {
+          "name": "NoveltyPageLayoutComponent",
+          "methods": [],
+          "properties": [
+            "title",
+            "breadcrumbItems",
+            "contract"
+          ],
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "input"
+          ]
+        },
+        {
+          "source": "@angular/router",
+          "specifiers": [
+            "RouterLink"
+          ]
+        },
+        {
+          "source": "@angular/material/icon",
+          "specifiers": [
+            "MatIconModule"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/breadcrumb.component",
+          "specifiers": [
+            "BreadcrumbComponent",
+            "BreadcrumbItem"
+          ]
+        },
+        {
+          "source": "../contract-info-card/contract-info-card.component",
+          "specifiers": [
+            "ContractInfoCardComponent"
+          ]
+        },
+        {
+          "source": "../../../domain/models/contract.entity",
+          "specifiers": [
+            "Contract"
+          ]
+        }
+      ],
+      "exports": [
+        "NoveltyPageLayoutComponent"
+      ],
+      "totalLines": 50,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts": {
+      "filePath": "src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts",
+      "contentHash": "0047434830fa5164baf9e0010f55be4b7ed8e7e1fb3170b36eab37434b701070",
+      "functions": [],
+      "classes": [
+        {
+          "name": "NoveltyResultComponent",
+          "methods": [],
+          "properties": [
+            "noveltyName",
+            "contractNumber",
+            "executedAt",
+            "responsible",
+            "title",
+            "message",
+            "back",
+            "displayMessage"
+          ],
+          "exported": true,
+          "lineCount": 17
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "computed",
+            "input",
+            "output"
+          ]
+        },
+        {
+          "source": "@angular/material/icon",
+          "specifiers": [
+            "MatIconModule"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/feedback-card.component",
+          "specifiers": [
+            "FeedbackCardComponent"
+          ]
+        }
+      ],
+      "exports": [
+        "NoveltyResultComponent"
+      ],
+      "totalLines": 69,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts": {
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "contentHash": "4f48ef0f7917366ef767d5bf61b3b1f30dd06d9b98fb17ad9092e6e4e4936394",
+      "functions": [],
+      "classes": [
+        {
+          "name": "CrearAdicionProrrogaComponent",
+          "methods": [
+            "solicitud",
+            "adicion",
+            "prorroga",
+            "clausula",
+            "constructor",
+            "onClear",
+            "buildDraft",
+            "buildSummary"
+          ],
+          "properties": [
+            "fb",
+            "noveltyName",
+            "vigencias",
+            "form",
+            "formValue",
+            "valorVigente",
+            "nuevoValor",
+            "nuevoValorEnLetras",
+            "valorAdicionalEnLetras",
+            "nuevoPlazo",
+            "topeAdicionValidator",
+            "topeProrrogaValidator"
+          ],
+          "exported": true,
+          "lineCount": 129
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "computed",
+            "effect",
+            "inject"
+          ]
+        },
+        {
+          "source": "@angular/common",
+          "specifiers": [
+            "CurrencyPipe"
+          ]
+        },
+        {
+          "source": "@angular/forms",
+          "specifiers": [
+            "AbstractControl",
+            "FormBuilder",
+            "FormGroup",
+            "ReactiveFormsModule",
+            "ValidationErrors",
+            "Validators"
+          ]
+        },
+        {
+          "source": "@angular/core/rxjs-interop",
+          "specifiers": [
+            "toSignal"
+          ]
+        },
+        {
+          "source": "../create-novelty-page.base",
+          "specifiers": [
+            "CreateNoveltyPage"
+          ]
+        },
+        {
+          "source": "../../components/novelty-page-layout/novelty-page-layout.component",
+          "specifiers": [
+            "NoveltyPageLayoutComponent"
+          ]
+        },
+        {
+          "source": "../../components/additional-clause-section/additional-clause-section.component",
+          "specifiers": [
+            "AdditionalClauseSectionComponent"
+          ]
+        },
+        {
+          "source": "../../components/confirm-novelty-modal/confirm-novelty-modal.component",
+          "specifiers": [
+            "ConfirmNoveltyModalComponent",
+            "NoveltySummaryItem"
+          ]
+        },
+        {
+          "source": "../../components/novelty-result/novelty-result.component",
+          "specifiers": [
+            "NoveltyResultComponent"
+          ]
+        },
+        {
+          "source": "../../components/novelty-error/novelty-error.component",
+          "specifiers": [
+            "NoveltyErrorComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/card.component",
+          "specifiers": [
+            "CardComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/form-field.component",
+          "specifiers": [
+            "FormFieldComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/form-input.directive",
+          "specifiers": [
+            "FormInputDirective"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/no-negative-number.directive",
+          "specifiers": [
+            "NoNegativeNumberDirective"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/money-field.component",
+          "specifiers": [
+            "MoneyFieldComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/document-preview-control.component",
+          "specifiers": [
+            "DocumentPreviewControlComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/novelty-form-actions.component",
+          "specifiers": [
+            "NoveltyFormActionsComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/util/format.util",
+          "specifiers": [
+            "addDaysToTerm",
+            "formatCop",
+            "formatCopWords",
+            "todayIso"
+          ]
+        },
+        {
+          "source": "../../../domain/models/novelty-type.enum",
+          "specifiers": [
+            "NoveltyType"
+          ]
+        },
+        {
+          "source": "../../../domain/models/novelty-draft.model",
+          "specifiers": [
+            "AdicionProrrogaDraft",
+            "NoveltyDraft"
+          ]
+        },
+        {
+          "source": "../../../domain/contract.rules",
+          "specifiers": [
+            "availableVigencias",
+            "currentContractValue",
+            "maxAdditionValue",
+            "maxExtensionDays"
+          ]
+        }
+      ],
+      "exports": [
+        "CrearAdicionProrrogaComponent"
+      ],
+      "totalLines": 190,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts": {
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "contentHash": "fd841b26bf986abc79298619730baad75433e88b96cfd10eff07a49117cf02c6",
+      "functions": [],
+      "classes": [
+        {
+          "name": "CrearCesionComponent",
+          "methods": [
+            "considerando",
+            "clausula",
+            "constructor",
+            "onCesionarioSelected",
+            "onClear",
+            "buildDraft",
+            "buildSummary"
+          ],
+          "properties": [
+            "fb",
+            "noveltyName",
+            "assignee",
+            "form",
+            "formValue",
+            "valorVigente",
+            "saldoCesionario",
+            "saldoCesionarioTexto",
+            "topeValorContrato"
+          ],
+          "exported": true,
+          "lineCount": 149
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "computed",
+            "effect",
+            "inject",
+            "signal"
+          ]
+        },
+        {
+          "source": "@angular/forms",
+          "specifiers": [
+            "AbstractControl",
+            "FormBuilder",
+            "FormGroup",
+            "ReactiveFormsModule",
+            "ValidationErrors",
+            "Validators"
+          ]
+        },
+        {
+          "source": "@angular/core/rxjs-interop",
+          "specifiers": [
+            "takeUntilDestroyed",
+            "toSignal"
+          ]
+        },
+        {
+          "source": "rxjs",
+          "specifiers": [
+            "startWith"
+          ]
+        },
+        {
+          "source": "@angular/material/icon",
+          "specifiers": [
+            "MatIconModule"
+          ]
+        },
+        {
+          "source": "../create-novelty-page.base",
+          "specifiers": [
+            "CreateNoveltyPage"
+          ]
+        },
+        {
+          "source": "../../components/novelty-page-layout/novelty-page-layout.component",
+          "specifiers": [
+            "NoveltyPageLayoutComponent"
+          ]
+        },
+        {
+          "source": "../../components/additional-clause-section/additional-clause-section.component",
+          "specifiers": [
+            "AdditionalClauseSectionComponent"
+          ]
+        },
+        {
+          "source": "../../components/assignee-info-card/assignee-info-card.component",
+          "specifiers": [
+            "AssigneeInfoCardComponent"
+          ]
+        },
+        {
+          "source": "../../components/contractor-autocomplete/contractor-autocomplete.component",
+          "specifiers": [
+            "ContractorAutocompleteComponent"
+          ]
+        },
+        {
+          "source": "../../components/confirm-novelty-modal/confirm-novelty-modal.component",
+          "specifiers": [
+            "ConfirmNoveltyModalComponent",
+            "NoveltySummaryItem"
+          ]
+        },
+        {
+          "source": "../../components/novelty-result/novelty-result.component",
+          "specifiers": [
+            "NoveltyResultComponent"
+          ]
+        },
+        {
+          "source": "../../components/novelty-error/novelty-error.component",
+          "specifiers": [
+            "NoveltyErrorComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/card.component",
+          "specifiers": [
+            "CardComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/form-field.component",
+          "specifiers": [
+            "FormFieldComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/form-input.directive",
+          "specifiers": [
+            "FormInputDirective"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/no-negative-number.directive",
+          "specifiers": [
+            "NoNegativeNumberDirective"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/money-field.component",
+          "specifiers": [
+            "MoneyFieldComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/toggle-section.component",
+          "specifiers": [
+            "ToggleSectionComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/document-preview-control.component",
+          "specifiers": [
+            "DocumentPreviewControlComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/novelty-form-actions.component",
+          "specifiers": [
+            "NoveltyFormActionsComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/util/format.util",
+          "specifiers": [
+            "addDaysToDate",
+            "formatCop",
+            "toDisplayDate",
+            "todayIso"
+          ]
+        },
+        {
+          "source": "../../../domain/models/novelty-type.enum",
+          "specifiers": [
+            "NoveltyType"
+          ]
+        },
+        {
+          "source": "../../../domain/models/novelty-draft.model",
+          "specifiers": [
+            "CesionDraft",
+            "NoveltyDraft"
+          ]
+        },
+        {
+          "source": "../../../domain/models/assignee.model",
+          "specifiers": [
+            "Assignee"
+          ]
+        },
+        {
+          "source": "../../../domain/contract.rules",
+          "specifiers": [
+            "currentContractValue"
+          ]
+        }
+      ],
+      "exports": [
+        "CrearCesionComponent"
+      ],
+      "totalLines": 211,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts": {
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "contentHash": "c14287d9f254510cd7852aeb24e6ba8dabff8d572ac630e7fb27fb290e9d839e",
+      "functions": [],
+      "classes": [
+        {
+          "name": "CrearPolizaComponent",
+          "methods": [
+            "constructor",
+            "onSubmit",
+            "closeConfirm",
+            "onConfirm",
+            "onClear",
+            "onRetry",
+            "goBack"
+          ],
+          "properties": [
+            "route",
+            "router",
+            "repository",
+            "fb",
+            "state",
+            "contractId",
+            "pageState",
+            "submitting",
+            "showConfirm",
+            "executedAt",
+            "summary",
+            "poliza",
+            "aseguradoras",
+            "breadcrumb",
+            "form"
+          ],
+          "exported": true,
+          "lineCount": 112
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "computed",
+            "effect",
+            "inject",
+            "signal"
+          ]
+        },
+        {
+          "source": "@angular/forms",
+          "specifiers": [
+            "FormBuilder",
+            "ReactiveFormsModule",
+            "Validators"
+          ]
+        },
+        {
+          "source": "@angular/router",
+          "specifiers": [
+            "ActivatedRoute",
+            "Router"
+          ]
+        },
+        {
+          "source": "@angular/core/rxjs-interop",
+          "specifiers": [
+            "toSignal"
+          ]
+        },
+        {
+          "source": "@angular/material/icon",
+          "specifiers": [
+            "MatIconModule"
+          ]
+        },
+        {
+          "source": "../../../application/contract-state.service",
+          "specifiers": [
+            "ContractStateService"
+          ]
+        },
+        {
+          "source": "../../../domain/repositories/contract.repository",
+          "specifiers": [
+            "IContractRepository"
+          ]
+        },
+        {
+          "source": "../../../domain/models/novelty-type.enum",
+          "specifiers": [
+            "NoveltyType"
+          ]
+        },
+        {
+          "source": "../../../domain/contract.rules",
+          "specifiers": [
+            "getLatestNovelty"
+          ]
+        },
+        {
+          "source": "../../../domain/models/poliza.model",
+          "specifiers": [
+            "Poliza"
+          ]
+        },
+        {
+          "source": "../../components/novelty-page-layout/novelty-page-layout.component",
+          "specifiers": [
+            "NoveltyPageLayoutComponent"
+          ]
+        },
+        {
+          "source": "../../components/confirm-novelty-modal/confirm-novelty-modal.component",
+          "specifiers": [
+            "ConfirmNoveltyModalComponent",
+            "NoveltySummaryItem"
+          ]
+        },
+        {
+          "source": "../../components/novelty-result/novelty-result.component",
+          "specifiers": [
+            "NoveltyResultComponent"
+          ]
+        },
+        {
+          "source": "../../components/novelty-error/novelty-error.component",
+          "specifiers": [
+            "NoveltyErrorComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/card.component",
+          "specifiers": [
+            "CardComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/form-field.component",
+          "specifiers": [
+            "FormFieldComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/form-input.directive",
+          "specifiers": [
+            "FormInputDirective"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/novelty-form-actions.component",
+          "specifiers": [
+            "NoveltyFormActionsComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/breadcrumb.component",
+          "specifiers": [
+            "BreadcrumbItem"
+          ]
+        },
+        {
+          "source": "../../../../../shared/util/format.util",
+          "specifiers": [
+            "formatExecutionDate"
+          ]
+        }
+      ],
+      "exports": [
+        "CrearPolizaComponent"
+      ],
+      "totalLines": 164,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts": {
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "contentHash": "6e81db21ea8fef08be24c73170f7a07ea0a0756041995027d222a7c7c5d71a10",
+      "functions": [],
+      "classes": [
+        {
+          "name": "CrearReinicioComponent",
+          "methods": [
+            "constructor",
+            "onClear",
+            "buildDraft",
+            "buildSummary"
+          ],
+          "properties": [
+            "fb",
+            "noveltyName",
+            "form"
+          ],
+          "exported": true,
+          "lineCount": 82
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "effect",
+            "inject"
+          ]
+        },
+        {
+          "source": "@angular/forms",
+          "specifiers": [
+            "FormBuilder",
+            "ReactiveFormsModule",
+            "Validators"
+          ]
+        },
+        {
+          "source": "@angular/core/rxjs-interop",
+          "specifiers": [
+            "takeUntilDestroyed"
+          ]
+        },
+        {
+          "source": "rxjs",
+          "specifiers": [
+            "combineLatest",
+            "startWith"
+          ]
+        },
+        {
+          "source": "../create-novelty-page.base",
+          "specifiers": [
+            "CreateNoveltyPage"
+          ]
+        },
+        {
+          "source": "../../components/novelty-page-layout/novelty-page-layout.component",
+          "specifiers": [
+            "NoveltyPageLayoutComponent"
+          ]
+        },
+        {
+          "source": "../../components/confirm-novelty-modal/confirm-novelty-modal.component",
+          "specifiers": [
+            "ConfirmNoveltyModalComponent",
+            "NoveltySummaryItem"
+          ]
+        },
+        {
+          "source": "../../components/novelty-result/novelty-result.component",
+          "specifiers": [
+            "NoveltyResultComponent"
+          ]
+        },
+        {
+          "source": "../../components/novelty-error/novelty-error.component",
+          "specifiers": [
+            "NoveltyErrorComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/card.component",
+          "specifiers": [
+            "CardComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/form-field.component",
+          "specifiers": [
+            "FormFieldComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/form-input.directive",
+          "specifiers": [
+            "FormInputDirective"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/no-negative-number.directive",
+          "specifiers": [
+            "NoNegativeNumberDirective"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/document-preview-control.component",
+          "specifiers": [
+            "DocumentPreviewControlComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/novelty-form-actions.component",
+          "specifiers": [
+            "NoveltyFormActionsComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/util/format.util",
+          "specifiers": [
+            "addDaysToDate",
+            "daysBetween",
+            "toDisplayDate",
+            "todayIso"
+          ]
+        },
+        {
+          "source": "../../../domain/models/novelty-type.enum",
+          "specifiers": [
+            "NoveltyType"
+          ]
+        },
+        {
+          "source": "../../../domain/models/novelty-draft.model",
+          "specifiers": [
+            "ReinicioDraft",
+            "NoveltyDraft"
+          ]
+        },
+        {
+          "source": "../../../domain/contract.rules",
+          "specifiers": [
+            "getLatestNovelty"
+          ]
+        }
+      ],
+      "exports": [
+        "CrearReinicioComponent"
+      ],
+      "totalLines": 130,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts": {
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "contentHash": "c04791f3ba2b05031b73bbd8f598688eafb5957a1b3fff959de364717a8166d9",
+      "functions": [
+        {
+          "name": "setExtraError",
+          "params": [
+            "control",
+            "key",
+            "hasError"
+          ],
+          "returnType": "void",
+          "exported": false,
+          "lineCount": 5
+        }
+      ],
+      "classes": [
+        {
+          "name": "CrearSuspensionComponent",
+          "methods": [
+            "clausula",
+            "minFechaFin",
+            "constructor",
+            "onClear",
+            "buildDraft",
+            "buildSummary"
+          ],
+          "properties": [
+            "fb",
+            "noveltyName",
+            "form",
+            "minFechaInicio"
+          ],
+          "exported": true,
+          "lineCount": 115
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "computed",
+            "effect",
+            "inject"
+          ]
+        },
+        {
+          "source": "@angular/forms",
+          "specifiers": [
+            "AbstractControl",
+            "FormBuilder",
+            "FormGroup",
+            "ReactiveFormsModule",
+            "Validators"
+          ]
+        },
+        {
+          "source": "@angular/core/rxjs-interop",
+          "specifiers": [
+            "takeUntilDestroyed"
+          ]
+        },
+        {
+          "source": "rxjs",
+          "specifiers": [
+            "combineLatest",
+            "startWith"
+          ]
+        },
+        {
+          "source": "../create-novelty-page.base",
+          "specifiers": [
+            "CreateNoveltyPage"
+          ]
+        },
+        {
+          "source": "../../components/novelty-page-layout/novelty-page-layout.component",
+          "specifiers": [
+            "NoveltyPageLayoutComponent"
+          ]
+        },
+        {
+          "source": "../../components/additional-clause-section/additional-clause-section.component",
+          "specifiers": [
+            "AdditionalClauseSectionComponent"
+          ]
+        },
+        {
+          "source": "../../components/confirm-novelty-modal/confirm-novelty-modal.component",
+          "specifiers": [
+            "ConfirmNoveltyModalComponent",
+            "NoveltySummaryItem"
+          ]
+        },
+        {
+          "source": "../../components/novelty-result/novelty-result.component",
+          "specifiers": [
+            "NoveltyResultComponent"
+          ]
+        },
+        {
+          "source": "../../components/novelty-error/novelty-error.component",
+          "specifiers": [
+            "NoveltyErrorComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/card.component",
+          "specifiers": [
+            "CardComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/form-field.component",
+          "specifiers": [
+            "FormFieldComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/form-input.directive",
+          "specifiers": [
+            "FormInputDirective"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/no-negative-number.directive",
+          "specifiers": [
+            "NoNegativeNumberDirective"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/document-preview-control.component",
+          "specifiers": [
+            "DocumentPreviewControlComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/novelty-form-actions.component",
+          "specifiers": [
+            "NoveltyFormActionsComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/util/format.util",
+          "specifiers": [
+            "addDaysToDate",
+            "daysBetween",
+            "toDisplayDate",
+            "todayIso"
+          ]
+        },
+        {
+          "source": "../../../domain/models/novelty-type.enum",
+          "specifiers": [
+            "NoveltyType"
+          ]
+        },
+        {
+          "source": "../../../domain/models/novelty-draft.model",
+          "specifiers": [
+            "SuspensionDraft",
+            "NoveltyDraft"
+          ]
+        }
+      ],
+      "exports": [
+        "CrearSuspensionComponent"
+      ],
+      "totalLines": 171,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts": {
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "contentHash": "1600df14c83a9048c43f6a5cf82dd23c93332b5ad2937986b5c985e3d561d2eb",
+      "functions": [],
+      "classes": [
+        {
+          "name": "CrearTerminacionComponent",
+          "methods": [
+            "clausula",
+            "constructor",
+            "onClear",
+            "buildDraft",
+            "buildSummary"
+          ],
+          "properties": [
+            "fb",
+            "noveltyName",
+            "form",
+            "topeValorContrato"
+          ],
+          "exported": true,
+          "lineCount": 107
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "effect",
+            "inject"
+          ]
+        },
+        {
+          "source": "@angular/forms",
+          "specifiers": [
+            "AbstractControl",
+            "FormBuilder",
+            "FormGroup",
+            "ReactiveFormsModule",
+            "ValidationErrors",
+            "Validators"
+          ]
+        },
+        {
+          "source": "@angular/core/rxjs-interop",
+          "specifiers": [
+            "takeUntilDestroyed"
+          ]
+        },
+        {
+          "source": "rxjs",
+          "specifiers": [
+            "startWith"
+          ]
+        },
+        {
+          "source": "@angular/material/icon",
+          "specifiers": [
+            "MatIconModule"
+          ]
+        },
+        {
+          "source": "../create-novelty-page.base",
+          "specifiers": [
+            "CreateNoveltyPage"
+          ]
+        },
+        {
+          "source": "../../components/novelty-page-layout/novelty-page-layout.component",
+          "specifiers": [
+            "NoveltyPageLayoutComponent"
+          ]
+        },
+        {
+          "source": "../../components/additional-clause-section/additional-clause-section.component",
+          "specifiers": [
+            "AdditionalClauseSectionComponent"
+          ]
+        },
+        {
+          "source": "../../components/confirm-novelty-modal/confirm-novelty-modal.component",
+          "specifiers": [
+            "ConfirmNoveltyModalComponent",
+            "NoveltySummaryItem"
+          ]
+        },
+        {
+          "source": "../../components/novelty-result/novelty-result.component",
+          "specifiers": [
+            "NoveltyResultComponent"
+          ]
+        },
+        {
+          "source": "../../components/novelty-error/novelty-error.component",
+          "specifiers": [
+            "NoveltyErrorComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/card.component",
+          "specifiers": [
+            "CardComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/form-field.component",
+          "specifiers": [
+            "FormFieldComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/form-input.directive",
+          "specifiers": [
+            "FormInputDirective"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/no-negative-number.directive",
+          "specifiers": [
+            "NoNegativeNumberDirective"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/money-field.component",
+          "specifiers": [
+            "MoneyFieldComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/document-preview-control.component",
+          "specifiers": [
+            "DocumentPreviewControlComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/novelty-form-actions.component",
+          "specifiers": [
+            "NoveltyFormActionsComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/util/format.util",
+          "specifiers": [
+            "toDisplayDate",
+            "todayIso"
+          ]
+        },
+        {
+          "source": "../../../domain/models/novelty-type.enum",
+          "specifiers": [
+            "NoveltyType"
+          ]
+        },
+        {
+          "source": "../../../domain/models/novelty-draft.model",
+          "specifiers": [
+            "TerminacionDraft",
+            "NoveltyDraft"
+          ]
+        },
+        {
+          "source": "../../../domain/contract.rules",
+          "specifiers": [
+            "currentContractValue"
+          ]
+        }
+      ],
+      "exports": [
+        "CrearTerminacionComponent"
+      ],
+      "totalLines": 159,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts": {
+      "filePath": "src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "contentHash": "f6b73153f13b33e684d997cde48c257db752ac3c203513819722a17e1b9b4911",
+      "functions": [],
+      "classes": [
+        {
+          "name": "CreateNoveltyPage",
+          "methods": [
+            "buildDraft",
+            "buildSummary",
+            "constructor",
+            "onSubmit",
+            "closeConfirm",
+            "onConfirm",
+            "onRetry",
+            "goBack"
+          ],
+          "properties": [
+            "route",
+            "router",
+            "noveltyService",
+            "state",
+            "contractId",
+            "submitting",
+            "showConfirm",
+            "pageState",
+            "executedAt",
+            "summary",
+            "year",
+            "breadcrumb",
+            "noveltyName",
+            "form"
+          ],
+          "exported": true,
+          "lineCount": 97
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Directive",
+            "computed",
+            "inject",
+            "signal"
+          ]
+        },
+        {
+          "source": "@angular/router",
+          "specifiers": [
+            "ActivatedRoute",
+            "Router"
+          ]
+        },
+        {
+          "source": "@angular/forms",
+          "specifiers": [
+            "FormGroup"
+          ]
+        },
+        {
+          "source": "../../application/contract-state.service",
+          "specifiers": [
+            "ContractStateService"
+          ]
+        },
+        {
+          "source": "../../application/novelty.service",
+          "specifiers": [
+            "NoveltyService"
+          ]
+        },
+        {
+          "source": "../../domain/models/novelty-draft.model",
+          "specifiers": [
+            "NoveltyDraft"
+          ]
+        },
+        {
+          "source": "../components/confirm-novelty-modal/confirm-novelty-modal.component",
+          "specifiers": [
+            "NoveltySummaryItem"
+          ]
+        },
+        {
+          "source": "../../../../shared/ui/breadcrumb.component",
+          "specifiers": [
+            "BreadcrumbItem"
+          ]
+        },
+        {
+          "source": "../../../../shared/util/format.util",
+          "specifiers": [
+            "formatExecutionDate"
+          ]
+        }
+      ],
+      "exports": [
+        "CreateNoveltyPage"
+      ],
+      "totalLines": 118,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/domains/contratos/presentation/pages/dashboard-contratos/dashboard-contratos.component.ts": {
+      "filePath": "src/app/domains/contratos/presentation/pages/dashboard-contratos/dashboard-contratos.component.ts",
+      "contentHash": "0db17134b1a508529b901baa06f6b4dcbb771c79e789c5cb7d29c2573bf045de",
+      "functions": [],
+      "classes": [
+        {
+          "name": "DashboardContratosComponent",
+          "methods": [
+            "setSearchBy",
+            "applyFilters",
+            "onAnnulRequest",
+            "closeAnnulConfirm",
+            "confirmAnnul",
+            "onActivateRequest",
+            "closeActivateConfirm",
+            "confirmActivate",
+            "backToList"
+          ],
+          "properties": [
+            "state",
+            "fb",
+            "noveltyService",
+            "filterForm",
+            "years",
+            "searchBy",
+            "filterError",
+            "hasSearched",
+            "view",
+            "annulTarget",
+            "showAnnulConfirm",
+            "annulling",
+            "executedAt",
+            "activateTarget",
+            "activating"
+          ],
+          "exported": true,
+          "lineCount": 127
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "inject",
+            "signal"
+          ]
+        },
+        {
+          "source": "@angular/forms",
+          "specifiers": [
+            "FormBuilder",
+            "FormGroup",
+            "ReactiveFormsModule"
+          ]
+        },
+        {
+          "source": "@angular/material/icon",
+          "specifiers": [
+            "MatIconModule"
+          ]
+        },
+        {
+          "source": "../../../application/contract-state.service",
+          "specifiers": [
+            "ContractStateService"
+          ]
+        },
+        {
+          "source": "../../../application/novelty.service",
+          "specifiers": [
+            "NoveltyService"
+          ]
+        },
+        {
+          "source": "../../components/contract-accordion/contract-accordion.component",
+          "specifiers": [
+            "ContractAccordionComponent"
+          ]
+        },
+        {
+          "source": "../../components/contractor-autocomplete/contractor-autocomplete.component",
+          "specifiers": [
+            "ContractorAutocompleteComponent"
+          ]
+        },
+        {
+          "source": "../../components/confirm-annul-modal/confirm-annul-modal.component",
+          "specifiers": [
+            "ConfirmAnnulModalComponent"
+          ]
+        },
+        {
+          "source": "../../components/novelty-result/novelty-result.component",
+          "specifiers": [
+            "NoveltyResultComponent"
+          ]
+        },
+        {
+          "source": "../../components/novelty-error/novelty-error.component",
+          "specifiers": [
+            "NoveltyErrorComponent"
+          ]
+        },
+        {
+          "source": "../../../../../shared/ui/modal-shell.component",
+          "specifiers": [
+            "ModalShellComponent"
+          ]
+        },
+        {
+          "source": "../../../domain/models/contract.entity",
+          "specifiers": [
+            "Contract",
+            "NoveltySummary"
+          ]
+        },
+        {
+          "source": "../../../domain/contract.rules",
+          "specifiers": [
+            "availableVigencias"
+          ]
+        },
+        {
+          "source": "../../../domain/repositories/contract.repository",
+          "specifiers": [
+            "ContractFilters"
+          ]
+        },
+        {
+          "source": "../../../../../shared/util/format.util",
+          "specifiers": [
+            "formatExecutionDate"
+          ]
+        }
+      ],
+      "exports": [
+        "DashboardContratosComponent"
+      ],
+      "totalLines": 176,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/shared/auth/contract-access.guard.ts": {
+      "filePath": "src/app/shared/auth/contract-access.guard.ts",
+      "contentHash": "5ea42b7343119e2fbabec9f07e01c33b7cc11f7354567d2bfd3d258085781364",
+      "functions": [
+        {
+          "name": "contractAccessGuard",
+          "params": [],
+          "exported": true,
+          "lineCount": 14
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "inject"
+          ]
+        },
+        {
+          "source": "@angular/router",
+          "specifiers": [
+            "CanActivateFn",
+            "Router"
+          ]
+        },
+        {
+          "source": "rxjs/operators",
+          "specifiers": [
+            "map"
+          ]
+        },
+        {
+          "source": "./user-session.service",
+          "specifiers": [
+            "UserSessionService"
+          ]
+        },
+        {
+          "source": "../../domains/contratos/domain/repositories/contract.repository",
+          "specifiers": [
+            "IContractRepository"
+          ]
+        },
+        {
+          "source": "../../domains/contratos/domain/contract.rules",
+          "specifiers": [
+            "canManageContract"
+          ]
+        }
+      ],
+      "exports": [
+        "contractAccessGuard"
+      ],
+      "totalLines": 28,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/shared/auth/user-session.service.ts": {
+      "filePath": "src/app/shared/auth/user-session.service.ts",
+      "contentHash": "7be1af38ce876238177d340e987225d43a9c5d6257b1130d1216805324781b06",
+      "functions": [
+        {
+          "name": "decodeJwtPayload",
+          "params": [
+            "token"
+          ],
+          "returnType": "Record<string, unknown> | null",
+          "exported": false,
+          "lineCount": 10
+        }
+      ],
+      "classes": [
+        {
+          "name": "UserSessionService",
+          "methods": [
+            "session",
+            "usuarioRegistro"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 21
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Injectable"
+          ]
+        }
+      ],
+      "exports": [
+        "UserSessionService"
+      ],
+      "totalLines": 55,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/shared/http/auth.interceptor.ts": {
+      "filePath": "src/app/shared/http/auth.interceptor.ts",
+      "contentHash": "94516b2894ba83ce9b8e47051ffdc25650bdc77f3bebae75a4506cd8e5ecf6cd",
+      "functions": [
+        {
+          "name": "authInterceptor",
+          "params": [
+            "req",
+            "next"
+          ],
+          "exported": true,
+          "lineCount": 6
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@angular/common/http",
+          "specifiers": [
+            "HttpInterceptorFn"
+          ]
+        },
+        {
+          "source": "../../../environments/environment",
+          "specifiers": [
+            "environment"
+          ]
+        },
+        {
+          "source": "./dev-token",
+          "specifiers": [
+            "DEV_TOKEN"
+          ]
+        }
+      ],
+      "exports": [
+        "authInterceptor"
+      ],
+      "totalLines": 28,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/shared/http/dev-token.ts": {
+      "filePath": "src/app/shared/http/dev-token.ts",
+      "contentHash": "d715fb9628ac0d0fc43349deeaf8b2f0daa0ac052d9c2b1bfb8eb3a6d76077e2",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "DEV_TOKEN"
+      ],
+      "totalLines": 12,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/shared/ui/breadcrumb.component.ts": {
+      "filePath": "src/app/shared/ui/breadcrumb.component.ts",
+      "contentHash": "79813fd7c262aa6702e3cefe1ef9dd1763a473112e5a56c89d0fa07b39a1f49e",
+      "functions": [],
+      "classes": [
+        {
+          "name": "BreadcrumbComponent",
+          "methods": [],
+          "properties": [
+            "items"
+          ],
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "input"
+          ]
+        },
+        {
+          "source": "@angular/router",
+          "specifiers": [
+            "RouterLink"
+          ]
+        },
+        {
+          "source": "@angular/material/icon",
+          "specifiers": [
+            "MatIconModule"
+          ]
+        }
+      ],
+      "exports": [
+        "BreadcrumbComponent"
+      ],
+      "totalLines": 38,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/shared/ui/card.component.ts": {
+      "filePath": "src/app/shared/ui/card.component.ts",
+      "contentHash": "7a6373cca85b1b0f7ecebf7128c290e6dea72d3c90dd6f97de54aa50b10cf808",
+      "functions": [],
+      "classes": [
+        {
+          "name": "CardComponent",
+          "methods": [],
+          "properties": [
+            "title",
+            "icon",
+            "variant",
+            "containerClasses",
+            "headerClasses"
+          ],
+          "exported": true,
+          "lineCount": 17
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "computed",
+            "input"
+          ]
+        },
+        {
+          "source": "@angular/material/icon",
+          "specifiers": [
+            "MatIconModule"
+          ]
+        }
+      ],
+      "exports": [
+        "CardComponent"
+      ],
+      "totalLines": 46,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/shared/ui/document-preview-control.component.ts": {
+      "filePath": "src/app/shared/ui/document-preview-control.component.ts",
+      "contentHash": "12ef31b118ccc467b7ce33ba448bec3a567a9e23fa9baff722a13f5da73c424c",
+      "functions": [],
+      "classes": [
+        {
+          "name": "DocumentPreviewControlComponent",
+          "methods": [
+            "onFontSizeChange"
+          ],
+          "properties": [
+            "fontSize",
+            "preview"
+          ],
+          "exported": true,
+          "lineCount": 9
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "model",
+            "output"
+          ]
+        },
+        {
+          "source": "@angular/forms",
+          "specifiers": [
+            "FormsModule"
+          ]
+        },
+        {
+          "source": "@angular/material/icon",
+          "specifiers": [
+            "MatIconModule"
+          ]
+        },
+        {
+          "source": "./form-field.component",
+          "specifiers": [
+            "FormFieldComponent"
+          ]
+        },
+        {
+          "source": "./form-input.directive",
+          "specifiers": [
+            "FormInputDirective"
+          ]
+        },
+        {
+          "source": "./no-negative-number.directive",
+          "specifiers": [
+            "NoNegativeNumberDirective"
+          ]
+        }
+      ],
+      "exports": [
+        "DocumentPreviewControlComponent"
+      ],
+      "totalLines": 46,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/shared/ui/feedback-card.component.ts": {
+      "filePath": "src/app/shared/ui/feedback-card.component.ts",
+      "contentHash": "946d31e8fc2b99194391b9f250715e8044d1909c7906fbc7c81519710d0256a0",
+      "functions": [],
+      "classes": [
+        {
+          "name": "FeedbackCardComponent",
+          "methods": [],
+          "properties": [
+            "variant",
+            "icon",
+            "title",
+            "message",
+            "circleClass",
+            "haloClass",
+            "titleClass"
+          ],
+          "exported": true,
+          "lineCount": 16
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "computed",
+            "input"
+          ]
+        }
+      ],
+      "exports": [
+        "FeedbackCardComponent"
+      ],
+      "totalLines": 57,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/shared/ui/form-field.component.ts": {
+      "filePath": "src/app/shared/ui/form-field.component.ts",
+      "contentHash": "d9913a91468332befc3a1a01f64348339ad56641bdfb47a020b7e262256822f1",
+      "functions": [],
+      "classes": [
+        {
+          "name": "FormFieldComponent",
+          "methods": [],
+          "properties": [
+            "label",
+            "for",
+            "required",
+            "control",
+            "errorMessage"
+          ],
+          "exported": true,
+          "lineCount": 22
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "computed",
+            "input"
+          ]
+        },
+        {
+          "source": "@angular/forms",
+          "specifiers": [
+            "AbstractControl"
+          ]
+        }
+      ],
+      "exports": [
+        "FormFieldComponent"
+      ],
+      "totalLines": 44,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/shared/ui/form-input.directive.ts": {
+      "filePath": "src/app/shared/ui/form-input.directive.ts",
+      "contentHash": "f2b9a6a27c638aa15ad58098ed9416b909a61f13430ae15b9eae0373ef819837",
+      "functions": [],
+      "classes": [
+        {
+          "name": "FormInputDirective",
+          "methods": [],
+          "properties": [],
+          "exported": true,
+          "lineCount": 1
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Directive"
+          ]
+        }
+      ],
+      "exports": [
+        "FormInputDirective"
+      ],
+      "totalLines": 20,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/shared/ui/modal-shell.component.ts": {
+      "filePath": "src/app/shared/ui/modal-shell.component.ts",
+      "contentHash": "002afedde822ac4ac62288949af379ad473dec8090fc20e9984c92ab9634817f",
+      "functions": [],
+      "classes": [
+        {
+          "name": "ModalShellComponent",
+          "methods": [
+            "onBackdropClick",
+            "onEscape"
+          ],
+          "properties": [
+            "maxWidth",
+            "dismiss",
+            "maxWidthClass"
+          ],
+          "exported": true,
+          "lineCount": 18
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "HostListener",
+            "computed",
+            "input",
+            "output"
+          ]
+        }
+      ],
+      "exports": [
+        "ModalShellComponent"
+      ],
+      "totalLines": 44,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/shared/ui/money-field.component.ts": {
+      "filePath": "src/app/shared/ui/money-field.component.ts",
+      "contentHash": "7973813116a84c037cbb0eebfb239e6feebd9b72ed13279154feebe177a8abe9",
+      "functions": [],
+      "classes": [
+        {
+          "name": "MoneyFieldComponent",
+          "methods": [],
+          "properties": [
+            "label",
+            "for",
+            "required",
+            "control"
+          ],
+          "exported": true,
+          "lineCount": 6
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "input"
+          ]
+        },
+        {
+          "source": "@angular/forms",
+          "specifiers": [
+            "AbstractControl"
+          ]
+        },
+        {
+          "source": "./form-field.component",
+          "specifiers": [
+            "FormFieldComponent"
+          ]
+        }
+      ],
+      "exports": [
+        "MoneyFieldComponent"
+      ],
+      "totalLines": 30,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/shared/ui/no-negative-number.directive.ts": {
+      "filePath": "src/app/shared/ui/no-negative-number.directive.ts",
+      "contentHash": "682f42a5adafd2c76e29ea2c15b00e64965797993dcc9c443ef2dd4b7247582e",
+      "functions": [],
+      "classes": [
+        {
+          "name": "NoNegativeNumberDirective",
+          "methods": [
+            "onKeyDown",
+            "onPaste",
+            "onDrop"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 16
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Directive",
+            "HostListener"
+          ]
+        }
+      ],
+      "exports": [
+        "NoNegativeNumberDirective"
+      ],
+      "totalLines": 31,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/shared/ui/novelty-form-actions.component.ts": {
+      "filePath": "src/app/shared/ui/novelty-form-actions.component.ts",
+      "contentHash": "3b0328b64a65dc513da481e268eb09039634d1a735982ecb327a2cc14fd04009",
+      "functions": [],
+      "classes": [
+        {
+          "name": "NoveltyFormActionsComponent",
+          "methods": [],
+          "properties": [
+            "submitLabel",
+            "submitting",
+            "clear"
+          ],
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "input",
+            "output"
+          ]
+        },
+        {
+          "source": "@angular/material/icon",
+          "specifiers": [
+            "MatIconModule"
+          ]
+        }
+      ],
+      "exports": [
+        "NoveltyFormActionsComponent"
+      ],
+      "totalLines": 35,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/shared/ui/toggle-section.component.ts": {
+      "filePath": "src/app/shared/ui/toggle-section.component.ts",
+      "contentHash": "e21b9021597c6cc36fbc4b31b613f7907fe598463d8f0ae13b7f716171d1724b",
+      "functions": [],
+      "classes": [
+        {
+          "name": "ToggleSectionComponent",
+          "methods": [],
+          "properties": [
+            "label",
+            "active"
+          ],
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "Component",
+            "input",
+            "model"
+          ]
+        }
+      ],
+      "exports": [
+        "ToggleSectionComponent"
+      ],
+      "totalLines": 37,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/shared/util/format.util.spec.ts": {
+      "filePath": "src/app/shared/util/format.util.spec.ts",
+      "contentHash": "07fd2d2642b68727b9fbe85412368074155fa08d92bb969c5d2006d9f9b7802e",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "./format.util",
+          "specifiers": [
+            "addDaysToDate",
+            "addDaysToTerm",
+            "daysBetween",
+            "formatCopWords",
+            "numberToWords",
+            "termToDays"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 63,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/shared/util/format.util.ts": {
+      "filePath": "src/app/shared/util/format.util.ts",
+      "contentHash": "776df7598e87fab8128dc3e43695d81c0526e0a8eec29e0b3b427762d371ffae",
+      "functions": [
+        {
+          "name": "todayIso",
+          "params": [],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "toDisplayDate",
+          "params": [
+            "iso"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "parseAnyDate",
+          "params": [
+            "date"
+          ],
+          "returnType": "Date",
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "addDaysToDate",
+          "params": [
+            "date",
+            "days"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "daysBetween",
+          "params": [
+            "dateA",
+            "dateB"
+          ],
+          "returnType": "number | null",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "formatCop",
+          "params": [
+            "value"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "hundredsToWords",
+          "params": [
+            "n"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 15
+        },
+        {
+          "name": "apocopado",
+          "params": [
+            "words"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "belowMillionToWords",
+          "params": [
+            "n"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "numberToWords",
+          "params": [
+            "value"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "formatCopWords",
+          "params": [
+            "value"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "parseMonthsTerm",
+          "params": [
+            "term"
+          ],
+          "returnType": "number",
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "termToDays",
+          "params": [
+            "term"
+          ],
+          "returnType": "number",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "addDaysToTerm",
+          "params": [
+            "initialTerm",
+            "extraDays"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "formatDocument",
+          "params": [
+            "value"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "formatExecutionDate",
+          "params": [
+            "d"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "todayIso",
+        "toDisplayDate",
+        "addDaysToDate",
+        "daysBetween",
+        "formatCop",
+        "numberToWords",
+        "formatCopWords",
+        "termToDays",
+        "addDaysToTerm",
+        "formatDocument",
+        "formatExecutionDate"
+      ],
+      "totalLines": 153,
+      "hasStructuralAnalysis": true
+    },
+    "src/environments/environment.development.ts": {
+      "filePath": "src/environments/environment.development.ts",
+      "contentHash": "c1ab6540cf5a06b69a9f78d21104e24e9fe622f1dcd9ba9cb2a6109d2a105f83",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "environment"
+      ],
+      "totalLines": 25,
+      "hasStructuralAnalysis": true
+    },
+    "src/environments/environment.test.ts": {
+      "filePath": "src/environments/environment.test.ts",
+      "contentHash": "91bd7877d905906ddff093efb93d8e51da0ec89203a8be36cc00e98d1079fa69",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "environment"
+      ],
+      "totalLines": 25,
+      "hasStructuralAnalysis": true
+    },
+    "src/environments/environment.ts": {
+      "filePath": "src/environments/environment.ts",
+      "contentHash": "192f82608ab0026321633c53b187945bdc799b244b5e861bc98e6c031a04fa52",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "environment"
+      ],
+      "totalLines": 25,
+      "hasStructuralAnalysis": true
+    },
+    "src/main.single-spa.ts": {
+      "filePath": "src/main.single-spa.ts",
+      "contentHash": "d3ca561f2b1b823e135f53e77b8dc254abb8bf0a736ab3161e048af6ed3cb0bf",
+      "functions": [
+        {
+          "name": "bootstrapStandaloneApp",
+          "params": [],
+          "exported": false,
+          "lineCount": 5
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@angular/core",
+          "specifiers": [
+            "enableProdMode",
+            "NgZone"
+          ]
+        },
+        {
+          "source": "@angular/common",
+          "specifiers": [
+            "APP_BASE_HREF"
+          ]
+        },
+        {
+          "source": "@angular/platform-browser",
+          "specifiers": [
+            "bootstrapApplication"
+          ]
+        },
+        {
+          "source": "@angular/router",
+          "specifiers": [
+            "Router",
+            "NavigationStart"
+          ]
+        },
+        {
+          "source": "single-spa-angular",
+          "specifiers": [
+            "singleSpaAngular",
+            "getSingleSpaExtraProviders"
+          ]
+        },
+        {
+          "source": "./app/app.component",
+          "specifiers": [
+            "AppComponent"
+          ]
+        },
+        {
+          "source": "./app/app.config",
+          "specifiers": [
+            "appConfig"
+          ]
+        },
+        {
+          "source": "./environments/environment",
+          "specifiers": [
+            "environment"
+          ]
+        }
+      ],
+      "exports": [
+        "bootstrap",
+        "mount",
+        "unmount"
+      ],
+      "totalLines": 53,
+      "hasStructuralAnalysis": true
+    },
+    "tailwind.config.js": {
+      "filePath": "tailwind.config.js",
+      "contentHash": "7fe08eb623d391a27776918d3e6498fe90882f1837452217ea55ebe4b4eea29f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 105,
+      "hasStructuralAnalysis": true
+    }
+  }
+}

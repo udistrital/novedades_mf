@@ -57,7 +57,7 @@
               </app-form-field>
               <div class="flex flex-col gap-1">
                 <app-money-field label="Valor Adicional" for="valor_adicional" [required]="true" [control]="adicion.controls['valorAdicional']">
-                  <input appFormInput class="!pl-7" id="valor_adicional" type="number" min="0" placeholder="1.000.000" formControlName="valorAdicional">
+                  <input appFormInput class="!pl-7" id="valor_adicional" type="number" min="1" placeholder="1.000.000" formControlName="valorAdicional">
                 </app-money-field>
                 @if (valorAdicionalEnLetras()) {
                   <span class="text-on-surface-variant text-xs italic px-1">{{ valorAdicionalEnLetras() }}</span>
@@ -84,7 +84,7 @@
             <h3 class="font-title-md text-title-md text-on-surface">Prórroga de Tiempo</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-stack-md">
               <app-form-field label="Tiempo de prórroga (Días)" for="tiempo_prorroga" [required]="true" [control]="prorroga.controls['tiempoDias']">
-                <input appFormInput id="tiempo_prorroga" type="number" min="0" placeholder="Ej. 30" formControlName="tiempoDias">
+                <input appFormInput id="tiempo_prorroga" type="number" min="1" placeholder="Ej. 30" formControlName="tiempoDias">
               </app-form-field>
               <app-form-field label="Fecha de la Prórroga" for="fecha_prorroga">
                 <input appFormInput id="fecha_prorroga" type="date" formControlName="fechaProrroga">
@@ -115,6 +115,8 @@
       [year]="year()"
       [summary]="summary()"
       [submitting]="submitting()"
+      [blocked]="sinOrdenadorGasto()"
+      blockedMessage="No se puede generar la novedad: el contrato no tiene un Ordenador del Gasto asignado. Comuníquese con el equipo de soporte a través de IRIS."
       (confirm)="onConfirm($event)"
       (dismiss)="closeConfirm()" />
   }

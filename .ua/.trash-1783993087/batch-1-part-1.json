@@ -1,0 +1,1371 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts",
+      "type": "file",
+      "name": "additional-clause-section.component.ts",
+      "filePath": "src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts",
+      "summary": "Angular component rendering the additional-clause form section used in novelty creation forms, wiring conditional validators for position and text fields when the clause toggle is active.",
+      "tags": [
+        "component",
+        "form",
+        "validation",
+        "novelty"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts:AdditionalClauseSectionComponent",
+      "type": "class",
+      "name": "AdditionalClauseSectionComponent",
+      "filePath": "src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts",
+      "lineRange": [
+        46,
+        59
+      ],
+      "summary": "Component class managing the reactive form group and toggle-driven validators for an optional contract clause section.",
+      "tags": [
+        "component",
+        "form",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/components/assignee-info-card/assignee-info-card.component.ts",
+      "type": "file",
+      "name": "assignee-info-card.component.ts",
+      "filePath": "src/app/domains/contratos/presentation/components/assignee-info-card/assignee-info-card.component.ts",
+      "summary": "Presentational component that displays contractor/assignee information within a card, used in cesion (assignment) novelty flows.",
+      "tags": [
+        "component",
+        "ui",
+        "data-display",
+        "novelty"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/app/domains/contratos/presentation/components/assignee-info-card/assignee-info-card.component.ts:AssigneeInfoCardComponent",
+      "type": "class",
+      "name": "AssigneeInfoCardComponent",
+      "filePath": "src/app/domains/contratos/presentation/components/assignee-info-card/assignee-info-card.component.ts",
+      "lineRange": [
+        32,
+        34
+      ],
+      "summary": "Displays the bound assignee input as a read-only info card.",
+      "tags": [
+        "component",
+        "ui",
+        "data-display"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts",
+      "type": "file",
+      "name": "confirm-novelty-modal.component.ts",
+      "filePath": "src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts",
+      "summary": "Confirmation modal shown before submitting a contract novelty, displaying a summary and handling confirm/dismiss/error states.",
+      "tags": [
+        "component",
+        "modal",
+        "confirmation",
+        "novelty"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts:ConfirmNoveltyModalComponent",
+      "type": "class",
+      "name": "ConfirmNoveltyModalComponent",
+      "filePath": "src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts",
+      "lineRange": [
+        22,
+        35
+      ],
+      "summary": "Modal component exposing novelty summary details plus confirm/dismiss outputs and a submitting/error state.",
+      "tags": [
+        "component",
+        "modal",
+        "confirmation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts",
+      "type": "file",
+      "name": "novelty-error.component.ts",
+      "filePath": "src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts",
+      "summary": "Displays an error state page after a failed novelty submission, showing the error code/detail with retry and back actions.",
+      "tags": [
+        "component",
+        "error-handling",
+        "feedback",
+        "novelty"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts:NoveltyErrorComponent",
+      "type": "class",
+      "name": "NoveltyErrorComponent",
+      "filePath": "src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts",
+      "lineRange": [
+        50,
+        66
+      ],
+      "summary": "Renders novelty submission error details and exposes retry/back action outputs.",
+      "tags": [
+        "component",
+        "error-handling",
+        "feedback"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts",
+      "type": "file",
+      "name": "novelty-page-layout.component.ts",
+      "filePath": "src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts",
+      "summary": "Shared layout wrapper for novelty creation pages, rendering a breadcrumb trail and contract info card around page content.",
+      "tags": [
+        "component",
+        "layout",
+        "shared",
+        "novelty"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts:NoveltyPageLayoutComponent",
+      "type": "class",
+      "name": "NoveltyPageLayoutComponent",
+      "filePath": "src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts",
+      "lineRange": [
+        45,
+        49
+      ],
+      "summary": "Wraps novelty page content with breadcrumb and contract-info-card inputs.",
+      "tags": [
+        "component",
+        "layout",
+        "shared"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts",
+      "type": "file",
+      "name": "novelty-result.component.ts",
+      "filePath": "src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts",
+      "summary": "Displays the success/result page after a novelty is executed, showing contract, execution date and responsible party.",
+      "tags": [
+        "component",
+        "feedback",
+        "success-state",
+        "novelty"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts:NoveltyResultComponent",
+      "type": "class",
+      "name": "NoveltyResultComponent",
+      "filePath": "src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts",
+      "lineRange": [
+        52,
+        68
+      ],
+      "summary": "Renders the confirmation summary for a successfully executed novelty.",
+      "tags": [
+        "component",
+        "feedback",
+        "success-state"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "type": "file",
+      "name": "crear-adicion-prorroga.component.ts",
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "summary": "Page component implementing the 'Adicion y Prorroga' (value addition and term extension) novelty creation form, applying contract-rules caps and building the novelty draft/summary.",
+      "tags": [
+        "component",
+        "form",
+        "novelty",
+        "business-logic"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts:CrearAdicionProrrogaComponent",
+      "type": "class",
+      "name": "CrearAdicionProrrogaComponent",
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "lineRange": [
+        61,
+        189
+      ],
+      "summary": "Extends the novelty-creation base page to collect additional value and extended term, validating against TOPE_ADICION/TOPE_PRORROGA business rules.",
+      "tags": [
+        "component",
+        "form",
+        "business-logic",
+        "novelty"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "type": "file",
+      "name": "crear-cesion.component.ts",
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "summary": "Page component implementing the 'Cesion de Contrato' (contract assignment) novelty creation form, capturing the new contractor/assignee and computing balances.",
+      "tags": [
+        "component",
+        "form",
+        "novelty",
+        "business-logic"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts:CrearCesionComponent",
+      "type": "class",
+      "name": "CrearCesionComponent",
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "lineRange": [
+        62,
+        210
+      ],
+      "summary": "Extends the novelty-creation base page to assign a contract to a new contractor, wiring conditional validators and balance calculations.",
+      "tags": [
+        "component",
+        "form",
+        "business-logic",
+        "novelty"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "type": "file",
+      "name": "crear-poliza.component.ts",
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "summary": "Page component for updating a contract's insurance policy (poliza) novelty, loading the current policy, submitting confirmation, and handling success/error states directly against the contract repository.",
+      "tags": [
+        "component",
+        "form",
+        "novelty",
+        "business-logic"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts:CrearPolizaComponent",
+      "type": "class",
+      "name": "CrearPolizaComponent",
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "lineRange": [
+        52,
+        163
+      ],
+      "summary": "Standalone novelty page (does not extend the shared base) that manages its own submit/confirm/retry lifecycle for updating a contract insurance policy.",
+      "tags": [
+        "component",
+        "form",
+        "business-logic",
+        "novelty"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "type": "file",
+      "name": "crear-reinicio.component.ts",
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "summary": "Page component implementing the 'Reinicio' (resumption after suspension) novelty creation form, computing the resumed term based on the prior suspension period.",
+      "tags": [
+        "component",
+        "form",
+        "novelty",
+        "business-logic"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts:CrearReinicioComponent",
+      "type": "class",
+      "name": "CrearReinicioComponent",
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "lineRange": [
+        48,
+        129
+      ],
+      "summary": "Extends the novelty-creation base page to resume a suspended contract, recalculating dates via date utility helpers.",
+      "tags": [
+        "component",
+        "form",
+        "business-logic",
+        "novelty"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "type": "file",
+      "name": "crear-suspension.component.ts",
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "summary": "Page component implementing the 'Suspension' novelty creation form, validating the suspension date range against the contract's current term.",
+      "tags": [
+        "component",
+        "form",
+        "novelty",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts:CrearSuspensionComponent",
+      "type": "class",
+      "name": "CrearSuspensionComponent",
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "lineRange": [
+        56,
+        170
+      ],
+      "summary": "Extends the novelty-creation base page to suspend a contract, deriving minimum end date and custom form-control errors.",
+      "tags": [
+        "component",
+        "form",
+        "validation",
+        "novelty"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "type": "file",
+      "name": "crear-terminacion.component.ts",
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "summary": "Page component implementing the 'Terminacion' (contract termination) novelty creation form, tracking contractor/university balances.",
+      "tags": [
+        "component",
+        "form",
+        "novelty",
+        "business-logic"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts:CrearTerminacionComponent",
+      "type": "class",
+      "name": "CrearTerminacionComponent",
+      "filePath": "src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "lineRange": [
+        52,
+        158
+      ],
+      "summary": "Extends the novelty-creation base page to terminate a contract, computing and validating settlement balances.",
+      "tags": [
+        "component",
+        "form",
+        "business-logic",
+        "novelty"
+      ],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts:AdditionalClauseSectionComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts:AdditionalClauseSectionComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts",
+      "target": "file:src/app/shared/ui/form-field.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts",
+      "target": "file:src/app/shared/ui/form-input.directive.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts",
+      "target": "file:src/app/shared/ui/no-negative-number.directive.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts",
+      "target": "file:src/app/shared/ui/toggle-section.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/assignee-info-card/assignee-info-card.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/components/assignee-info-card/assignee-info-card.component.ts:AssigneeInfoCardComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/assignee-info-card/assignee-info-card.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/components/assignee-info-card/assignee-info-card.component.ts:AssigneeInfoCardComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/assignee-info-card/assignee-info-card.component.ts",
+      "target": "file:src/app/domains/contratos/domain/models/assignee.model.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/assignee-info-card/assignee-info-card.component.ts",
+      "target": "file:src/app/shared/ui/card.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts:ConfirmNoveltyModalComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts:ConfirmNoveltyModalComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts",
+      "target": "file:src/app/shared/ui/modal-shell.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts:NoveltyErrorComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts:NoveltyErrorComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts",
+      "target": "file:src/app/shared/ui/feedback-card.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts:NoveltyPageLayoutComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts:NoveltyPageLayoutComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts",
+      "target": "file:src/app/domains/contratos/domain/models/contract.entity.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/contract-info-card/contract-info-card.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts",
+      "target": "file:src/app/shared/ui/breadcrumb.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts:NoveltyResultComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts:NoveltyResultComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts",
+      "target": "file:src/app/shared/ui/feedback-card.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts:CrearAdicionProrrogaComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts:CrearAdicionProrrogaComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "target": "file:src/app/domains/contratos/domain/contract.rules.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "target": "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "target": "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "target": "file:src/app/shared/ui/card.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "target": "file:src/app/shared/ui/document-preview-control.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "target": "file:src/app/shared/ui/form-field.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "target": "file:src/app/shared/ui/form-input.directive.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "target": "file:src/app/shared/ui/money-field.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "target": "file:src/app/shared/ui/no-negative-number.directive.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "target": "file:src/app/shared/ui/novelty-form-actions.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "target": "file:src/app/shared/util/format.util.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "class:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts:CrearAdicionProrrogaComponent",
+      "target": "class:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts:CreateNoveltyPage",
+      "type": "inherits",
+      "direction": "forward",
+      "weight": 0.9
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts:CrearCesionComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts:CrearCesionComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/domains/contratos/domain/contract.rules.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/domains/contratos/domain/models/assignee.model.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/assignee-info-card/assignee-info-card.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/contractor-autocomplete/contractor-autocomplete.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/shared/ui/card.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/shared/ui/document-preview-control.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/shared/ui/form-field.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/shared/ui/form-input.directive.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/shared/ui/money-field.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/shared/ui/no-negative-number.directive.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/shared/ui/novelty-form-actions.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/shared/ui/toggle-section.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "target": "file:src/app/shared/util/format.util.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "class:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts:CrearCesionComponent",
+      "target": "class:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts:CreateNoveltyPage",
+      "type": "inherits",
+      "direction": "forward",
+      "weight": 0.9
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts:CrearPolizaComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts:CrearPolizaComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "target": "file:src/app/domains/contratos/application/contract-state.service.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "target": "file:src/app/domains/contratos/domain/contract.rules.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "target": "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "target": "file:src/app/domains/contratos/domain/models/poliza.model.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "target": "file:src/app/domains/contratos/domain/repositories/contract.repository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "target": "file:src/app/shared/ui/breadcrumb.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "target": "file:src/app/shared/ui/card.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "target": "file:src/app/shared/ui/form-field.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "target": "file:src/app/shared/ui/form-input.directive.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "target": "file:src/app/shared/ui/novelty-form-actions.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "target": "file:src/app/shared/util/format.util.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts:CrearReinicioComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts:CrearReinicioComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "target": "file:src/app/domains/contratos/domain/contract.rules.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "target": "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "target": "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "target": "file:src/app/shared/ui/card.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "target": "file:src/app/shared/ui/document-preview-control.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "target": "file:src/app/shared/ui/form-field.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "target": "file:src/app/shared/ui/form-input.directive.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "target": "file:src/app/shared/ui/no-negative-number.directive.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "target": "file:src/app/shared/ui/novelty-form-actions.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "target": "file:src/app/shared/util/format.util.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "class:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts:CrearReinicioComponent",
+      "target": "class:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts:CreateNoveltyPage",
+      "type": "inherits",
+      "direction": "forward",
+      "weight": 0.9
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts:CrearSuspensionComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts:CrearSuspensionComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "target": "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "target": "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "target": "file:src/app/shared/ui/card.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "target": "file:src/app/shared/ui/document-preview-control.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "target": "file:src/app/shared/ui/form-field.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "target": "file:src/app/shared/ui/form-input.directive.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "target": "file:src/app/shared/ui/no-negative-number.directive.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "target": "file:src/app/shared/ui/novelty-form-actions.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "target": "file:src/app/shared/util/format.util.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "class:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts:CrearSuspensionComponent",
+      "target": "class:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts:CreateNoveltyPage",
+      "type": "inherits",
+      "direction": "forward",
+      "weight": 0.9
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts:CrearTerminacionComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "target": "class:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts:CrearTerminacionComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "target": "file:src/app/domains/contratos/domain/contract.rules.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "target": "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "target": "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "target": "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "target": "file:src/app/shared/ui/card.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "target": "file:src/app/shared/ui/document-preview-control.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "target": "file:src/app/shared/ui/form-field.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "target": "file:src/app/shared/ui/form-input.directive.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "target": "file:src/app/shared/ui/money-field.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "target": "file:src/app/shared/ui/no-negative-number.directive.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "target": "file:src/app/shared/ui/novelty-form-actions.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "target": "file:src/app/shared/util/format.util.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "class:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts:CrearTerminacionComponent",
+      "target": "class:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts:CreateNoveltyPage",
+      "type": "inherits",
+      "direction": "forward",
+      "weight": 0.9
+    }
+  ]
+}

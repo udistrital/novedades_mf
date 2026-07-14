@@ -6,7 +6,7 @@ import {
   canAnnulNovelty,
   canManageContract,
   currentContractValue,
-  currentContractorDocument,
+  currentContractorId,
   currentTermDays,
   effectiveStatus,
   hasNoveltyInProgress,
@@ -144,19 +144,19 @@ describe('contract.rules', () => {
     });
   });
 
-  describe('currentContractorDocument (§5.5)', () => {
-    it('devuelve el último cesionario cuando hubo cesiones', () => {
+  describe('currentContractorId (§5.5)', () => {
+    it('devuelve el id del último cesionario cuando hubo cesiones', () => {
       const c = contract({
         novelties: [
-          novelty({ id: 'c1', type: NoveltyType.ASSIGNMENT, expeditionDate: '01/02/2024', cesionarioDocumento: '222' }),
-          novelty({ id: 'c2', type: NoveltyType.ASSIGNMENT, expeditionDate: '01/04/2024', cesionarioDocumento: '333' })
+          novelty({ id: 'c1', type: NoveltyType.ASSIGNMENT, expeditionDate: '01/02/2024', cesionarioId: '222' }),
+          novelty({ id: 'c2', type: NoveltyType.ASSIGNMENT, expeditionDate: '01/04/2024', cesionarioId: '333' })
         ]
       });
-      expect(currentContractorDocument(c)).toBe('333');
+      expect(currentContractorId(c)).toBe('333');
     });
 
     it('sin cesiones devuelve undefined (se mantiene el contratista original)', () => {
-      expect(currentContractorDocument(contract({}))).toBeUndefined();
+      expect(currentContractorId(contract({}))).toBeUndefined();
     });
   });
 

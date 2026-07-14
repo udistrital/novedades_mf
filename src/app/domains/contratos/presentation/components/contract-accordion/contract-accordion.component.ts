@@ -7,6 +7,7 @@ import { ContractAction } from '../../../domain/models/contract-status.enum';
 import {
   availableActions,
   canManageContract,
+  contractStatusLabel,
   currentContractValue,
   effectiveStatus,
   hasNoveltyInProgress
@@ -73,7 +74,7 @@ export class ContractAccordionComponent {
 
   /** Estado efectivo mostrado en el detalle (real del backend o inferido). */
   get estado(): string {
-    return effectiveStatus(this.contract);
+    return contractStatusLabel(effectiveStatus(this.contract));
   }
 
   /** Valor vigente: base + adiciones históricas (puede diferir del valor inicial). */

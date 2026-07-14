@@ -18,8 +18,8 @@ export interface NoveltySummary {
   valorAdicion?: number;
   /** Días de prórroga de esta novedad (solo prórrogas); alimenta el plazo vigente acumulado. */
   diasProrroga?: number;
-  /** Documento del cesionario (solo cesiones); resuelve el contratista vigente tras una cesión. */
-  cesionarioDocumento?: string;
+  /** Id (en `informacion_proveedor`) del cesionario (solo cesiones); resuelve el contratista vigente tras una cesión. */
+  cesionarioId?: string;
 }
 
 /**

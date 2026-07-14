@@ -1,0 +1,36 @@
+{
+  "issues": [],
+  "warnings": [
+    "Node 'document:docs/adr/ADR-001-reescritura-angular18.md' has no edges (orphan)",
+    "Node 'config:.ua/.understandignore' has no edges (orphan)",
+    "Node 'file:extra-webpack.config.js' has no edges (orphan)",
+    "Node 'file:src/environments/environment.development.ts' has no edges (orphan)",
+    "Node 'file:src/index.html' has no edges (orphan)"
+  ],
+  "stats": {
+    "totalNodes": 186,
+    "totalEdges": 548,
+    "totalLayers": 10,
+    "tourSteps": 12,
+    "nodeTypes": {
+      "file": 77,
+      "class": 36,
+      "function": 41,
+      "document": 26,
+      "config": 6
+    },
+    "edgeTypes": {
+      "contains": 77,
+      "exports": 71,
+      "imports": 211,
+      "inherits": 5,
+      "implements": 2,
+      "calls": 25,
+      "tested_by": 4,
+      "depends_on": 19,
+      "configures": 3,
+      "documents": 93,
+      "related": 38
+    }
+  }
+}
