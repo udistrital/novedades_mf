@@ -8,6 +8,7 @@ import { ContractorAutocompleteComponent } from '../../components/contractor-aut
 import { ConfirmAnnulModalComponent } from '../../components/confirm-annul-modal/confirm-annul-modal.component';
 import { NoveltyResultComponent } from '../../components/novelty-result/novelty-result.component';
 import { NoveltyErrorComponent } from '../../components/novelty-error/novelty-error.component';
+import { ModalShellComponent } from '../../../../../shared/ui/modal-shell.component';
 import { Contract, NoveltySummary } from '../../../domain/models/contract.entity';
 import { availableVigencias } from '../../../domain/contract.rules';
 import { ContractFilters } from '../../../domain/repositories/contract.repository';
@@ -18,7 +19,7 @@ interface AnnulTarget {
   novelty: NoveltySummary;
 }
 
-type DashboardView = 'list' | 'annul-success' | 'annul-error';
+type DashboardView = 'list' | 'annul-success' | 'annul-error' | 'activate-success' | 'activate-error';
 
 /** Criterios de búsqueda excluyentes entre sí. */
 type SearchBy = 'number' | 'contractor';
@@ -40,7 +41,8 @@ type SearchBy = 'number' | 'contractor';
     ContractorAutocompleteComponent,
     ConfirmAnnulModalComponent,
     NoveltyResultComponent,
-    NoveltyErrorComponent
+    NoveltyErrorComponent,
+    ModalShellComponent
   ],
   templateUrl: './dashboard-contratos.component.html'
 })
@@ -75,6 +77,10 @@ export class DashboardContratosComponent {
   readonly showAnnulConfirm = signal(false);
   readonly annulling = signal(false);
   readonly executedAt = signal('');
+
+  // Flujo de activación (reapertura administrativa de un contrato Finalizado)
+  readonly activateTarget = signal<Contract | null>(null);
+  readonly activating = signal(false);
 
   /** Cambia el criterio de búsqueda y limpia el término anterior para no arrastrar valores. */
   setSearchBy(by: SearchBy): void {
@@ -133,9 +139,37 @@ export class DashboardContratosComponent {
     });
   }
 
+  // --- Activación (contrato Finalizado → En ejecución) ---
+  onActivateRequest(contract: Contract): void {
+    this.activateTarget.set(contract);
+  }
+
+  closeActivateConfirm(): void {
+    this.activateTarget.set(null);
+  }
+
+  confirmActivate(): void {
+    const contract = this.activateTarget();
+    if (!contract) return;
+
+    this.activating.set(true);
+    this.noveltyService.activate(contract.id).subscribe({
+      next: () => {
+        this.activating.set(false);
+        this.executedAt.set(formatExecutionDate());
+        this.view.set('activate-success');
+      },
+      error: () => {
+        this.activating.set(false);
+        this.view.set('activate-error');
+      }
+    });
+  }
+
   backToList(): void {
     this.view.set('list');
     this.annulTarget.set(null);
+    this.activateTarget.set(null);
     this.state.loadContracts(this.state.filters());
   }
 }

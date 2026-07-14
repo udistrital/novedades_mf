@@ -6,7 +6,7 @@ import {
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 
 import { FormInputDirective } from '../../../../../shared/ui/form-input.directive';
 import { ContractStateService } from '../../../application/contract-state.service';
@@ -45,6 +45,8 @@ export class ContractorAutocompleteComponent implements ControlValueAccessor, Va
   private readonly state = inject(ContractStateService);
 
   readonly placeholder = input('C.C. o NIT');
+  /** Restringe las opciones a personas naturales (el cesionario debe serlo, requerimientos §5.3). */
+  readonly soloNaturales = input(false);
   readonly selected = output<Assignee>();
 
   readonly query = new FormControl<string | Assignee>('', { nonNullable: true });
@@ -61,7 +63,8 @@ export class ContractorAutocompleteComponent implements ControlValueAccessor, Va
       distinctUntilChanged(),
       switchMap(value => typeof value === 'string' && value.trim().length >= 3
         ? this.state.searchContractors(value.trim())
-        : of([] as Assignee[]))
+        : of([] as Assignee[])),
+      map(list => this.soloNaturales() ? list.filter(a => a.documentType !== 'NIT') : list)
     ),
     { initialValue: [] as Assignee[] }
   );

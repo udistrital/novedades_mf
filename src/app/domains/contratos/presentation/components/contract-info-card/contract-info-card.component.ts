@@ -1,7 +1,8 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { CardComponent } from '../../../../../shared/ui/card.component';
 import { Contract } from '../../../domain/models/contract.entity';
+import { currentContractValue } from '../../../domain/contract.rules';
 import { formatDocument } from '../../../../../shared/util/format.util';
 
 /**
@@ -16,6 +17,9 @@ import { formatDocument } from '../../../../../shared/util/format.util';
 })
 export class ContractInfoCardComponent {
   readonly contract = input.required<Contract>();
+
+  /** Valor vigente: base + adiciones históricas (se muestra solo si difiere del inicial). */
+  readonly valorVigente = computed(() => currentContractValue(this.contract()));
 
   /** NIT/CC con puntos de separación visuales. */
   get contractorDocument(): string {

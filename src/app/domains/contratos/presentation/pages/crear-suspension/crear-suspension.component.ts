@@ -69,7 +69,8 @@ export class CrearSuspensionComponent extends CreateNoveltyPage {
     fechaFin: [todayIso(), Validators.required],
     periodoDias: [{ value: null as number | null, disabled: true }],
     fechaReinicio: [{ value: '', disabled: true }],
-    motivo: ['', Validators.required],
+    // Máx. 249 caracteres: límite de la columna de motivo en el backend legado (§5.4).
+    motivo: ['', [Validators.required, Validators.maxLength(249)]],
     clausula: this.fb.group({
       activa: [false],
       posicion: [null as number | null],

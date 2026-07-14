@@ -1,6 +1,6 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { CreateNoveltyPage } from '../create-novelty-page.base';
@@ -20,15 +20,22 @@ import { addDaysToTerm, formatCop, formatCopWords, todayIso } from '../../../../
 
 import { NoveltyType } from '../../../domain/models/novelty-type.enum';
 import { AdicionProrrogaDraft, NoveltyDraft } from '../../../domain/models/novelty-draft.model';
-import { availableVigencias } from '../../../domain/contract.rules';
+import {
+  availableVigencias,
+  currentContractValue,
+  maxAdditionValue,
+  maxExtensionDays
+} from '../../../domain/contract.rules';
 
 /**
  * Página de creación de la novedad de Adición y Prórroga: incrementa el valor
- * del contrato y/o extiende su plazo.
+ * del contrato y extiende su plazo (ambas secciones son obligatorias por
+ * requerimiento actualizado — la novedad siempre se tramita completa).
  *
- * Deriva en vivo el nuevo valor (contrato + adición, también en letras) y el
- * nuevo plazo (regla mes = 30 días) que se muestran en el resumen de
- * confirmación.
+ * Topes normativos (requerimientos §5.2): la adición no puede superar el 50 %
+ * del valor vigente (base + adiciones previas) ni la prórroga el 50 % del
+ * plazo vigente en días (mes = 30 días). Nuevo valor y nuevo plazo parten de
+ * los acumulados históricos, no del dato base del contrato.
  */
 @Component({
   selector: 'app-crear-adicion-prorroga',
@@ -84,10 +91,15 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
 
   private readonly formValue = toSignal(this.form.valueChanges, { initialValue: this.form.getRawValue() });
 
+  /** Valor vigente del contrato: base + adiciones históricas (MIG-004). */
+  readonly valorVigente = computed(() => {
+    const c = this.state.selectedContract();
+    return c ? currentContractValue(c) : 0;
+  });
+
   readonly nuevoValor = computed(() => {
-    const base = this.state.selectedContract()?.totalValue ?? 0;
     const add = Number(this.formValue()?.adicion?.valorAdicional) || 0;
-    return base + add;
+    return this.valorVigente() + add;
   });
 
   readonly nuevoValorEnLetras = computed(() => formatCopWords(this.nuevoValor()));
@@ -97,14 +109,52 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
     return valor > 0 ? formatCopWords(valor) : '';
   });
 
-  readonly nuevoPlazo = computed(() =>
-    addDaysToTerm(this.state.selectedContract()?.initialTerm, Number(this.formValue()?.prorroga?.tiempoDias))
-  );
+  readonly nuevoPlazo = computed(() => {
+    const c = this.state.selectedContract();
+    // Prórrogas históricas + la nueva, sobre el plazo inicial (mes = 30 días).
+    const diasHistoricos = c?.novelties.reduce((s, n) => s + (n.diasProrroga ?? 0), 0) ?? 0;
+    const diasNuevos = Number(this.formValue()?.prorroga?.tiempoDias) || 0;
+    return addDaysToTerm(c?.initialTerm, diasHistoricos + diasNuevos);
+  });
 
   get solicitud(): FormGroup { return this.form.get('solicitud') as FormGroup; }
   get adicion(): FormGroup { return this.form.get('adicion') as FormGroup; }
   get prorroga(): FormGroup { return this.form.get('prorroga') as FormGroup; }
   get clausula(): FormGroup { return this.form.get('clausula') as FormGroup; }
+
+  /** Tope de adición: 50 % del valor vigente (TOPE_ADICION del dominio). */
+  private readonly topeAdicionValidator = (ctrl: AbstractControl): ValidationErrors | null => {
+    const c = this.state.selectedContract();
+    const v = Number(ctrl.value);
+    if (!c || !Number.isFinite(v) || v <= 0) return null;
+    const max = maxAdditionValue(c);
+    return v > max ? { topeAdicion: { max: formatCop(max) } } : null;
+  };
+
+  /** Tope de prórroga: 50 % del plazo vigente en días (TOPE_PRORROGA del dominio). */
+  private readonly topeProrrogaValidator = (ctrl: AbstractControl): ValidationErrors | null => {
+    const c = this.state.selectedContract();
+    const dias = Number(ctrl.value);
+    if (!c || !Number.isFinite(dias) || dias <= 0) return null;
+    const max = maxExtensionDays(c);
+    return dias > max ? { topeProrroga: { max } } : null;
+  };
+
+  constructor() {
+    super();
+
+    const valorAdicional = this.adicion.controls['valorAdicional'];
+    const tiempoDias = this.prorroga.controls['tiempoDias'];
+    valorAdicional.addValidators(this.topeAdicionValidator);
+    tiempoDias.addValidators(this.topeProrrogaValidator);
+
+    // Los topes dependen del contrato: al cargarlo se revalida lo ya digitado.
+    effect(() => {
+      this.state.selectedContract();
+      valorAdicional.updateValueAndValidity({ emitEvent: false });
+      tiempoDias.updateValueAndValidity({ emitEvent: false });
+    });
+  }
 
   onClear(): void {
     this.form.reset({
@@ -115,7 +165,16 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
   }
 
   protected buildDraft(): NoveltyDraft {
-    return { type: NoveltyType.ADDITION_EXTENSION, ...this.form.getRawValue() } as AdicionProrrogaDraft;
+    const v = this.form.getRawValue();
+    // Ambas secciones son obligatorias: la novedad siempre viaja como adición+prórroga.
+    const draft: AdicionProrrogaDraft = {
+      type: NoveltyType.ADDITION_EXTENSION,
+      solicitud: v.solicitud as AdicionProrrogaDraft['solicitud'],
+      adicion: { ...(v.adicion as Omit<AdicionProrrogaDraft['adicion'], 'activa'>), activa: true },
+      prorroga: { ...(v.prorroga as Omit<AdicionProrrogaDraft['prorroga'], 'activa'>), activa: true },
+      clausula: v.clausula as AdicionProrrogaDraft['clausula']
+    };
+    return draft;
   }
 
   protected buildSummary(): NoveltySummaryItem[] {

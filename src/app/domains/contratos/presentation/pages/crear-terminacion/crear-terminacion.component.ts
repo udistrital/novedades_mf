@@ -1,5 +1,7 @@
-import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, effect, inject } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { startWith } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 
 import { CreateNoveltyPage } from '../create-novelty-page.base';
@@ -19,6 +21,7 @@ import { toDisplayDate, todayIso } from '../../../../../shared/util/format.util'
 
 import { NoveltyType } from '../../../domain/models/novelty-type.enum';
 import { TerminacionDraft, NoveltyDraft } from '../../../domain/models/novelty-draft.model';
+import { currentContractValue } from '../../../domain/contract.rules';
 
 /**
  * Página de creación de la novedad de Terminación Anticipada
@@ -72,7 +75,44 @@ export class CrearTerminacionComponent extends CreateNoveltyPage {
 
   get clausula(): FormGroup { return this.form.get('clausula') as FormGroup; }
 
+  /** Cada valor está topado al valor vigente del contrato (§5.6). */
+  private readonly topeValorContrato = (ctrl: AbstractControl): ValidationErrors | null => {
+    const c = this.state.selectedContract();
+    const v = Number(ctrl.value);
+    if (!c || !Number.isFinite(v) || v <= 0) return null;
+    return v > currentContractValue(c) ? { maxContractValue: true } : null;
+  };
+
+  constructor() {
+    super();
+
+    const desembolsado = this.form.controls.valorDesembolsado;
+    const saldoContratista = this.form.controls.saldoFavorContratista;
+    const saldoUniversidad = this.form.controls.saldoFavorUniversidad;
+
+    [desembolsado, saldoContratista, saldoUniversidad].forEach(ctrl => ctrl.addValidators(this.topeValorContrato));
+    // El tope depende del contrato: al cargarlo se revalida lo ya digitado.
+    effect(() => {
+      this.state.selectedContract();
+      [desembolsado, saldoContratista, saldoUniversidad].forEach(ctrl => ctrl.updateValueAndValidity({ emitEvent: false }));
+    });
+
+    // Regla de asignación de saldo (§5.6): los saldos son mutuamente excluyentes.
+    // Con saldo a favor del contratista > 0, el saldo de la universidad queda en 0 y
+    // bloqueado; con saldo del contratista en 0, la universidad recibe el saldo.
+    saldoContratista.valueChanges.pipe(startWith(saldoContratista.value), takeUntilDestroyed()).subscribe(v => {
+      const contratistaTieneSaldo = (Number(v) || 0) > 0;
+      if (contratistaTieneSaldo) {
+        saldoUniversidad.setValue(0, { emitEvent: false });
+        saldoUniversidad.disable({ emitEvent: false });
+      } else if (saldoUniversidad.disabled) {
+        saldoUniversidad.enable({ emitEvent: false });
+      }
+    });
+  }
+
   onClear(): void {
+    this.form.controls.saldoFavorUniversidad.enable({ emitEvent: false });
     this.form.reset({
       fechaSolicitud: todayIso(),
       fechaExpedicionActa: todayIso(),

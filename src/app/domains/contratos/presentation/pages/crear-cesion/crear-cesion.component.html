@@ -71,8 +71,21 @@
               <app-contractor-autocomplete
                 formControlName="cedulaCesionario"
                 placeholder="Buscar por número de documento..."
+                [soloNaturales]="true"
                 (selected)="onCesionarioSelected($event)" />
             </app-form-field>
+            <div class="md:col-span-2">
+              <app-form-field label="Saldo restante para el Cesionario">
+                <div class="block w-full rounded-md border border-outline-variant bg-surface-container-low p-3">
+                  <div class="font-bold text-title-md" [class.text-primary]="saldoCesionario() >= 0" [class.text-error]="saldoCesionario() < 0">
+                    {{ saldoCesionarioTexto() }}
+                  </div>
+                  <div class="text-on-surface-variant text-xs italic mt-1">
+                    Valor vigente del contrato menos el valor a favor del cedente y lo desembolsado.
+                  </div>
+                </div>
+              </app-form-field>
+            </div>
           </div>
         </div>
 

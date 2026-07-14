@@ -49,7 +49,7 @@
         </app-form-field>
         <div class="md:col-span-2">
           <app-form-field label="Motivo de suspensión" for="motivo" [required]="true" [control]="form.controls['motivo']">
-            <textarea appFormInput id="motivo" rows="4" formControlName="motivo"></textarea>
+            <textarea appFormInput id="motivo" rows="4" maxlength="249" formControlName="motivo"></textarea>
           </app-form-field>
         </div>
       </div>

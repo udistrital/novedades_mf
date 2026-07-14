@@ -15,6 +15,11 @@
     <div>
       <span class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Valor total del contrato</span>
       <p class="font-title-md text-title-md text-primary">{{ contract().totalValue | currency:'COP':'symbol':'1.0-0' }}</p>
+      @if (valorVigente() !== contract().totalValue) {
+        <p class="text-xs text-on-surface-variant">
+          Valor vigente (con adiciones): <span class="font-medium text-on-surface">{{ valorVigente() | currency:'COP':'symbol':'1.0-0' }}</span>
+        </p>
+      }
     </div>
     <div class="bg-surface p-3 rounded border border-surface-variant mt-2">
       <span class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Datos contratista</span>

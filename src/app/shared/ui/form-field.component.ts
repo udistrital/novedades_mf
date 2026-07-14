@@ -31,9 +31,13 @@ export class FormFieldComponent {
     if (!errors) return '';
     if (errors['required']) return 'Este campo es obligatorio.';
     if (errors['min']) return 'El valor no puede ser negativo.';
+    if (errors['maxlength']) return `Máximo ${errors['maxlength'].requiredLength} caracteres.`;
     if (errors['dateRange']) return 'La fecha de inicio debe ser anterior a la fecha de fin (mínimo 1 día de diferencia).';
     if (errors['minDate']) return 'La fecha no puede ser anterior a la mínima permitida.';
     if (errors['notSelected']) return 'Selecciona una opción de la lista.';
+    if (errors['topeAdicion']) return `Supera el tope legal: máximo 50 % del valor vigente (${errors['topeAdicion'].max}).`;
+    if (errors['topeProrroga']) return `Supera el tope legal: máximo 50 % del plazo vigente (${errors['topeProrroga'].max} días).`;
+    if (errors['maxContractValue']) return 'El valor no puede superar el valor vigente del contrato.';
     return 'Valor inválido.';
   });
 }

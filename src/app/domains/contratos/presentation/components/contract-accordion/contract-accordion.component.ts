@@ -1,27 +1,45 @@
-import { Component, ElementRef, HostListener, Input, ViewChild, output, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, ViewChild, inject, output, signal } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { Contract, NoveltySummary } from '../../../domain/models/contract.entity';
-import { NoveltyType } from '../../../domain/models/novelty-type.enum';
-import { isContractSuspended } from '../../../domain/contract.rules';
+import { ContractAction } from '../../../domain/models/contract-status.enum';
+import {
+  availableActions,
+  canManageContract,
+  currentContractValue,
+  effectiveStatus,
+  hasNoveltyInProgress
+} from '../../../domain/contract.rules';
+import { UserSessionService } from '../../../../../shared/auth/user-session.service';
 import { formatDocument } from '../../../../../shared/util/format.util';
 
 interface NoveltyMenuOption {
-  type: NoveltyType;
+  action: ContractAction;
   label: string;
   icon: string;
-  /** Segmento de ruta de la vista de creación correspondiente. */
-  path: string;
+  /** Segmento de ruta de la vista de creación correspondiente; null para acciones sin vista propia. */
+  path: string | null;
 }
+
+/** Catálogo de opciones de menú por acción de dominio. */
+const MENU_OPTIONS: Record<ContractAction, NoveltyMenuOption> = {
+  [ContractAction.ADICION_PRORROGA]: { action: ContractAction.ADICION_PRORROGA, label: 'Adición y Prórroga', icon: 'add_circle', path: 'adicion-prorroga' },
+  [ContractAction.SUSPENSION]: { action: ContractAction.SUSPENSION, label: 'Suspensión', icon: 'pause_circle', path: 'suspension' },
+  [ContractAction.CESION]: { action: ContractAction.CESION, label: 'Cesión', icon: 'swap_horiz', path: 'cesion' },
+  [ContractAction.TERMINACION]: { action: ContractAction.TERMINACION, label: 'Terminación Anticipada', icon: 'cancel', path: 'terminacion' },
+  [ContractAction.REINICIO]: { action: ContractAction.REINICIO, label: 'Reinicio', icon: 'play_circle', path: 'reinicio' },
+  [ContractAction.AGREGAR_POLIZA]: { action: ContractAction.AGREGAR_POLIZA, label: 'Agregar Póliza', icon: 'verified_user', path: 'poliza' },
+  [ContractAction.ACTIVAR_CONTRATO]: { action: ContractAction.ACTIVAR_CONTRATO, label: 'Activar Contrato', icon: 'restart_alt', path: null }
+};
 
 /**
  * Fila expandible del listado de contratos: encabezado con los datos clave,
  * detalle con el historial de novedades y menú de acciones.
  *
- * Encapsula la regla de qué novedades ofrece el menú según el estado del
- * contrato (suspendido → solo Reinicio) y delega la anulación al dashboard
- * vía el output `annul`.
+ * Las acciones ofrecidas salen del mapa estado → acciones del dominio
+ * (`availableActions`), y se ocultan por completo cuando la regla de rol
+ * (SUPERVISOR con documento distinto) deja al usuario en solo consulta.
  */
 @Component({
   selector: 'app-contract-accordion',
@@ -32,8 +50,12 @@ interface NoveltyMenuOption {
 export class ContractAccordionComponent {
   @Input({ required: true }) contract!: Contract;
 
+  private readonly userSession = inject(UserSessionService);
+
   /** Solicitud de anulación de una novedad. */
   readonly annul = output<NoveltySummary>();
+  /** Solicitud de activación (reapertura) de un contrato Finalizado. */
+  readonly activate = output<void>();
 
   @ViewChild('menuRef') private menuRef?: ElementRef<HTMLElement>;
 
@@ -49,26 +71,40 @@ export class ContractAccordionComponent {
     return formatDocument(this.contract.contractorId);
   }
 
-  /** Opciones disponibles cuando el contrato está en ejecución normal. */
-  private static readonly DEFAULT_OPTIONS: readonly NoveltyMenuOption[] = [
-    { type: NoveltyType.ADDITION_EXTENSION, label: 'Adición y Prórroga', icon: 'add_circle', path: 'adicion-prorroga' },
-    { type: NoveltyType.SUSPENSION, label: 'Suspensión', icon: 'pause_circle', path: 'suspension' },
-    { type: NoveltyType.ASSIGNMENT, label: 'Cesión', icon: 'swap_horiz', path: 'cesion' },
-    { type: NoveltyType.EARLY_TERMINATION, label: 'Terminación Anticipada', icon: 'cancel', path: 'terminacion' }
-  ];
+  /** Estado efectivo mostrado en el detalle (real del backend o inferido). */
+  get estado(): string {
+    return effectiveStatus(this.contract);
+  }
 
-  /** Única opción disponible cuando el contrato está suspendido. */
-  private static readonly RESTART_OPTION: NoveltyMenuOption =
-    { type: NoveltyType.RESTART, label: 'Reinicio', icon: 'play_circle', path: 'reinicio' };
+  /** Valor vigente: base + adiciones históricas (puede diferir del valor inicial). */
+  get valorVigente(): number {
+    return currentContractValue(this.contract);
+  }
 
-  /**
-   * Si el contrato está suspendido (su última novedad es una suspensión),
-   * la única acción posible es el Reinicio; en caso contrario, las novedades normales.
-   */
-  get noveltyMenuOptions(): readonly NoveltyMenuOption[] {
-    return isContractSuspended(this.contract)
-      ? [ContractAccordionComponent.RESTART_OPTION]
-      : ContractAccordionComponent.DEFAULT_OPTIONS;
+  /** Solo consulta: regla de rol SUPERVISOR con documento distinto al del contrato. */
+  get readOnly(): boolean {
+    const session = this.userSession.session();
+    return !canManageContract(session.roles, session.documento, this.contract);
+  }
+
+  /** Una novedad "En trámite" bloquea cualquier acción nueva sobre el contrato. */
+  get bloqueadoPorTramite(): boolean {
+    return hasNoveltyInProgress(this.contract);
+  }
+
+  /** Acciones habilitadas por el estado del contrato, ya resueltas a opciones de menú. */
+  get noveltyMenuOptions(): NoveltyMenuOption[] {
+    return availableActions(this.contract).map(action => MENU_OPTIONS[action]);
+  }
+
+  /** El botón "Añadir Novedad" solo aparece si hay acciones y el usuario puede gestionar. */
+  get showActions(): boolean {
+    return !this.readOnly && this.noveltyMenuOptions.length > 0;
+  }
+
+  onActivate(): void {
+    this.closeMenu();
+    this.activate.emit();
   }
 
   toggleMenu(): void {

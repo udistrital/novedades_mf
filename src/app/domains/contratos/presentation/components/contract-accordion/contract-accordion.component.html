@@ -36,35 +36,62 @@
         <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">Vigencia</span>
         <span class="text-body-md font-body-md text-on-surface">{{ vigencia }}</span>
       </div>
+      <div>
+        <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">Estado del Contrato</span>
+        <span class="text-body-md font-body-md text-on-surface font-medium">{{ estado }}</span>
+      </div>
+      @if (valorVigente !== contract.totalValue) {
+        <div>
+          <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">Valor Vigente (con adiciones)</span>
+          <span class="text-body-md font-body-md text-on-surface font-semibold">{{ valorVigente | currency:'COP':'symbol':'1.0-0' }}</span>
+        </div>
+      }
     </div>
     <!-- Novedades Section -->
     <div class="mt-4">
       <div class="flex justify-between items-center mb-3">
         <h3 class="text-title-sm font-title-md font-semibold text-primary">Novedades ({{ contract.novelties.length }})</h3>
-        <div class="relative" #menuRef>
-          <button
-            type="button"
-            (click)="toggleMenu()"
-            [attr.aria-expanded]="isMenuOpen()"
-            aria-haspopup="true"
-            class="bg-secondary-container hover:bg-secondary-fixed-dim transition-colors px-4 py-1.5 rounded shadow-sm font-bold text-label-sm flex items-center gap-1 text-on-surface cursor-pointer">
-            <mat-icon class="text-[16px] flex items-center justify-center">add</mat-icon> Añadir Novedad
-          </button>
+        @if (bloqueadoPorTramite) {
+          <span class="text-label-sm font-label-sm text-on-surface-variant bg-surface-container px-3 py-1.5 rounded flex items-center gap-1">
+            <mat-icon class="text-[16px] flex items-center justify-center">hourglass_top</mat-icon>
+            Hay una novedad en trámite: no se pueden crear nuevas novedades.
+          </span>
+        } @else if (showActions) {
+          <div class="relative" #menuRef>
+            <button
+              type="button"
+              (click)="toggleMenu()"
+              [attr.aria-expanded]="isMenuOpen()"
+              aria-haspopup="true"
+              class="bg-secondary-container hover:bg-secondary-fixed-dim transition-colors px-4 py-1.5 rounded shadow-sm font-bold text-label-sm flex items-center gap-1 text-on-surface cursor-pointer">
+              <mat-icon class="text-[16px] flex items-center justify-center">add</mat-icon> Añadir Novedad
+            </button>
 
-          @if (isMenuOpen()) {
-            <div class="absolute right-0 mt-2 w-56 bg-surface-container-lowest rounded-lg shadow-lg border border-outline-variant z-10 py-1">
-              @for (option of noveltyMenuOptions; track option.type) {
-                <a
-                  [routerLink]="['/contratos', contract.id, 'novedades', option.path]"
-                  (click)="closeMenu()"
-                  class="w-full text-left px-4 py-2 text-body-md font-body-md hover:bg-surface-container transition-colors flex items-center gap-2 text-on-surface cursor-pointer">
-                  <mat-icon class="text-primary text-[20px] flex items-center justify-center">{{ option.icon }}</mat-icon>
-                  {{ option.label }}
-                </a>
-              }
-            </div>
-          }
-        </div>
+            @if (isMenuOpen()) {
+              <div class="absolute right-0 mt-2 w-56 bg-surface-container-lowest rounded-lg shadow-lg border border-outline-variant z-10 py-1">
+                @for (option of noveltyMenuOptions; track option.action) {
+                  @if (option.path) {
+                    <a
+                      [routerLink]="['/contratos', contract.id, 'novedades', option.path]"
+                      (click)="closeMenu()"
+                      class="w-full text-left px-4 py-2 text-body-md font-body-md hover:bg-surface-container transition-colors flex items-center gap-2 text-on-surface cursor-pointer">
+                      <mat-icon class="text-primary text-[20px] flex items-center justify-center">{{ option.icon }}</mat-icon>
+                      {{ option.label }}
+                    </a>
+                  } @else {
+                    <button
+                      type="button"
+                      (click)="onActivate()"
+                      class="w-full text-left px-4 py-2 text-body-md font-body-md hover:bg-surface-container transition-colors flex items-center gap-2 text-on-surface cursor-pointer">
+                      <mat-icon class="text-primary text-[20px] flex items-center justify-center">{{ option.icon }}</mat-icon>
+                      {{ option.label }}
+                    </button>
+                  }
+                }
+              </div>
+            }
+          </div>
+        }
       </div>
       <div class="overflow-x-auto border border-outline-variant rounded bg-surface-container-lowest">
         <table class="w-full text-left">
@@ -97,9 +124,11 @@
                     <a href="#" target="_blank" class="bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:bg-surface-container-low px-3 py-1 rounded text-label-sm font-bold transition-colors flex items-center gap-1" title="Ver Acta">
                       <mat-icon class="text-[16px]">visibility</mat-icon> Ver Acta
                     </a>
-                    <button type="button" (click)="annul.emit(novelty)" class="bg-surface-container-lowest border border-error text-error hover:bg-error/10 px-3 py-1 rounded text-label-sm font-bold flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed" [disabled]="!novelty.canAnnul" title="Anular">
-                      <mat-icon class="text-[16px]">delete</mat-icon> Anular
-                    </button>
+                    @if (!readOnly) {
+                      <button type="button" (click)="annul.emit(novelty)" class="bg-surface-container-lowest border border-error text-error hover:bg-error/10 px-3 py-1 rounded text-label-sm font-bold flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed" [disabled]="!novelty.canAnnul" title="Anular">
+                        <mat-icon class="text-[16px]">delete</mat-icon> Anular
+                      </button>
+                    }
                   </div>
                 </td>
               </tr>

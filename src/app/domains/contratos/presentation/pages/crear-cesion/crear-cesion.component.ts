@@ -1,6 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, computed, effect, inject, signal } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { startWith } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -20,11 +20,12 @@ import { MoneyFieldComponent } from '../../../../../shared/ui/money-field.compon
 import { ToggleSectionComponent } from '../../../../../shared/ui/toggle-section.component';
 import { DocumentPreviewControlComponent } from '../../../../../shared/ui/document-preview-control.component';
 import { NoveltyFormActionsComponent } from '../../../../../shared/ui/novelty-form-actions.component';
-import { addDaysToDate, toDisplayDate, todayIso } from '../../../../../shared/util/format.util';
+import { addDaysToDate, formatCop, toDisplayDate, todayIso } from '../../../../../shared/util/format.util';
 
 import { NoveltyType } from '../../../domain/models/novelty-type.enum';
 import { CesionDraft, NoveltyDraft } from '../../../domain/models/novelty-draft.model';
 import { Assignee } from '../../../domain/models/assignee.model';
+import { currentContractValue } from '../../../domain/contract.rules';
 
 /**
  * Página de creación de la novedad de Cesión: transfiere el contrato del
@@ -94,8 +95,45 @@ export class CrearCesionComponent extends CreateNoveltyPage {
   get considerando(): FormGroup { return this.form.get('considerando') as FormGroup; }
   get clausula(): FormGroup { return this.form.get('clausula') as FormGroup; }
 
+  private readonly formValue = toSignal(this.form.valueChanges, { initialValue: this.form.getRawValue() });
+
+  /** Valor vigente del contrato (base + adiciones históricas): tope de los valores de la cesión. */
+  readonly valorVigente = computed(() => {
+    const c = this.state.selectedContract();
+    return c ? currentContractValue(c) : 0;
+  });
+
+  /** Saldo restante para el cesionario = valor vigente − (a favor del cedente + desembolsado). */
+  readonly saldoCesionario = computed(() => {
+    const v = this.formValue();
+    const usado = (Number(v?.valorFavorCedente) || 0) + (Number(v?.valorDesembolsado) || 0);
+    return this.valorVigente() - usado;
+  });
+
+  readonly saldoCesionarioTexto = computed(() => formatCop(this.saldoCesionario()));
+
+  /** Los valores de la cesión no pueden superar el valor vigente del contrato (§5.3). */
+  private readonly topeValorContrato = (ctrl: AbstractControl): ValidationErrors | null => {
+    const c = this.state.selectedContract();
+    const v = Number(ctrl.value);
+    if (!c || !Number.isFinite(v) || v <= 0) return null;
+    return v > currentContractValue(c) ? { maxContractValue: true } : null;
+  };
+
   constructor() {
     super();
+
+    // Topes contra el valor del contrato en los dos valores monetarios.
+    const desembolsado = this.form.controls.valorDesembolsado;
+    const favorCedente = this.form.controls.valorFavorCedente;
+    desembolsado.addValidators(this.topeValorContrato);
+    favorCedente.addValidators(this.topeValorContrato);
+    // El tope depende del contrato: al cargarlo se revalida lo ya digitado.
+    effect(() => {
+      this.state.selectedContract();
+      desembolsado.updateValueAndValidity({ emitEvent: false });
+      favorCedente.updateValueAndValidity({ emitEvent: false });
+    });
 
     // Fecha de terminación del cedente: siempre un día antes de la fecha de cesión.
     const sesion = this.form.controls.fechaSesion;
@@ -165,7 +203,8 @@ export class CrearCesionComponent extends CreateNoveltyPage {
       { label: 'Ordenador del Gasto', value: c?.spendingManager ?? '' },
       { label: 'Supervisor', value: c?.supervisor ?? '' },
       { label: 'Fecha de Cesión', value: toDisplayDate(v.fechaSesion) },
-      { label: 'Fecha de Terminación del Cedente', value: toDisplayDate(v.fechaTerminacionCedente) }
+      { label: 'Fecha de Terminación del Cedente', value: toDisplayDate(v.fechaTerminacionCedente) },
+      { label: 'Saldo a favor del Cesionario', value: this.saldoCesionarioTexto(), highlight: true }
     ];
   }
 }
