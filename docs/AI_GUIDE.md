@@ -46,7 +46,10 @@ Instrucciones operativas para trabajar en `novedades_mf` sin degradar su arquite
 
 ## Estado del proyecto que debes conocer
 
-- **Las escrituras están simuladas** (crear/anular novedad fingen éxito). Es deliberado y temporal ([ADR-011](adr/ADR-011-escrituras-simuladas.md), tarea MIG-001). No "arregles" los `console.warn` de esos métodos: son los marcadores del pendiente.
-- Los parámetros `forceError` y el switch del modal son **herramientas de prueba** documentadas para retiro junto con MIG-001.
+- **Las escrituras están conectadas** ([ADR-014](adr/ADR-014-escrituras-reales-sin-replica.md)): crear novedad = validar transición → `POST {mid}novedad/` → registrar estado; anular = `PATCH {mid}novedad/{id}`. **Sin réplica a Ágora/Titan ni compensación en cliente** (TD-007 es de backend). Los nombres de campo del payload por tipo son aproximación documentada: si el backend los rechaza, se corrige ÚNICAMENTE `infrastructure/mappers/novelty-payload.mapper.ts`.
+- Igual de corregible en un solo punto: la extracción de valor de adición / días de prórroga / cesionario de las respuestas del mid (`readCandidate` en `contract.mapper.ts`) usa nombres candidatos porque los `GetNovedad*` no están documentados campo a campo.
+- Los parámetros `forceError` y el switch del modal **se conservan** como herramienta de prueba de los caminos de error de la UI (decisión registrada en ADR-014).
 - `dev-token.ts` es un hook de desarrollo local con instrucciones de borrado en su cabecera; su token debe permanecer vacío en commits.
-- El estado real del contrato **no se lee del backend** todavía; no asumas que `isContractSuspended` cubre todos los estados (MIG-002).
+- El estado real del contrato **sí se lee** de `contrato_estado` y gobierna el menú de acciones (`availableActions`); cuando el backend no tiene registro se infiere (`effectiveStatus`). El control por rol vive en `shared/auth/` + `canManageContract`.
+- El plan de pruebas manual por funcionalidad está en [TEST_PLAN.md](TEST_PLAN.md); el detalle de la ejecución del plan de migración, en [REVISION_CAMBIOS.md](REVISION_CAMBIOS.md).
+- Generación/previsualización de actas (PDF) quedó explícitamente FUERA de esta fase, igual que el módulo de Aprobación (MIG-014, bloqueado por negocio).

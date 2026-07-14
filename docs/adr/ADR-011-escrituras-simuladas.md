@@ -1,6 +1,6 @@
 # ADR-011 — Migración por fases: lecturas reales primero, escrituras simuladas
 
-**Fecha**: 2026-07-06 (commit `81dc395`, conexión de lecturas) · **Estado**: Aceptada (temporal — se cierra con MIG-001)
+**Fecha**: 2026-07-06 (commit `81dc395`, conexión de lecturas) · **Estado**: **Reemplazada por [ADR-014](ADR-014-escrituras-reales-sin-replica.md)** (2026-07-07, cierre de MIG-001)
 
 ## Contexto
 

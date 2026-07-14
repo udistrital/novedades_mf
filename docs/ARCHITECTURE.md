@@ -102,16 +102,13 @@ Cada página concreta solo define `noveltyName`, su `FormGroup`, `buildDraft()` 
 Rutas lazy (`loadComponent`) definidas en `app.routes.ts`:
 
 ```
-/                                                → dashboard (búsqueda + listado + anulación)
-/contratos/:contractId/novedades/adicion-prorroga
-/contratos/:contractId/novedades/suspension
-/contratos/:contractId/novedades/cesion
-/contratos/:contractId/novedades/terminacion
-/contratos/:contractId/novedades/reinicio
+/                                                → dashboard (búsqueda + listado + anulación + activación)
+/contratos/:contractId/novedades/…               → hijas bajo un padre con canActivate: [contractAccessGuard]
+    adicion-prorroga | suspension | cesion | terminacion | reinicio | poliza
 /**                                              → redirige al dashboard
 ```
 
-`:contractId` es el id compuesto `${numero}_${vigencia}` (el backend no tiene id único de contrato). Qué opciones de novedad se ofrecen por contrato lo decide `contract-accordion` con las reglas de `domain/contract.rules.ts` (hoy: suspendido → solo Reinicio; ver limitaciones en [MIGRATION.md](MIGRATION.md)).
+`:contractId` es el id compuesto `${numero}_${vigencia}` (el backend no tiene id único de contrato). Qué opciones se ofrecen por contrato lo decide `contract-accordion` con el mapa estado→acciones de `domain/contract.rules.ts` (`availableActions`, alimentado por el estado real de `contrato_estado` con fallback inferido). `contractAccessGuard` (`shared/auth/`) redirige al dashboard a los usuarios cuyo único rol es SUPERVISOR sobre contratos que no supervisan. La página `poliza` no extiende `CreateNoveltyPage` (no crea una novedad: completa el registro de póliza de la última cesión vía PUT).
 
 ## Integración single-spa y ciclo de vida
 

@@ -56,5 +56,7 @@ referencias/                  # Requerimientos del legado, compliance vs lineami
 | [DECISION_LOG.md](DECISION_LOG.md) | Índice cronológico de decisiones |
 | [AI_GUIDE.md](AI_GUIDE.md) | Reglas operativas para agentes de IA |
 | [GLOSSARY.md](GLOSSARY.md) | Términos técnicos y de negocio |
+| [TEST_PLAN.md](TEST_PLAN.md) | Plan de pruebas manual, caso por caso, de todas las funcionalidades |
+| [REVISION_CAMBIOS.md](REVISION_CAMBIOS.md) | Detalle de la ejecución del plan de migración (2026-07-07), para revisión |
 
 Documentos operativos fuera de `docs/`: [`MIGRATION_PLAN.md`](../MIGRATION_PLAN.md) (backlog MIG-XXX vigente) y [`referencias/COMPLIANCE_REPORT.md`](../referencias/COMPLIANCE_REPORT.md) (cumplimiento de lineamientos OAS).

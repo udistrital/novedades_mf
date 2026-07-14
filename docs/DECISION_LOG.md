@@ -27,6 +27,10 @@
 | 2026-07-07 | **Exclusiones por decisión del equipo**: tema Material institucional (H3) y ampliación de cobertura de pruebas (H4) quedan fuera del alcance actual | — | compliance (⛔) |
 | 2026-07-07 | Plan de migración funcional vs legado: 48 requerimientos evaluados, backlog MIG-001..014, deuda TD-001..010, supuesto de alcance del MF documentado | [MIGRATION_PLAN](../MIGRATION_PLAN.md) | plan completo |
 | 2026-07-07 | Pasada de documentación TSDoc orientada a intención + creación de `docs/` como base de conocimiento oficial | — | commit `e5370e8` y posteriores |
+| 2026-07-07 | **Ejecución del plan de migración** (MIG-001..013, sin actas/preview ni MIG-014): estado real del contrato, escrituras reales, topes normativos, roles, póliza, acumulados | [REVISION_CAMBIOS](REVISION_CAMBIOS.md) | rama `feature/contratos` |
+| 2026-07-07 | Escrituras reales contra novedades_mid **sin réplica ni compensación en cliente** (TD-007 queda en backend); payload por tipo como aproximación corregible en un solo archivo | [ADR-014](adr/ADR-014-escrituras-reales-sin-replica.md) | `http-contract.service.ts`, `novelty-payload.mapper.ts` |
+| 2026-07-07 | No replicar la normalización de fechas del legado (mediodía / día 31); casos borde cubiertos con pruebas | [ADR-013](adr/ADR-013-normalizacion-fechas-legado.md) | `format.util.spec.ts` |
+| 2026-07-07 | Plan de pruebas manual por funcionalidad como documento oficial de QA | [TEST_PLAN](TEST_PLAN.md) | documento completo |
 
 ## Cómo mantener este registro
 

@@ -17,7 +17,7 @@ La Universidad Distrital suscribe **contratos** (típicamente de prestación de 
 
 | Novedad | Qué hace | Particularidades |
 |---|---|---|
-| **Adición y Prórroga** | Aumenta el valor y/o extiende el plazo | Aplican por separado o juntas. Topes legales: adición ≤ 50 % del valor vigente; prórroga ≤ 50 % del plazo vigente (pendiente de implementar — MIG-005) |
+| **Adición y Prórroga** | Aumenta el valor y extiende el plazo | Ambas secciones son obligatorias (requerimiento actualizado 2026-07-08). Topes legales: adición ≤ 50 % del valor vigente; prórroga ≤ 50 % del plazo vigente |
 | **Suspensión** | Pausa temporal de la ejecución | Requiere motivo; período mínimo 1 día; la fecha de reinicio esperada se deriva (fin + 1 día) |
 | **Reinicio** | Levanta una suspensión | Solo posible si la última novedad es una suspensión; hereda sus fechas |
 | **Cesión** | Transfiere el contrato a un cesionario | La terminación del cedente es la víspera de la cesión; tras la cesión el contrato queda pendiente de póliza del nuevo contratista |
@@ -37,18 +37,19 @@ El legado declaraba además Liquidación, Otrosí (aclaratorio/modificatorio) y 
 5. **Los plazos se expresan en letras y números**: "NUEVE ( 9 ) MESES", incluidos los cálculos derivados ("… Y QUINCE ( 15 ) DÍAS"). Los valores monetarios de actas van también en letras ("… PESOS").
 6. **Vigencias válidas**: del año actual hacia atrás hasta 2015 (primer año con contratos en el sistema).
 7. **La búsqueda siempre exige un criterio** (número de contrato o contratista): el universo de contratos es demasiado grande para listarlo.
-
-### Del negocio, pendientes de implementar (ver [MIGRATION_PLAN](../MIGRATION_PLAN.md))
-
-- Topes del 50 % en adición/prórroga, calculados sobre el valor/plazo **vigente** (base + novedades históricas acumuladas), no sobre el inicial.
-- Valores de cesión y terminación topados al valor del contrato; saldo del cesionario = total − (favor cedente + desembolsado); en terminación, el saldo queda a favor de una única parte.
-- Mapa completo de estados del contrato (en ejecución / suspendido / cesión pendiente de póliza / finalizado / cancelado / inicio) gobernando las acciones disponibles, incluido el bloqueo cuando hay una novedad **en trámite**.
-- Autorización: un **supervisor** solo tramita novedades de contratos donde su documento coincide con el del supervisor del contrato.
+8. **Valor y plazo vigentes acumulan las novedades históricas**: valor vigente = base + Σ adiciones; plazo vigente en días = plazo inicial (mes = 30 días) + Σ prórrogas (`currentContractValue`/`currentTermDays`).
+9. **Topes normativos del 50 %** sobre los acumulados: una nueva adición ≤ 50 % del valor vigente; una nueva prórroga ≤ 50 % del plazo vigente en días (`maxAdditionValue`/`maxExtensionDays`; constantes `TOPE_ADICION`/`TOPE_PRORROGA` sustituibles — TD-006).
+10. **El estado del contrato gobierna las acciones** (`availableActions`): En ejecución → las 4 novedades; Suspendido → Reinicio; Cesión pendiente de póliza → Agregar póliza; Finalizado → Activar contrato; Cancelado/Inicio/Terminado → solo consulta. Una novedad **En trámite** bloquea todo (`hasNoveltyInProgress`).
+11. **Anulación estricta** (`canAnnulNovelty`): solo la última novedad y solo si su tipo corresponde al estado que produjo (la Suspensión de un contrato Suspendido, la Cesión pendiente de póliza, etc.).
+12. **Cesión**: valores desembolsado y a favor del cedente topados al valor vigente; saldo del cesionario = valor vigente − (favor cedente + desembolsado); el cesionario debe ser una **selección real** del autocomplete y persona natural.
+13. **Terminación**: los tres valores topados al valor vigente; los saldos son mutuamente excluyentes — con saldo a favor del contratista > 0, el de la universidad queda en 0 y bloqueado.
+14. **Autorización por rol** (`canManageContract`): un usuario cuyo único rol de negocio es **SUPERVISOR** solo tramita/anula novedades de contratos donde su documento (claim `documento` del JWT) coincide con el del supervisor del contrato; si no, solo consulta. Se aplica en el acordeón (oculta acciones) y como guard de las rutas de creación.
+15. **Contratista vigente tras cesión**: si el historial registra cesiones, el contratista mostrado es el último cesionario (`currentContractorDocument`), resuelto contra `informacion_proveedor`.
 
 ## Estados
 
-- **De una novedad**: *En trámite* (bloqueará nuevas novedades), *En ejecución*, *Terminada*.
-- **De un contrato** (catálogo del legado, aún no mapeado del backend): En ejecución, Suspendido, Cesión pendiente de póliza, Finalizado, Cancelado, Inicio, Fin anticipado.
+- **De una novedad**: *En trámite* (código legado `ENTR` — bloquea nuevas novedades), *En ejecución*, *Terminada*.
+- **De un contrato** (`ContractStatus`, leído del último registro de `contrato_estado`): Inicio, En ejecución, Suspendido, Cesión pendiente de póliza, Finalizado, Cancelado, Terminado ("Fin anticipado" en los requerimientos). Cuando el backend no tiene registro, el dominio **infiere** (última novedad = suspensión ⇒ Suspendido; si no ⇒ En ejecución) — `effectiveStatus`.
 
 ## Fuentes de datos del dominio
 

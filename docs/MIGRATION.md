@@ -24,17 +24,17 @@ El sistema anterior es `novedades_cliente`: AngularJS 1.7.9, Bootstrap 3, build 
 
 Todas con ADR propio — índice cronológico en [DECISION_LOG.md](DECISION_LOG.md). Las estructurales: reescritura en Angular 18 (ADR-001), parcel single-spa (ADR-002), standalone+zoneless+signals divergiendo del proyecto guía NgModules (ADR-003), DDD con dominio único `contratos` (ADR-004), puerto de repositorio + anticorrupción (ADR-005), estado con signals (ADR-006), Tailwind con tokens y Material puntual (ADR-007), base común de páginas de novedad (ADR-008), auth delegada (ADR-009), deployUrl por ambiente (ADR-010), **migración por fases con escrituras simuladas** (ADR-011) y conservación de la regla de 30 días (ADR-012).
 
-## Estado actual (2026-07-07)
+## Estado actual (2026-07-07, tras la ejecución del plan de migración)
 
-**Implementado y conectado a backend real (lecturas)**: búsqueda de contratos por número o contratista con filtro de vigencia; listado con historial de novedades por contrato; los 5 formularios de novedad con sus derivaciones de fechas, resúmenes de confirmación y pantallas de éxito/error; flujo de anulación de la última novedad.
+**Implementado y conectado a backend real**: búsqueda de contratos por número o contratista con filtro de vigencia; listado con historial de novedades, **estado real del contrato** (`contrato_estado`) y valor vigente acumulado; menú de acciones gobernado por el mapa estado→acciones (incluye Agregar Póliza y Activar Contrato); bloqueo por novedad En trámite; los 5 formularios de novedad con topes normativos del 50 %, modos independientes de adición/prórroga, topes y saldo de cesión, regla de saldos excluyentes de terminación y límite de 249 caracteres del motivo; **escrituras reales** (crear/anular novedad, activar contrato, registrar póliza — [ADR-014](adr/ADR-014-escrituras-reales-sin-replica.md)); control de acceso por rol SUPERVISOR (acordeón + guard); contratista vigente tras cesión. Detalle tarea por tarea en [REVISION_CAMBIOS.md](REVISION_CAMBIOS.md); plan de pruebas en [TEST_PLAN.md](TEST_PLAN.md).
 
-**La brecha funcional está medida requerimiento por requerimiento** en [`MIGRATION_PLAN.md`](../MIGRATION_PLAN.md): ~19 % implementado, ~12 % parcial, ~35 % pendiente, ~13 % no aplica al MF, más 10 deudas técnicas. Los frentes pendientes, en orden de criticidad:
+Los frentes que siguen abiertos, en orden de criticidad:
 
-1. **Escrituras** (MIG-001): crear/anular novedad hoy **simulan éxito** — bloqueante absoluto de producción.
-2. **Estados del contrato** (MIG-002/003): el estado real no se lee del backend; solo se infiere "suspendido".
-3. **Reglas normativas** (MIG-004..007): topes 50 %, topes de valores, saldos.
-4. **Roles/supervisor** (MIG-010) y **acta de póliza** (MIG-008).
-5. **Aprobación** (MIG-014): módulo completo, bloqueado por validación de negocio.
+1. **Validar contra backend los contratos de datos no documentados**: nombres de campo del `POST novedad/` por tipo (`novelty-payload.mapper.ts`) y de las respuestas `GetNovedad*` (`readCandidate` del mapper). Ambos corregibles en un único archivo cada uno.
+2. **Réplica hacia Ágora/Titan** (TD-007): decisión de backend; hasta entonces las novedades creadas aquí no se replican en preliquidación.
+3. **Actas** (generación/previsualización de PDF): excluida de esta fase por decisión explícita.
+4. **Aprobación** (MIG-014): módulo completo, bloqueado por validación de negocio.
+5. Ids/avance de estado de "Cesión pendiente de póliza" tras registrar la póliza: sin documentar en el legado (ambigüedad registrada; el backend debería fijarlo).
 
 ## Deuda técnica heredada y registrada
 
