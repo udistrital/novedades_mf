@@ -80,7 +80,13 @@
             </div>
           </div>
           <div>
-            <label for="filter-term" class="block text-label-sm font-label-sm text-on-surface-variant mb-1">{{ searchBy() === 'number' ? 'Número de Contrato' : 'Contratista' }}</label>
+            <div class="flex items-center justify-between mb-1">
+              <label for="filter-term" class="block text-label-sm font-label-sm text-on-surface-variant">{{ searchBy() === 'number' ? 'Número de Contrato' : 'Contratista' }}</label>
+              <button type="button" (click)="clearTerm()" [disabled]="!filterForm.get('term')?.value"
+                class="text-label-sm font-label-sm text-primary hover:underline cursor-pointer disabled:text-primary/40 disabled:no-underline disabled:cursor-not-allowed">
+                Limpiar
+              </button>
+            </div>
             @if (searchBy() === 'number') {
               <input id="filter-term" formControlName="term" type="text" class="w-full rounded bg-surface-container-low border-outline-variant text-body-md font-body-md focus:border-primary focus:ring-1 focus:ring-primary h-10 px-3" placeholder="Ej. 1234-2024">
             } @else {

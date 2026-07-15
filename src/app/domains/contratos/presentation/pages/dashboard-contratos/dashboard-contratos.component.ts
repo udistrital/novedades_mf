@@ -89,6 +89,12 @@ export class DashboardContratosComponent {
     this.filterForm.get('term')!.reset('');
   }
 
+  /** Limpia el campo activo (número de contrato o contratista) sin tocar la vigencia. */
+  clearTerm(): void {
+    this.filterForm.get('term')!.reset('');
+    this.filterError.set('');
+  }
+
   applyFilters(): void {
     const { year, term } = this.filterForm.value;
     const trimmedTerm = (term ?? '').trim();
