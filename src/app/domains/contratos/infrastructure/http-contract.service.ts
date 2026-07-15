@@ -108,9 +108,18 @@ export class HttpContractService implements IContractRepository {
     const usuario = this.session.usuarioRegistro();
     const estadoDestino = targetStateId(draft);
 
-    const validar$ = estadoDestino !== null
-      ? this.validarCambioEstado(estadoDestino, numero, vigencia, usuario)
-      : of(undefined);
+    // El "NumeroContrato" que espera validarCambioEstado es el Id principal de
+    // contrato_general (row.Id), no el número humano del contrato — mismo dato
+    // que ya usa la lectura de estado (`estadoDeContrato`).
+    const validar$ = estadoDestino === null
+      ? of(undefined)
+      : this.contratoPrincipalId(numero, vigencia).pipe(
+          switchMap(contratoId =>
+            contratoId
+              ? this.validarCambioEstado(estadoDestino, contratoId, vigencia, usuario)
+              : throwError(() => new Error('No se encontró el contrato para validar el cambio de estado.'))
+          )
+        );
 
     return validar$.pipe(
       switchMap(() =>
@@ -151,16 +160,23 @@ export class HttpContractService implements IContractRepository {
   activateContract(contractId: string): Observable<void> {
     const { numero, vigencia } = splitContractId(contractId);
     const usuario = this.session.usuarioRegistro();
-    return this.estadoContratoId('En ejecucion').pipe(
-      switchMap(estadoId => {
+    return forkJoin({
+      estadoId: this.estadoContratoId('En ejecucion'),
+      // Id principal de contrato_general (row.Id), no el número humano — ver createNovelty.
+      contratoId: this.contratoPrincipalId(numero, vigencia)
+    }).pipe(
+      switchMap(({ estadoId, contratoId }) => {
         if (estadoId === undefined) {
           return throwError(() => new Error('No se encontró el estado "En ejecución" en el catálogo.'));
         }
-        return this.validarCambioEstado(estadoId, numero, vigencia, usuario).pipe(
+        if (!contratoId) {
+          return throwError(() => new Error('No se encontró el contrato a activar.'));
+        }
+        return this.validarCambioEstado(estadoId, contratoId, vigencia, usuario).pipe(
           switchMap(() => {
             // Deshabilitado: `administrativa_amazon_api` (contrato_estado) apunta a datos
             // reales en todos los ambientes. Descomentar al pasar a producción.
-            // return this.registrarEstado(estadoId, numero, vigencia, usuario);
+            // return this.registrarEstado(estadoId, contratoId, vigencia, usuario);
             return of(undefined);
           })
         );
@@ -230,6 +246,18 @@ export class HttpContractService implements IContractRepository {
     return this.http
       .get<ContratoGeneralDto[]>(`${this.adm}contrato_general/`, { params: { query } })
       .pipe(map(nonEmpty), catchError(() => of([])));
+  }
+
+  /**
+   * Id principal de `contrato_general` (el primer `Id` del GET
+   * `?query=ContratoSuscrito.NumeroContratoSuscrito:{numero},VigenciaContrato:{vigencia}`),
+   * no el número humano del contrato. Es el "NumeroContrato" que esperan los
+   * endpoints de cambio de estado (`validarCambioEstado`, `contrato_estado`).
+   */
+  private contratoPrincipalId(numero: string, vigencia: string): Observable<string | undefined> {
+    return this.contratosPorQuery(`ContratoSuscrito.NumeroContratoSuscrito:${numero}`, vigencia).pipe(
+      map(rows => (rows[0]?.Id !== undefined ? String(rows[0].Id) : undefined))
+    );
   }
 
   /** Búsqueda por contratista: primero resuelve el proveedor por documento, luego sus contratos. */
