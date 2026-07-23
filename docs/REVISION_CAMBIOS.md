@@ -68,7 +68,7 @@ Detalle, tarea por tarea, de la implementación del backlog de [`MIGRATION_PLAN.
 
 ## Interpretaciones y supuestos documentados (revisar con negocio/backend)
 
-1. **Payload de `POST novedad/`**: campos por tipo no documentados → aproximación en `novelty-payload.mapper.ts` (ADR-014). Capturar la primera respuesta real (caso ESC-01 del TEST_PLAN) y ajustar.
+1. **Payload de `POST novedad/`**: campos por tipo no documentados → aproximación en `novelty-payload.mapper.ts` (ADR-014). **Terminación Anticipada ya se confirmó contra una traza real** (ver addendum 2026-07-22 al final de este documento); los demás tipos (Suspensión, Cesión, Reinicio, Adición/Prórroga) siguen siendo la aproximación original, pendiente de la misma confirmación.
 2. **Campos de `GetNovedad*`**: extracción por candidatos (`readCandidate`); mientras el backend no confirme nombres, los acumulados/cesionario pueden venir vacíos — el dominio degrada con gracia (suma 0 / mantiene contratista original).
 3. **"Coincide con el botón habilitado"** (anulación): interpretado como "la novedad que produjo el estado actual" (interpretación #1 del plan).
 4. **Regla SUPERVISOR**: sin selector de "rol activo" en el shell, se aplica solo a usuarios cuyo único rol de negocio es SUPERVISOR.
@@ -82,4 +82,40 @@ Detalle, tarea por tarea, de la implementación del backlog de [`MIGRATION_PLAN.
 - Réplica/compensación hacia Ágora/Titan (TD-007 — backend).
 - Actas/preview de documentos (exclusión del alcance).
 - MIG-014 Aprobación (bloqueada por negocio).
+
+## Addendum (2026-07-22) — Payload real de Terminación Anticipada
+
+El usuario capturó la traza de red del cliente legado creando una Terminación Anticipada real
+(contrato 435/2022) y la trajo para contrastarla contra `novelty-payload.mapper.ts`. Resultado:
+
+- **`POST {mid}novedad/` confirmado**: el body real es plano, en snake_case, y **distinto** del
+  que se venía enviando (`toNoveltyPayload` usaba `numeroContrato`/`vigencia` numérica/`usuario`,
+  ninguno presente en la traza real). Se corrigió el caso `EARLY_TERMINATION` para construir su
+  propio objeto con los nombres confirmados (`contrato`, `vigencia` string, `fecharegistro`,
+  `numerosolicitud`, `fechasolicitud`, `fechaexpedicion`, `numerooficiosupervisor`,
+  `numerooficioordenador`, `fechaoficiosupervisor`, `fechaoficioordenador`, `valor_desembolsado`,
+  `saldo_contratista`, `saldo_universidad`, `fecha_terminacion_anticipada`, `fechafinefectiva`,
+  `estado:"TERM"`, `enlace`). Los demás tipos (`SUSPENSION`/`ASSIGNMENT`/`RESTART`/
+  `ADDITION_EXTENSION`) **no se tocaron**: siguen siendo la aproximación original hasta que se
+  confirmen de la misma forma.
+- **`replica`, `gestor_documental` (subida del acta) y la compensación de
+  `novedades_poscontractuales`** que hace el cliente legado **no se implementan**: `replica` es
+  justamente la llamada que la traza muestra fallando (confirma la decisión de ADR-014 de no
+  llamarla) y el acta/PDF sigue excluido de alcance (se deja `enlace: ''`).
+- **`validarCambioEstado`**: la traza del legado muestra un body en forma de arreglo
+  (`[{NombreEstado:...},{...última fila de contrato_estado}]`), distinto del objeto
+  `{Estado:{Id},FechaRegistro,NumeroContrato,Usuario,Vigencia}` que ya usa e implementa esta app
+  (confirmado funcional en el flujo de activar contrato). Se decidió **no** replicar ese arreglo:
+  nuestro propio `postman_backend_legal.md` documenta la forma de objeto, y cambiarla arriesgaba
+  romper un flujo ya confirmado a partir del comportamiento de un cliente distinto. Si el backend
+  llegara a rechazar la validación en Terminación específicamente, este es el punto a revisar.
+- **Abierto / pendiente de confirmar con backend**:
+  - `cesionario` viaja en la traza (`10`) sin ningún campo equivalente en `TerminacionDraft` ni en
+    las reglas de negocio de terminación (§5.6 solo define desembolsado + saldos). Se omite del
+    payload hasta que se aclare qué representa ahí.
+  - `fechafinefectiva` se envía con el mismo valor que `fecha_terminacion_anticipada`
+    (`fechaTerminacion` del formulario); `fechaCertificacion` (capturada en el formulario) no
+    aparece en la traza y no se envía a este endpoint — podría ser exclusiva de la generación del
+    acta (fuera de alcance).
+- Prueba unitaria nueva: `novelty-payload.mapper.spec.ts` fija el shape confirmado.
 - Nombres/URLs de environment existentes; `dev-token.ts`; switches `forceError` (se conservan como herramienta de prueba — ADR-014).

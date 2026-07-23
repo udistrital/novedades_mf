@@ -23,6 +23,11 @@ novedades-mf, novedades-mf *, novedades-mf *::before, novedades-mf *::after {
 novedades-mf {
   line-height: 1.5;
   -webkit-text-size-adjust: 100%;
+  /* Aísla el stacking context del MFE completo: cualquier z-index/opacity/transform
+     interno queda contenido aquí y nunca puede pintarse por encima de elementos del
+     shell (header, etc.) — sin esto, un z-index interno "gana" contra el shell según
+     el orden del DOM real, que single-spa no aísla. */
+  isolation: isolate;
 }
 novedades-mf h1, novedades-mf h2, novedades-mf h3, novedades-mf h4, novedades-mf p, novedades-mf figure {
   margin: 0;

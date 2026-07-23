@@ -82,6 +82,12 @@ export class CrearPolizaComponent {
   constructor() {
     this.state.loadContract(this.contractId);
 
+    // form → success/error no navega de ruta: hay que subir el scroll a mano.
+    effect(() => {
+      this.pageState();
+      window.scrollTo(0, 0);
+    });
+
     // La póliza pende de la última cesión del contrato: se resuelve al cargarlo.
     effect(() => {
       const contract = this.state.selectedContract();

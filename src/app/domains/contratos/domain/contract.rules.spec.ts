@@ -103,11 +103,22 @@ describe('contract.rules', () => {
 
   describe('canAnnulNovelty (condiciones estrictas §5.1)', () => {
     it('solo la última novedad es anulable', () => {
-      const vieja = novelty({ id: 'n1', expeditionDate: '01/01/2024' });
-      const ultima = novelty({ id: 'n2', expeditionDate: '01/03/2024' });
+      const vieja = novelty({ id: '1', expeditionDate: '01/01/2024' });
+      const ultima = novelty({ id: '2', expeditionDate: '01/03/2024' });
       const c = contract({ novelties: [vieja, ultima] });
       expect(canAnnulNovelty(c, vieja)).toBeFalse();
       expect(canAnnulNovelty(c, ultima)).toBeTrue();
+    });
+
+    it('con la misma fecha de expedición, gana el id más alto (no el orden del arreglo)', () => {
+      // `contract.novelties` llega del mapper ya ordenado por id descendente (más
+      // reciente primero): si "última" se decidiera por fecha con empate, el
+      // desempate por orden de iteración terminaría eligiendo la más antigua.
+      const reciente = novelty({ id: '3', expeditionDate: '01/01/2024' });
+      const vieja = novelty({ id: '1', expeditionDate: '01/01/2024' });
+      const c = contract({ novelties: [reciente, vieja] });
+      expect(canAnnulNovelty(c, reciente)).toBeTrue();
+      expect(canAnnulNovelty(c, vieja)).toBeFalse();
     });
 
     it('el tipo debe corresponder al estado: Suspensión anulable solo con contrato Suspendido', () => {
@@ -148,8 +159,8 @@ describe('contract.rules', () => {
     it('devuelve el id del último cesionario cuando hubo cesiones', () => {
       const c = contract({
         novelties: [
-          novelty({ id: 'c1', type: NoveltyType.ASSIGNMENT, expeditionDate: '01/02/2024', cesionarioId: '222' }),
-          novelty({ id: 'c2', type: NoveltyType.ASSIGNMENT, expeditionDate: '01/04/2024', cesionarioId: '333' })
+          novelty({ id: '1', type: NoveltyType.ASSIGNMENT, expeditionDate: '01/02/2024', cesionarioId: '222' }),
+          novelty({ id: '2', type: NoveltyType.ASSIGNMENT, expeditionDate: '01/04/2024', cesionarioId: '333' })
         ]
       });
       expect(currentContractorId(c)).toBe('333');

@@ -53,7 +53,11 @@
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
     
     <!-- Filter Panel -->
-    <aside class="lg:col-span-4 xl:col-span-3 sticky top-container-margin-desktop">
+    <!-- z-10: el listado tiene varios elementos posicionados/transformados (menú
+         desplegable "Añadir Novedad", flecha de expandir) que sin esto ganan el
+         orden de pintado por estar después en el DOM. Seguro contra el shell porque
+         `novedades-mf` aísla su propio stacking context (ver styles.css). -->
+    <aside class="lg:col-span-4 xl:col-span-3 sticky top-container-margin-desktop z-10">
       <div class="bg-surface-container-lowest rounded-lg shadow-sm p-stack-lg border border-outline-variant">
         <h2 class="text-title-md font-title-md text-primary mb-4 flex items-center gap-2">
           <mat-icon>filter_list</mat-icon> Filtros de Búsqueda

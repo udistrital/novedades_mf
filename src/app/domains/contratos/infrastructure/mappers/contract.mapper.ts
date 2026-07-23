@@ -101,16 +101,22 @@ function readCandidate(raw: NovedadMidDto, keys: string[]): unknown {
 
 function toNoveltySummary(item: NovedadMidDto): NoveltySummary {
   const raw = item.NovedadPoscontractual ?? item;
-  const valorAdicion = Number(readCandidate(item, ['ValorAdicion', 'valor_adicion', 'ValorNovedad', 'Valor', 'valor']));
-  const diasProrroga = Number(readCandidate(item, ['DiasProrroga', 'dias_prorroga', 'Dias', 'dias', 'PeriodoProrroga']));
-  const cesionarioId = readCandidate(item, ['Cesionario', 'cesionario', 'DocumentoNuevo', 'documento_nuevo']);
+  // Todos los campos de negocio se leen del objeto ya desanidado (`raw`), igual que
+  // tipo/estado/fecha: cuando el mid responde con la forma anidada ({NovedadPoscontractual:{…}})
+  // estos datos viven dentro, no en el envoltorio — leerlos de `item` los perdía y, sin
+  // `cesionarioId`, la tarjeta seguía mostrando el contratista original tras una cesión.
+  const valorAdicion = Number(readCandidate(raw, ['ValorAdicion', 'valor_adicion', 'ValorNovedad', 'Valor', 'valor']));
+  const diasProrroga = Number(readCandidate(raw, ['DiasProrroga', 'dias_prorroga', 'Dias', 'dias', 'PeriodoProrroga']));
+  const cesionarioId = readCandidate(raw, ['Cesionario', 'cesionario', 'DocumentoNuevo', 'documento_nuevo']);
   const enlace = readCandidate(raw, ['Enlace', 'EnlaceDocumento']);
   const fechaExpedicion = readCandidate(raw, ['FechaExpedicion', 'FechaCreacion']);
+  // NombreEstado es el campo confirmado contra el servicio real; Estado queda como alternativa.
+  const nombreEstado = readCandidate(raw, ['NombreEstado', 'Estado']);
   return {
     id: String(raw.Id ?? ''),
     type: TIPO_NOVEDAD[Number(raw.TipoNovedad)] ?? NoveltyType.ADDITION_EXTENSION,
     expeditionDate: toDdMmYyyy(String(fechaExpedicion ?? '')),
-    status: toStatus(raw.Estado),
+    status: toStatus(String(nombreEstado ?? '')),
     // El acta se sirve desde novedades_mid; el query de la novedad solo trae el enlace (id del documento).
     documentUrl: enlace ? `${environment.NOVEDADES_MID_SERVICE}gestor_documental/${String(enlace)}` : undefined,
     canAnnul: raw.Activo !== false,
@@ -122,7 +128,11 @@ function toNoveltySummary(item: NovedadMidDto): NoveltySummary {
 
 /** Convierte las novedades del mid; la anulabilidad definitiva se resuelve en `toContract`. */
 export function toNoveltySummaries(items: NovedadMidDto[]): NoveltySummary[] {
-  return items.map(toNoveltySummary);
+  // El mid las devuelve en orden de inserción (más antigua primero); la UI quiere la más
+  // reciente arriba. `Id` es autoincremental, así que ordenar por él descendente basta.
+  return [...items]
+    .sort((a, b) => Number(b.Id ?? 0) - Number(a.Id ?? 0))
+    .map(toNoveltySummary);
 }
 
 /**

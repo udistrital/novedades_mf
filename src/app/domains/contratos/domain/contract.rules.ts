@@ -12,19 +12,16 @@ export function availableVigencias(): string[] {
   return Array.from({ length: current - PRIMERA_VIGENCIA + 1 }, (_, i) => String(current - i));
 }
 
-/** Convierte una fecha dd/mm/yyyy en epoch para poder comparar cronológicamente. */
-function parseExpeditionDate(date: string): number {
-  const [d, m, y] = date.split('/').map(Number);
-  return new Date(y ?? 0, (m ?? 1) - 1, d ?? 1).getTime();
-}
-
-/** Última novedad del contrato según su fecha de expedición. */
+/**
+ * Última novedad del contrato según su `id` (autoincremental en el backend).
+ * No se usa `expeditionDate`: varias novedades del mismo día empatan en esa
+ * fecha y el desempate por orden de iteración terminaba eligiendo la más
+ * antigua en vez de la más reciente.
+ */
 export function getLatestNovelty(contract: Contract): NoveltySummary | undefined {
   if (!contract.novelties.length) return undefined;
   return contract.novelties.reduce((latest, current) =>
-    parseExpeditionDate(current.expeditionDate) >= parseExpeditionDate(latest.expeditionDate)
-      ? current
-      : latest
+    Number(current.id) >= Number(latest.id) ? current : latest
   );
 }
 
@@ -152,9 +149,7 @@ export function maxExtensionDays(contract: Contract): number {
 export function currentContractorId(contract: Contract): string | undefined {
   const cesiones = contract.novelties.filter(n => n.type === NoveltyType.ASSIGNMENT && n.cesionarioId);
   if (!cesiones.length) return undefined;
-  return cesiones.reduce((a, b) =>
-    parseExpeditionDate(b.expeditionDate) >= parseExpeditionDate(a.expeditionDate) ? b : a
-  ).cesionarioId;
+  return cesiones.reduce((a, b) => (Number(b.id) >= Number(a.id) ? b : a)).cesionarioId;
 }
 
 // --- Control de acceso por rol (requerimientos §4) ---

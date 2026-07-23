@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { ContractStateService } from '../../../application/contract-state.service';
@@ -81,6 +81,15 @@ export class DashboardContratosComponent {
   // Flujo de activación (reapertura administrativa de un contrato Finalizado)
   readonly activateTarget = signal<Contract | null>(null);
   readonly activating = signal(false);
+
+  constructor() {
+    // Estos cambios de vista no navegan de ruta (siguen en el dashboard), así que el
+    // scroll restoration del router no aplica: hay que subir el scroll a mano.
+    effect(() => {
+      this.view();
+      window.scrollTo(0, 0);
+    });
+  }
 
   /** Cambia el criterio de búsqueda y limpia el término anterior para no arrastrar valores. */
   setSearchBy(by: SearchBy): void {

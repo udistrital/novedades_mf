@@ -12,6 +12,11 @@ import { NoveltyType } from '../../domain/models/novelty-type.enum';
  * mejor aproximación con los datos del draft: si el backend rechaza el payload
  * al probar integrado, ESTE es el único archivo del frontend a corregir
  * (ver docs/adr/ADR-014 y el gap #1 de info/backend/API_ENDPOINTS_mid.md).
+ *
+ * `EARLY_TERMINATION` es la excepción: sus nombres de campo están confirmados
+ * contra una traza real del cliente legado (ver docs/REVISION_CAMBIOS.md), por
+ * eso arma su propio objeto plano en vez de usar `base`. Los demás tipos
+ * siguen siendo la mejor aproximación, pendientes de la misma confirmación.
  */
 
 /** Ids del catálogo `estado_contrato` documentados en endpoints_legacy.md. */
@@ -68,6 +73,37 @@ export function toNoveltyPayload(
     usuario
   };
 
+  if (draft.type === NoveltyType.EARLY_TERMINATION) {
+    // Confirmado contra la traza real del cliente legado (ver docs/REVISION_CAMBIOS.md):
+    // nombres de campo planos y en snake_case, sin "usuario" ni "numeroContrato".
+    // "cesionario" viaja en la traza (valor 10) sin equivalente en el dominio de
+    // terminación; se omite hasta confirmar con backend qué representa ahí.
+    return {
+      contrato: numeroContrato,
+      vigencia,
+      motivo: '',
+      tiponovedad: tipoNovedadMid(draft),
+      fecharegistro: new Date().toISOString(),
+      numerosolicitud: '',
+      fechasolicitud: draft.solicitud.fechaSolicitud,
+      fechaexpedicion: draft.solicitud.fechaExpedicionActa,
+      numerooficiosupervisor: draft.solicitud.numOficioSupervisor,
+      numerooficioordenador: draft.solicitud.numOficioOrdenador,
+      fechaoficiosupervisor: draft.solicitud.fechaOficioSupervisor,
+      fechaoficioordenador: draft.solicitud.fechaOficioOrdenador,
+      valor_desembolsado: draft.valorDesembolsado,
+      saldo_contratista: draft.saldoFavorContratista,
+      saldo_universidad: draft.saldoFavorUniversidad,
+      // La traza envía el mismo valor en ambas fechas (última día trabajado = fecha
+      // fin efectiva); "fechaCertificacion" del formulario no aparece en la traza.
+      fecha_terminacion_anticipada: draft.fechaTerminacion,
+      fechafinefectiva: draft.fechaTerminacion,
+      estado: 'TERM',
+      // El acta/PDF es un servicio aparte, aún no implementado (ver ADR correspondiente).
+      enlace: ''
+    };
+  }
+
   switch (draft.type) {
     case NoveltyType.SUSPENSION:
       return {
@@ -103,17 +139,6 @@ export function toNoveltyPayload(
         fechaFinSuspension: draft.fechaFinSuspension,
         periodoSuspension: draft.periodoDias,
         fechaReinicio: draft.fechaReinicio
-      };
-    case NoveltyType.EARLY_TERMINATION:
-      return {
-        ...base,
-        ...draft.solicitud,
-        fechaTerminacion: draft.fechaTerminacion,
-        fechaCertificacion: draft.fechaCertificacion,
-        valorDesembolsado: draft.valorDesembolsado,
-        saldoFavorContratista: draft.saldoFavorContratista,
-        saldoFavorUniversidad: draft.saldoFavorUniversidad,
-        clausulaAdicional: clausula(draft.clausula)
       };
     case NoveltyType.ADDITION_EXTENSION:
       return {

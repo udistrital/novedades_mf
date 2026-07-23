@@ -1,4 +1,4 @@
-import { Directive, computed, inject, signal } from '@angular/core';
+import { Directive, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 
@@ -55,6 +55,11 @@ export abstract class CreateNoveltyPage {
 
   constructor() {
     this.state.loadContract(this.contractId);
+    // form → success/error no navega de ruta: hay que subir el scroll a mano.
+    effect(() => {
+      this.pageState();
+      window.scrollTo(0, 0);
+    });
   }
 
   /**

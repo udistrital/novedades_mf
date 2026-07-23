@@ -102,6 +102,7 @@ export interface NovedadMidDto {
   FechaExpedicion?: string;
   FechaCreacion?: string;
   Estado?: string;
+  NombreEstado?: string;
   Activo?: boolean;
   EnlaceDocumento?: string;
   NovedadPoscontractual?: NovedadMidDto;

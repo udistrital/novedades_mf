@@ -122,12 +122,16 @@
                 <td class="px-3 py-2 text-right">
                   <div class="flex justify-end gap-1">
                     <a [href]="novelty.documentUrl" target="_blank" rel="noopener"
-                      [class.opacity-50]="!novelty.documentUrl" [class.pointer-events-none]="!novelty.documentUrl"
-                      class="bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:bg-surface-container-low px-3 py-1 rounded text-label-sm font-bold transition-colors flex items-center gap-1" title="Ver Acta">
+                      [class.pointer-events-none]="!novelty.documentUrl"
+                      [class]="novelty.documentUrl ? 'border-outline-variant text-on-surface-variant hover:bg-surface-container-low' : 'border-outline-variant/40 text-on-surface-variant/40'"
+                      class="bg-surface-container-lowest border px-3 py-1 rounded text-label-sm font-bold transition-colors flex items-center gap-1" title="Ver Acta">
                       <mat-icon class="text-[16px]">visibility</mat-icon> Ver Acta
                     </a>
                     @if (!readOnly) {
-                      <button type="button" (click)="annul.emit(novelty)" class="bg-surface-container-lowest border border-error text-error hover:bg-error/10 px-3 py-1 rounded text-label-sm font-bold flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed" [disabled]="!novelty.canAnnul" title="Anular">
+                      <!-- disabled:text-error/40 en vez de disabled:opacity-50: `opacity` crea un
+                           stacking context que se pinta encima del panel de filtros (sticky) al
+                           hacer scroll; el color con alfa apaga el botón sin ese efecto. -->
+                      <button type="button" (click)="annul.emit(novelty)" class="bg-surface-container-lowest border border-error text-error hover:bg-error/10 px-3 py-1 rounded text-label-sm font-bold flex items-center gap-1 disabled:text-error/40 disabled:border-error/40 disabled:hover:bg-transparent disabled:cursor-not-allowed" [disabled]="!novelty.canAnnul" title="Anular">
                         <mat-icon class="text-[16px]">delete</mat-icon> Anular
                       </button>
                     }
