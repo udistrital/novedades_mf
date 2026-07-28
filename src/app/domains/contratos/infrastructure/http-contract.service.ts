@@ -22,7 +22,7 @@ import {
   InformacionProveedorDto,
   NovedadMidDto,
   PolizaDto
-} from './dtos/legacy-api.dto';
+} from './dtos/external-api.dto';
 import {
   toAseguradora,
   toAssignee,

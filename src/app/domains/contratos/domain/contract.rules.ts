@@ -61,7 +61,8 @@ export function hasNoveltyInProgress(contract: Contract): boolean {
  * Mapa estado → acciones habilitadas (requerimientos §5.1):
  * En ejecución → las 4 novedades; Suspendido → Reinicio; Cesión pendiente de
  * póliza → Agregar póliza; Finalizado → Activar contrato; Cancelado / Inicio /
- * Terminado → solo informativo. Una novedad "en curso" bloquea todo (§5.1).
+ * Terminado / Anulado / Liquidado → solo informativo. Una novedad "en curso"
+ * bloquea todo (§5.1).
  */
 export function availableActions(contract: Contract): ContractAction[] {
   if (hasNoveltyInProgress(contract)) return [];
@@ -79,7 +80,7 @@ export function availableActions(contract: Contract): ContractAction[] {
       return [ContractAction.AGREGAR_POLIZA];
     case ContractStatus.FINALIZADO:
       return [ContractAction.ACTIVAR_CONTRATO];
-    default: // Inicio, Cancelado, Terminado: solo consulta.
+    default: // Inicio, Cancelado, Terminado, Anulado, Liquidado: solo consulta.
       return [];
   }
 }

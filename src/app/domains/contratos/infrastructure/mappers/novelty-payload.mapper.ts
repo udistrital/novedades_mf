@@ -21,9 +21,16 @@ import { NoveltyType } from '../../domain/models/novelty-type.enum';
 
 /** Ids del catálogo `estado_contrato` documentados en endpoints_legacy.md. */
 export const ESTADO_CONTRATO_ID = {
+  "POR SUSCRIBIR": 1,
   SUSPENDIDO: 2,
+  SUSCRITO: 3,
   EN_EJECUCION: 4,
-  TERMINADO: 8
+  ANULADO: 5,
+  FINALIZADO: 6,
+  CANCELADO: 7,
+  "FINALIZADO(ANTICIPADO)": 8,
+  LIQUIDADO: 9,
+  "NOVEDAD ANULADA": 10
 } as const;
 
 /** Discriminadores de POST {mid}novedad/ (API_ENDPOINTS_mid.md). */
@@ -34,7 +41,8 @@ export function targetStateId(draft: NoveltyDraft): number | null {
   switch (draft.type) {
     case NoveltyType.SUSPENSION: return ESTADO_CONTRATO_ID.SUSPENDIDO;
     case NoveltyType.RESTART: return ESTADO_CONTRATO_ID.EN_EJECUCION;
-    case NoveltyType.EARLY_TERMINATION: return ESTADO_CONTRATO_ID.TERMINADO;
+    case NoveltyType.ASSIGNMENT: return ESTADO_CONTRATO_ID.EN_EJECUCION;
+    case NoveltyType.EARLY_TERMINATION: return ESTADO_CONTRATO_ID['FINALIZADO(ANTICIPADO)'];
     // Adición/prórroga no cambia el estado; el estado post-cesión ("Cesión pendiente
     // de póliza") no tiene id documentado y el legado no registra la llamada — lo
     // resuelve el backend (ver ambigüedad §2 del informe de endpoints legados).

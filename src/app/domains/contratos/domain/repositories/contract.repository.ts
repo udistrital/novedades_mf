@@ -15,10 +15,9 @@ export interface ContractFilters {
  * Puerto de acceso a contratos y novedades (patrón repositorio de DDD).
  *
  * Clase abstracta en lugar de interface para poder usarse como token de DI:
- * la implementación activa se registra en `app.config.ts`
- * (`HttpContractService` contra las APIs reales, `MockContractService` para
- * desarrollo sin backend). Las capas de aplicación y presentación solo
- * dependen de esta abstracción.
+ * la implementación activa (`HttpContractService`) se registra en
+ * `app.config.ts`. Las capas de aplicación y presentación solo dependen de
+ * esta abstracción.
  */
 export abstract class IContractRepository {
   abstract getContracts(filters?: ContractFilters): Observable<Contract[]>;

@@ -49,7 +49,7 @@ miAccion(): void { this.repo.metodo().subscribe(...); this.state.update(...); }
 Cadena completa, en este orden (ejemplar de referencia: búsqueda de contratos):
 
 1. **URL base**: usa las de `environments/` (`ADMINISTRATIVA_PRUEBAS_SERVICE`, `NOVEDADES_MID_SERVICE`, `NOVEDADES_SERVICE`). No agregues URLs hardcodeadas; si necesitas un servicio institucional nuevo, se agrega a los 3 archivos de environment con su nombre oficial. Recuerda añadirlo a la allowlist del `auth.interceptor.ts` si debe llevar token.
-2. **DTO** en `infrastructure/dtos/legacy-api.dto.ts`: campos opcionales y laxos (el esquema legado no está documentado campo a campo); el envoltorio del mid es `AlertResponse<T> = {Code, Body}`.
+2. **DTO** en `infrastructure/dtos/external-api.dto.ts`: campos opcionales y laxos (el esquema legado no está documentado campo a campo); el envoltorio del mid es `AlertResponse<T> = {Code, Body}`.
 3. **Mapper** en `infrastructure/mappers/`: función pura DTO → entidad de dominio. Toda tolerancia al backend (nombres alternativos, strings/objetos, `[{}]` = vacío) vive aquí y en ningún otro lado.
 4. **Método en el puerto** (`domain/repositories/contract.repository.ts`) y su implementación en `HttpContractService` **y** en `MockContractService` (el mock debe seguir compilando; devuelve datos quemados con `of(...).pipe(delay(...))`).
 5. **Errores**: dentro del repositorio, `catchError(() => of(valorNeutro))` cuando el fallo no debe tumbar la vista (patrón de `novedadesDeContrato`); si la vista debe enterarse, deja que el error fluya y el servicio de aplicación lo captura en `subscribe({ error })` actualizando su signal de error. No uses `console.log`; `console.warn/error` solo para condiciones anormales reales.
@@ -97,7 +97,7 @@ Función pura exportada en `infrastructure/mappers/`, nombre `toXxx`. Reglas: nu
 | Entidad / modelo | `<nombre>.entity.ts` / `<nombre>.model.ts` / `<nombre>.enum.ts` | `contract.entity.ts` |
 | Reglas de dominio | `<dominio>.rules.ts` | `contract.rules.ts` |
 | Repositorio (puerto) | `<nombre>.repository.ts` | `contract.repository.ts` |
-| DTO / mapper | `<origen>.dto.ts` / `<nombre>.mapper.ts` | `legacy-api.dto.ts` |
+| DTO / mapper | `<origen>.dto.ts` / `<nombre>.mapper.ts` | `external-api.dto.ts` |
 | Directiva | `<nombre>.directive.ts` | `form-input.directive.ts` |
 | Carpetas | kebab-case; páginas con el verbo en español (`crear-cesion`) | |
 

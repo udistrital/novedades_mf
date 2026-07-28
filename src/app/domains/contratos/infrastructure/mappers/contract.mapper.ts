@@ -13,7 +13,7 @@ import {
   InformacionProveedorDto,
   NovedadMidDto,
   PolizaDto
-} from '../dtos/legacy-api.dto';
+} from '../dtos/external-api.dto';
 
 /** Códigos de TipoNovedad de novedades_mid (ver backend/API_ENDPOINTS_mid.md). */
 const TIPO_NOVEDAD: Record<number, NoveltyType> = {
@@ -39,16 +39,22 @@ function normalizado(value: string): string {
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().trim();
 }
 
+// Orden importa: `.find()` toma el primer match y "Finalizado(Anticipado)" contiene
+// "FINALIZADO" — por eso 'ANTICIPADO' va ANTES de 'FINALIZADO', si no toda terminación
+// anticipada se leería como un Finalizado normal (habilitaría "Activar contrato" cuando
+// no debería). Claves = nombre crudo real del catálogo `estado_contrato` (confirmado
+// 2026-07-22), no el nombre de negocio del enum.
 const ESTADOS_CONTRATO: ReadonlyArray<[string, ContractStatus]> = [
+  ['ANTICIPADO', ContractStatus.TERMINADO], // "Finalizado(Anticipado)", id 8.
   ['SUSCRITO', ContractStatus.SUSCRITO],
   ['EN EJECUCION', ContractStatus.EN_EJECUCION],
   ['SUSPENDIDO', ContractStatus.SUSPENDIDO],
   ['CESION', ContractStatus.CESION_PENDIENTE_POLIZA], // "Cesión pendiente de póliza" o variantes.
   ['FINALIZADO', ContractStatus.FINALIZADO],
   ['CANCELADO', ContractStatus.CANCELADO],
-  ['TERMINADO', ContractStatus.TERMINADO],
-  ['FIN ANTICIPADO', ContractStatus.TERMINADO],
-  ['INICIO', ContractStatus.INICIO]
+  ['ANULADO', ContractStatus.ANULADO],
+  ['LIQUIDADO', ContractStatus.LIQUIDADO],
+  ['POR SUSCRIBIR', ContractStatus.INICIO]
 ];
 
 /**

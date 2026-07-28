@@ -1,6 +1,7 @@
-import { toNoveltySummaries } from './contract.mapper';
+import { toNoveltySummaries, toContractStatus } from './contract.mapper';
 import { NoveltyStatus } from '../../domain/models/novelty-type.enum';
-import { NovedadMidDto } from '../dtos/legacy-api.dto';
+import { ContractStatus } from '../../domain/models/contract-status.enum';
+import { ContratoEstadoDto, NovedadMidDto } from '../dtos/external-api.dto';
 
 function novedad(overrides: Partial<NovedadMidDto>): NovedadMidDto {
   return { Id: 1, TipoNovedad: 6, FechaExpedicion: '2024-01-01', Estado: 'En ejecucion', ...overrides };
@@ -21,5 +22,24 @@ describe('toNoveltySummaries', () => {
     const anidada: NovedadMidDto = { Id: 9, NovedadPoscontractual: novedad({ Id: 9, TipoNovedad: 2, Cesionario: 10 }) };
     const result = toNoveltySummaries([anidada]);
     expect(result[0].cesionarioId).toBe('10');
+  });
+});
+
+describe('toContractStatus', () => {
+  function estado(nombreEstado: string): ContratoEstadoDto[] {
+    return [{ Id: 1, NombreEstado: nombreEstado }];
+  }
+
+  it('"Finalizado(Anticipado)" es TERMINADO, no FINALIZADO (contiene "FINALIZADO" como substring)', () => {
+    expect(toContractStatus(estado('Finalizado(Anticipado)'))).toBe(ContractStatus.TERMINADO);
+  });
+
+  it('"Por Suscribir" (nombre real, no "Inicio") mapea a INICIO', () => {
+    expect(toContractStatus(estado('Por Suscribir'))).toBe(ContractStatus.INICIO);
+  });
+
+  it('reconoce Anulado y Liquidado', () => {
+    expect(toContractStatus(estado('Anulado'))).toBe(ContractStatus.ANULADO);
+    expect(toContractStatus(estado('Liquidado'))).toBe(ContractStatus.LIQUIDADO);
   });
 });

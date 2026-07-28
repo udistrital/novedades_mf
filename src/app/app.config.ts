@@ -12,8 +12,7 @@ import { HttpContractService } from './domains/contratos/infrastructure/http-con
 /**
  * Providers compartidos por ambos arranques (standalone y single-spa).
  *
- * Aquí vive el binding del puerto `IContractRepository` → implementación
- * activa: es el único punto a tocar para alternar backend real y mock.
+ * Aquí vive el binding del puerto `IContractRepository` → implementación activa.
  */
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,7 +20,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'top' })),
     provideAnimationsAsync(),
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
-    // Para volver a los datos quemados: useClass: MockContractService (infrastructure/mock-contract.service).
     { provide: IContractRepository, useClass: HttpContractService }
   ]
 };
