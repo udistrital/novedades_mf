@@ -6,16 +6,18 @@
     [responsible]="state.selectedContract()?.supervisor ?? ''"
     (back)="goBack()" />
 } @else if (pageState() === 'error') {
-  <app-novelty-error [noveltyName]="noveltyName" (retry)="onRetry()" (back)="goBack()" />
+  <app-novelty-error [noveltyName]="noveltyName" [error]="errorInfo()" (retry)="onRetry()" (back)="goBack()" />
 } @else {
 <app-novelty-page-layout
   title="Crear Acta de Novedad de Reinicio"
   [breadcrumbItems]="breadcrumb()"
-  [contract]="state.selectedContract()">
+  [contract]="state.selectedContract()"
+  [error]="state.contractError()">
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-stack-lg">
+  <form [formGroup]="form" (ngSubmit)="onSubmit($event)" class="flex flex-col gap-stack-lg">
 
-    <app-card title="Datos de la Solicitud" icon="folder">
+    <!-- Datos de la Solicitud -->
+    <app-card title="Datos de la Solicitud" icon="folder_open">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
         <app-form-field label="Fecha de solicitud" for="fecha_solicitud">
           <input appFormInput id="fecha_solicitud" type="date" formControlName="fechaSolicitud">
@@ -23,21 +25,41 @@
         <app-form-field label="Fecha de expedición del acta" for="fecha_expedicion">
           <input appFormInput id="fecha_expedicion" type="date" formControlName="fechaExpedicionActa">
         </app-form-field>
-        <app-form-field label="Fecha inicio suspensión" for="fecha_inicio">
-          <input appFormInput id="fecha_inicio" type="date" formControlName="fechaInicioSuspension">
-        </app-form-field>
-        <app-form-field label="Fecha fin suspensión" for="fecha_fin">
-          <input appFormInput id="fecha_fin" type="date" formControlName="fechaFinSuspension">
-        </app-form-field>
-        <app-form-field label="Periodo suspensión (Días) *" for="periodo_suspension">
-          <input appFormInput id="periodo_suspension" type="number" formControlName="periodoDias">
-        </app-form-field>
-        <app-form-field label="Fecha reinicio" for="fecha_reinicio">
-          <input appFormInput id="fecha_reinicio" type="date" formControlName="fechaReinicio">
-        </app-form-field>
       </div>
+    </app-card>
 
-      <app-document-preview-control />
+    <!-- Configuración de la Novedad -->
+    <app-card title="Configuración de la Novedad" icon="settings_applications">
+      <div class="flex flex-col gap-stack-lg">
+
+        <!-- Datos del reinicio: período de la suspensión que se reanuda -->
+        <div class="border border-outline-variant/30 rounded-lg p-4 flex flex-col gap-stack-md">
+          <div class="flex items-center gap-3">
+            <mat-icon class="text-primary flex items-center justify-center">play_circle</mat-icon>
+            <span class="font-title-md text-title-md text-on-surface">Datos del reinicio</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+            <app-form-field label="Fecha inicio suspensión" for="fecha_inicio">
+              <input appFormInput id="fecha_inicio" type="date" formControlName="fechaInicioSuspension">
+            </app-form-field>
+            <app-form-field label="Fecha fin suspensión" for="fecha_fin" [required]="true" [control]="form.controls['fechaFinSuspension']">
+              <input appFormInput id="fecha_fin" type="date" [attr.min]="minFinSuspension()" [attr.max]="maxFinSuspension()" formControlName="fechaFinSuspension">
+            </app-form-field>
+            <app-form-field label="Periodo suspensión (Días)" for="periodo_suspension">
+              <input appFormInput id="periodo_suspension" type="number" formControlName="periodoDias">
+            </app-form-field>
+            <app-form-field label="Fecha reinicio" for="fecha_reinicio">
+              <input appFormInput id="fecha_reinicio" type="date" formControlName="fechaReinicio">
+            </app-form-field>
+          </div>
+        </div>
+
+        <app-document-preview-control
+          [(fontSize)]="tamanoLetra"
+          [loading]="previsualizando()"
+          [error]="previewError()"
+          (preview)="previsualizarActa()" />
+      </div>
     </app-card>
 
     <app-novelty-form-actions [submitting]="submitting()" (clear)="onClear()" />
@@ -50,8 +72,8 @@
       [year]="year()"
       [summary]="summary()"
       [submitting]="submitting()"
-      (confirm)="onConfirm()"
-      (cancel)="closeConfirm()" />
+      (confirm)="onConfirm($event)"
+      (dismiss)="closeConfirm()" />
   }
 </app-novelty-page-layout>
 }

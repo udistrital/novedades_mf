@@ -1,8 +1,8 @@
-<app-modal-shell maxWidth="lg" (dismiss)="cancel.emit()">
+<app-modal-shell maxWidth="lg" (dismiss)="dismiss.emit()">
   <!-- Header -->
   <div class="px-6 py-4 border-b border-outline-variant/30 flex justify-between items-center">
     <h2 class="font-title-lg text-title-lg text-primary">Confirmar Generación de Acta</h2>
-    <button type="button" class="text-on-surface-variant hover:text-primary transition-colors" (click)="cancel.emit()">
+    <button type="button" class="text-on-surface-variant hover:text-primary transition-colors" (click)="dismiss.emit()">
       <mat-icon class="flex items-center justify-center">close</mat-icon>
     </button>
   </div>
@@ -27,27 +27,54 @@
       }
     </div>
 
-    <!-- Advertencia -->
-    <div class="flex gap-3 p-3 bg-error-container text-on-error-container rounded-lg border border-error/20">
-      <mat-icon class="text-error flex items-center justify-center">warning</mat-icon>
-      <p class="text-xs font-medium">
-        Verifique los datos antes de continuar. Si alguno no coincide, comuníquese con el equipo de soporte a través de <b><u>IRIS</u></b>.
-      </p>
-    </div>
+    @if (effectiveBlocked()) {
+      <!-- Bloqueo: falta un dato obligatorio para poder tramitar la novedad -->
+      <div class="flex gap-3 p-3 bg-error-container text-on-error-container rounded-lg border border-error/40">
+        <mat-icon class="text-error flex items-center justify-center">error</mat-icon>
+        <p class="text-xs font-medium">
+          {{ blockedMessage() }}
+          <a [href]="soporteUrl" target="_blank" rel="noopener noreferrer" class="font-bold underline">Contactar soporte</a>
+        </p>
+      </div>
+    } @else {
+      <!-- Advertencia -->
+      <div class="flex gap-3 p-3 bg-error-container text-on-error-container rounded-lg border border-error/20">
+        <mat-icon class="text-error flex items-center justify-center">warning</mat-icon>
+        <p class="text-xs font-medium">
+          Verifique los datos antes de continuar. Si alguno no coincide, comuníquese con el equipo de soporte a través de
+          <a [href]="soporteUrl" target="_blank" rel="noopener noreferrer" class="font-bold underline">IRIS</a>.
+        </p>
+      </div>
+    }
   </div>
 
-  <!-- Footer -->
-  <div class="px-6 py-4 bg-surface-container-low flex justify-end gap-3">
+  <!-- TEST SWITCH — quitar este bloque para retirarlo. -->
+  <div class="px-6 pb-2 flex items-center gap-4 border-t border-dashed border-outline-variant/50 pt-3">
+    <label class="flex items-center gap-2 cursor-pointer">
+      <input type="checkbox" class="accent-error" [checked]="forceError()" (change)="forceError.set($any($event.target).checked)">
+      <span class="text-xs text-on-surface-variant">[TEST] Simular petición fallida</span>
+    </label>
+    @if (blocked()) {
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" class="accent-error" [checked]="ignoreBlocked()" (change)="ignoreBlocked.set($any($event.target).checked)">
+        <span class="text-xs text-on-surface-variant">[TEST] Ignorar bloqueo</span>
+      </label>
+    }
+  </div>
+
+  <!-- Footer: pegado abajo para que las acciones queden alcanzables cuando el
+       diálogo hace scroll (pantallas por debajo de 1080p). -->
+  <div class="sticky bottom-0 px-6 py-4 bg-surface-container-low border-t border-outline-variant/30 flex justify-end gap-3">
     <button
       type="button"
-      (click)="cancel.emit()"
+      (click)="dismiss.emit()"
       class="px-4 py-2 border border-outline text-on-surface-variant rounded hover:bg-surface-variant transition-colors font-label-lg">
       Cancelar
     </button>
     <button
       type="button"
-      [disabled]="submitting()"
-      (click)="confirm.emit()"
+      [disabled]="submitting() || effectiveBlocked()"
+      (click)="confirm.emit(forceError())"
       class="px-4 py-2 bg-primary rounded hover:bg-primary-container transition-colors font-label-lg shadow-sm text-on-primary disabled:opacity-50 flex items-center gap-2">
       @if (submitting()) {
         <mat-icon class="animate-spin text-[18px] flex items-center justify-center">sync</mat-icon>

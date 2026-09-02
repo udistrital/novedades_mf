@@ -1,0 +1,115 @@
+[
+  {
+    "order": 1,
+    "title": "Project Overview",
+    "description": "novedades_mf is an Angular 18 single-spa microfrontend for managing post-contractual \"novedades\" (contract updates) at Universidad Distrital Francisco José de Caldas: additions, extensions, assignments, suspensions, terminations, and restarts of contracts. The README explains its role inside the larger contract-management microfrontend architecture, how it plugs into a Root/Core shell via single-spa, and how to set up the project locally. Keep this big picture in mind as the tour moves from the shell integration point down into the domain logic that drives every novelty type.",
+    "nodeIds": ["document:README.md"]
+  },
+  {
+    "order": 2,
+    "title": "Single-Spa Entry Point",
+    "description": "src/main.single-spa.ts is the true entry point of the application: it wires the Angular lifecycle functions (bootstrap, mount, unmount) that single-spa calls to load, mount, and tear down this microfrontend inside the host shell. It bootstraps AppComponent under the /novedades base href when hosted, or auto-bootstraps standalone for local development. AppComponent itself is the root shell component that renders the routed pages you'll see throughout the tour.",
+    "nodeIds": ["file:src/main.single-spa.ts", "file:src/app/app.component.ts"],
+    "languageLesson": "single-spa microfrontends export bootstrap/mount/unmount lifecycle hooks instead of a normal Angular main.ts bootstrapApplication call directly at the top level -- single-spa-angular wraps that call so the host shell controls when this app's DOM gets attached and detached."
+  },
+  {
+    "order": 3,
+    "title": "Application Bootstrap & Routing",
+    "description": "app.config.ts wires the root providers: routing, an HTTP client with the auth interceptor attached, zoneless change detection, and -- critically -- the DI binding from the IContractRepository port to its concrete HttpContractService implementation. app.routes.ts then defines the lazy-loaded routes for the dashboard and every novelty-creation flow (adición/prórroga, suspensión, cesión, terminación, reinicio, póliza), guarding the creation routes with contractAccessGuard. Together these two files are the map of \"what pages exist and what powers them\" that the rest of the tour fills in.",
+    "nodeIds": ["file:src/app/app.config.ts", "file:src/app/app.routes.ts"]
+  },
+  {
+    "order": 4,
+    "title": "Domain Model: Contracts & Novelties",
+    "description": "The domain layer is framework-free TypeScript describing the business vocabulary: contract.entity.ts models a contract, contract-status.enum.ts enumerates its lifecycle states, novelty-type.enum.ts enumerates the six kinds of novelty this app can create, and novelty-draft.model.ts captures the in-progress form data for each novelty type before submission. docs/DOMAIN.md explains the same concepts in business terms -- contracts, contractors, and why each novelty type exists -- giving you the \"why\" behind the types you just read. Everything downstream (repositories, mappers, pages) speaks in terms of these models.",
+    "nodeIds": [
+      "file:src/app/domains/contratos/domain/models/contract.entity.ts",
+      "file:src/app/domains/contratos/domain/models/contract-status.enum.ts",
+      "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts",
+      "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts",
+      "document:docs/DOMAIN.md"
+    ]
+  },
+  {
+    "order": 5,
+    "title": "Domain Business Rules",
+    "description": "contract.rules.ts is the highest fan-in and fan-out file in the codebase -- it encodes the actual business logic: which contract statuses allow which novelty types, and date-normalization rules carried over from the legacy system. Because it's pure, framework-free TypeScript operating only on the models from Step 4, it can be unit-tested in isolation and reused identically by both presentation pages and infrastructure mappers. This is the module every novelty-creation page ultimately defers to when deciding whether an action is legal.",
+    "nodeIds": ["file:src/app/domains/contratos/domain/contract.rules.ts"],
+    "languageLesson": "Keeping business rules as plain exported functions operating on plain interfaces/enums (no Angular decorators, no framework imports) is what makes this layer framework-free DDD -- it can be tested and reasoned about without spinning up Angular's DI or change detection."
+  },
+  {
+    "order": 6,
+    "title": "Repository Port & Infrastructure Adapter",
+    "description": "contract.repository.ts is an abstract class acting as both a DI token and a port (ADR-005) -- the domain layer depends only on this interface, never on HTTP details. HttpContractService is the real implementation, translating calls into requests against the legacy backend; legacy-api.dto.ts mirrors that backend's raw, undocumented shapes, and contract.mapper.ts / novelty-payload.mapper.ts form the anti-corruption layer that converts between those DTOs and the clean domain models from Step 4. This indirection is what let the app swap in a mock implementation during development without touching a single domain or presentation file.",
+    "nodeIds": [
+      "file:src/app/domains/contratos/domain/repositories/contract.repository.ts",
+      "file:src/app/domains/contratos/infrastructure/http-contract.service.ts",
+      "file:src/app/domains/contratos/infrastructure/dtos/legacy-api.dto.ts",
+      "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts",
+      "file:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts"
+    ],
+    "languageLesson": "Modeling a repository as an abstract class rather than a TypeScript interface lets Angular's DI system use the class itself as an injection token -- interfaces disappear at runtime, but abstract classes don't, so `providers: [{ provide: IContractRepository, useClass: HttpContractService }]` works directly."
+  },
+  {
+    "order": 7,
+    "title": "Shared Novelty-Creation Lifecycle",
+    "description": "Rather than duplicating the load-contract/validate/confirm/submit/retry flow across five near-identical pages, create-novelty-page.base.ts introduces an abstract base class (ADR-008) that each novelty page extends, overriding only noveltyName, form, buildDraft(), and buildSummary(). confirm-novelty-modal.component.ts is the shared confirmation dialog this base class opens before calling the repository from Step 6. This is documented as a deliberate, exceptional use of inheritance -- not a pattern to replicate elsewhere in the codebase.",
+    "nodeIds": [
+      "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts"
+    ],
+    "languageLesson": "An abstract class decorated with @Directive() (rather than @Component()) lets Angular still perform dependency injection into it, even though it's never instantiated or rendered directly -- only its concrete subclasses are."
+  },
+  {
+    "order": 8,
+    "title": "The Five Novelty-Creation Pages",
+    "description": "These are the five concrete novelty-creation pages, each extending the base class from Step 7: adición/prórroga (extending a contract's term), suspensión (pausing it), cesión (reassigning it to a new contractor), terminación (ending it early), and reinicio (resuming after a suspension, computing the resumed term from the prior suspension period). Each page's job is narrow -- define its own form and how to build a NoveltyDraft and a human-readable summary -- because the shared lifecycle, validation, and submission mechanics already live in CreateNoveltyPage.",
+    "nodeIds": [
+      "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts"
+    ]
+  },
+  {
+    "order": 9,
+    "title": "Contract Dashboard",
+    "description": "dashboard-contratos.component.ts is the landing page of the application: a search/filter form for contracts, the resulting contract list, and workflows for annulling a novelty or activating a contract. It's the highest fan-out presentation page after the novelty pages, exercising the same repository port and contract rules from Steps 5-6 but for read and state-transition operations rather than novelty creation. This is typically the first page a user actually sees after logging in through the shell.",
+    "nodeIds": ["file:src/app/domains/contratos/presentation/pages/dashboard-contratos/dashboard-contratos.component.ts"]
+  },
+  {
+    "order": 10,
+    "title": "Shared UI Building Blocks",
+    "description": "form-field.component.ts, form-input.directive.ts, and card.component.ts are presentation-agnostic Angular Material building blocks reused across every novelty page and the dashboard from Steps 8-9. Keeping them outside the contratos domain folder (in shared/ui) means they carry no business logic and could be reused if a second domain were ever added alongside contratos, per the single-domain DDD boundary established in ADR-004.",
+    "nodeIds": [
+      "file:src/app/shared/ui/form-field.component.ts",
+      "file:src/app/shared/ui/form-input.directive.ts",
+      "file:src/app/shared/ui/card.component.ts"
+    ]
+  },
+  {
+    "order": 11,
+    "title": "Cross-Cutting Auth & Session",
+    "description": "This microfrontend never implements its own login: user-session.service.ts decodes the JWT the single-spa shell already deposited in localStorage to read roles/documento/email, auth.interceptor.ts re-reads that token on every HTTP request and attaches it only to allowlisted institutional API URLs, and contract-access.guard.ts (used by the routes in Step 3) restricts a SUPERVISOR-only user to contracts they actually supervise. dev-token.ts is a local-dev-only escape hatch for testing without running the shell's OAuth flow, and must stay empty in real commits -- a known, documented risk if that rule is ever broken.",
+    "nodeIds": [
+      "file:src/app/shared/auth/user-session.service.ts",
+      "file:src/app/shared/http/auth.interceptor.ts",
+      "file:src/app/shared/auth/contract-access.guard.ts",
+      "file:src/app/shared/http/dev-token.ts"
+    ],
+    "languageLesson": "Angular's functional HTTP interceptors (a plain function passed to `withInterceptors`) replaced the older class-based HttpInterceptor pattern in Angular 15+, fitting naturally with this project's standalone, provider-function-based bootstrap in app.config.ts."
+  },
+  {
+    "order": 12,
+    "title": "Architecture Decisions",
+    "description": "docs/ARCHITECTURE.md ties every layer from this tour together in one document: the DDD layering, the layer-dependency rules, and how a novelty gets created end to end. The four linked ADRs record why each major structural decision was made: ADR-004 justifies the single-domain DDD folder structure from Steps 4-9, ADR-005 justifies the repository-as-port pattern from Step 6, ADR-008 justifies the base-class inheritance from Step 7, and ADR-014 documents the most recent change -- connecting real backend writes (superseding an earlier simulated-writes decision) with a minimal validate-create-register cascade. Reading these last turns everything you just saw from \"how it works\" into \"why it was built this way.\"",
+    "nodeIds": [
+      "document:docs/ARCHITECTURE.md",
+      "document:docs/adr/ADR-004-ddd-dominio-unico.md",
+      "document:docs/adr/ADR-005-repositorio-como-puerto.md",
+      "document:docs/adr/ADR-008-clase-base-paginas-novedad.md",
+      "document:docs/adr/ADR-014-escrituras-reales-sin-replica.md"
+    ]
+  }
+]

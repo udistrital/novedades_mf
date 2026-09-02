@@ -2,11 +2,15 @@ import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 
+/** Miga de pan; sin `link` (o en la última posición) se muestra como texto plano. */
 export interface BreadcrumbItem {
   label: string;
   link?: string | unknown[];
+  /** Parámetros del enlace; las migas que vuelven al panel llevan ahí el contrato. */
+  queryParams?: Record<string, string>;
 }
 
+/** Migas de pan de las páginas internas del microfrontend. */
 @Component({
   selector: 'app-breadcrumb',
   standalone: true,
@@ -20,7 +24,7 @@ export interface BreadcrumbItem {
               <mat-icon class="text-[16px] flex items-center justify-center mx-1">chevron_right</mat-icon>
             }
             @if (item.link && !last) {
-              <a [routerLink]="item.link" class="hover:text-primary transition-colors">{{ item.label }}</a>
+              <a [routerLink]="item.link" [queryParams]="item.queryParams ?? null" class="hover:text-primary transition-colors">{{ item.label }}</a>
             } @else {
               <span [class.text-primary]="last" [class.font-bold]="last">{{ item.label }}</span>
             }

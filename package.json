@@ -3,13 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4209",
+    "start": "ng serve --configuration development --port 4209",
+    "start:test": "ng serve --configuration test --port 4209",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:novedades-mf": "node dist/novedades-mf/server/server.mjs",
     "build:single-spa:novedades-mf": "ng build novedades-mf --configuration production",
-    "serve:single-spa:novedades-mf": "ng s --project novedades-mf --disable-host-check --port 4209 --live-reload false"
+    "serve:single-spa:novedades-mf": "ng s --project novedades-mf --configuration development --disable-host-check --port 4209 --live-reload false",
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
@@ -22,10 +23,7 @@
     "@angular/material": "^18.2.14",
     "@angular/platform-browser": "^18.2.0",
     "@angular/platform-browser-dynamic": "^18.2.0",
-    "@angular/platform-server": "^18.2.0",
     "@angular/router": "^18.2.0",
-    "@angular/ssr": "^18.2.21",
-    "express": "^4.18.2",
     "rxjs": "~7.8.0",
     "single-spa": ">=4.0.0",
     "single-spa-angular": "^9.2.0",
@@ -37,10 +35,11 @@
     "@angular-devkit/build-angular": "^18.2.21",
     "@angular/cli": "^18.2.21",
     "@angular/compiler-cli": "^18.2.0",
-    "@types/express": "^4.17.17",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^18.18.0",
+    "angular-eslint": "18.4.3",
     "autoprefixer": "^10.5.2",
+    "eslint": "^9.15.0",
     "jasmine-core": "~5.2.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
@@ -50,6 +49,7 @@
     "postcss": "^8.5.15",
     "style-loader": "^3.3.1",
     "tailwindcss": "^3.4.19",
-    "typescript": "~5.5.2"
+    "typescript": "~5.5.2",
+    "typescript-eslint": "8.16.0"
   }
 }

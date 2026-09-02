@@ -1,0 +1,91 @@
+{
+  "startNode": "file:src/main.single-spa.ts",
+  "order": [
+    "file:src/main.single-spa.ts",
+    "file:src/app/app.component.ts",
+    "file:src/app/app.config.ts",
+    "file:src/environments/environment.ts",
+    "file:src/app/app.routes.ts",
+    "file:src/app/domains/contratos/domain/repositories/contract.repository.ts",
+    "file:src/app/domains/contratos/infrastructure/http-contract.service.ts",
+    "file:src/app/shared/http/auth.interceptor.ts",
+    "file:src/app/shared/auth/contract-access.guard.ts",
+    "file:src/app/domains/contratos/domain/models/assignee.model.ts",
+    "file:src/app/domains/contratos/domain/models/contract.entity.ts",
+    "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts",
+    "file:src/app/domains/contratos/domain/models/poliza.model.ts",
+    "file:src/app/domains/contratos/domain/contract.rules.ts",
+    "file:src/app/domains/contratos/domain/models/contract-status.enum.ts",
+    "file:src/app/domains/contratos/infrastructure/dtos/legacy-api.dto.ts",
+    "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts",
+    "file:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts",
+    "file:src/app/shared/auth/user-session.service.ts",
+    "file:src/app/shared/http/dev-token.ts",
+    "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts",
+    "file:src/app/shared/util/format.util.ts",
+    "function:src/app/shared/util/format.util.ts:numberToWords",
+    "function:src/app/shared/util/format.util.ts:toDisplayDate"
+  ],
+  "depthMap": {
+    "file:src/main.single-spa.ts": 0,
+    "file:src/app/app.component.ts": 1,
+    "file:src/app/app.config.ts": 1,
+    "file:src/environments/environment.ts": 1,
+    "file:src/app/app.routes.ts": 2,
+    "file:src/app/domains/contratos/domain/repositories/contract.repository.ts": 2,
+    "file:src/app/domains/contratos/infrastructure/http-contract.service.ts": 2,
+    "file:src/app/shared/http/auth.interceptor.ts": 2,
+    "file:src/app/shared/auth/contract-access.guard.ts": 3,
+    "file:src/app/domains/contratos/domain/models/assignee.model.ts": 3,
+    "file:src/app/domains/contratos/domain/models/contract.entity.ts": 3,
+    "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts": 3,
+    "file:src/app/domains/contratos/domain/models/poliza.model.ts": 3,
+    "file:src/app/domains/contratos/domain/contract.rules.ts": 3,
+    "file:src/app/domains/contratos/domain/models/contract-status.enum.ts": 3,
+    "file:src/app/domains/contratos/infrastructure/dtos/legacy-api.dto.ts": 3,
+    "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts": 3,
+    "file:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts": 3,
+    "file:src/app/shared/auth/user-session.service.ts": 3,
+    "file:src/app/shared/http/dev-token.ts": 3,
+    "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts": 4,
+    "file:src/app/shared/util/format.util.ts": 4,
+    "function:src/app/shared/util/format.util.ts:numberToWords": 4,
+    "function:src/app/shared/util/format.util.ts:toDisplayDate": 4
+  },
+  "byDepth": {
+    "0": [
+      "file:src/main.single-spa.ts"
+    ],
+    "1": [
+      "file:src/app/app.component.ts",
+      "file:src/app/app.config.ts",
+      "file:src/environments/environment.ts"
+    ],
+    "2": [
+      "file:src/app/app.routes.ts",
+      "file:src/app/domains/contratos/domain/repositories/contract.repository.ts",
+      "file:src/app/domains/contratos/infrastructure/http-contract.service.ts",
+      "file:src/app/shared/http/auth.interceptor.ts"
+    ],
+    "3": [
+      "file:src/app/shared/auth/contract-access.guard.ts",
+      "file:src/app/domains/contratos/domain/models/assignee.model.ts",
+      "file:src/app/domains/contratos/domain/models/contract.entity.ts",
+      "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts",
+      "file:src/app/domains/contratos/domain/models/poliza.model.ts",
+      "file:src/app/domains/contratos/domain/contract.rules.ts",
+      "file:src/app/domains/contratos/domain/models/contract-status.enum.ts",
+      "file:src/app/domains/contratos/infrastructure/dtos/legacy-api.dto.ts",
+      "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts",
+      "file:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts",
+      "file:src/app/shared/auth/user-session.service.ts",
+      "file:src/app/shared/http/dev-token.ts"
+    ],
+    "4": [
+      "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts",
+      "file:src/app/shared/util/format.util.ts",
+      "function:src/app/shared/util/format.util.ts:numberToWords",
+      "function:src/app/shared/util/format.util.ts:toDisplayDate"
+    ]
+  }
+}

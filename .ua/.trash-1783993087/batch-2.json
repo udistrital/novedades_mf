@@ -1,0 +1,439 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/app/app.config.ts",
+      "type": "file",
+      "name": "app.config.ts",
+      "filePath": "src/app/app.config.ts",
+      "summary": "Root Angular application config wiring routing, HTTP client with auth interceptor, and zoneless change detection, plus the DI binding from the IContractRepository port to its active implementation (HttpContractService by default, swappable to MockContractService).",
+      "tags": ["dependency-injection", "configuration", "bootstrap", "entry-point"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/app.routes.ts",
+      "type": "file",
+      "name": "app.routes.ts",
+      "filePath": "src/app/app.routes.ts",
+      "summary": "Defines the standalone lazy-loaded routes for the dashboard and the novedad-creation flows (adición/prórroga, suspensión, cesión, terminación, reinicio, póliza), guarding the creation routes with contractAccessGuard.",
+      "tags": ["routing", "lazy-loading", "guard", "entry-point"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/application/novelty.service.ts",
+      "type": "file",
+      "name": "novelty.service.ts",
+      "filePath": "src/app/domains/contratos/application/novelty.service.ts",
+      "summary": "Application service exposing create/annul/activate use cases for novedades, delegating persistence to the injected IContractRepository so presentation components don't touch the repository directly.",
+      "tags": ["service", "use-case", "application-layer"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/app/domains/contratos/application/novelty.service.ts:NoveltyService",
+      "type": "class",
+      "name": "NoveltyService",
+      "filePath": "src/app/domains/contratos/application/novelty.service.ts",
+      "lineRange": [17, 37],
+      "summary": "Thin use-case layer around IContractRepository for creating and annulling novelties and activating contracts; includes a test-only forceError switch to simulate failures for modal testing.",
+      "tags": ["service", "use-case", "dependency-injection"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/domain/models/assignee.model.ts",
+      "type": "file",
+      "name": "assignee.model.ts",
+      "filePath": "src/app/domains/contratos/domain/models/assignee.model.ts",
+      "summary": "Domain model describing an Assignee (contractor/supervisor) with id, document and display name used across novelty forms.",
+      "tags": ["type-definition", "data-model", "domain"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts",
+      "type": "file",
+      "name": "novelty-draft.model.ts",
+      "filePath": "src/app/domains/contratos/domain/models/novelty-draft.model.ts",
+      "summary": "Domain models for in-progress novelty drafts (adición/prórroga, suspensión, cesión, terminación, reinicio, póliza) capturing form data before submission to the repository.",
+      "tags": ["type-definition", "data-model", "domain"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts",
+      "type": "file",
+      "name": "novelty-type.enum.ts",
+      "filePath": "src/app/domains/contratos/domain/models/novelty-type.enum.ts",
+      "summary": "Enumerates the novelty types (adición, prórroga, suspensión, cesión, terminación, reinicio) and their status values used throughout the contratos domain.",
+      "tags": ["type-definition", "enum", "domain"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/domain/models/poliza.model.ts",
+      "type": "file",
+      "name": "poliza.model.ts",
+      "filePath": "src/app/domains/contratos/domain/models/poliza.model.ts",
+      "summary": "Domain models for insurance policy (póliza) data and its update payload, including the insuring entity (aseguradora).",
+      "tags": ["type-definition", "data-model", "domain"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/domain/repositories/contract.repository.ts",
+      "type": "file",
+      "name": "contract.repository.ts",
+      "filePath": "src/app/domains/contratos/domain/repositories/contract.repository.ts",
+      "summary": "Defines the IContractRepository port (hexagonal architecture boundary) with the full set of operations the domain layer needs from any backend implementation.",
+      "tags": ["interface", "port", "repository", "domain"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/app/domains/contratos/domain/repositories/contract.repository.ts:IContractRepository",
+      "type": "class",
+      "name": "IContractRepository",
+      "filePath": "src/app/domains/contratos/domain/repositories/contract.repository.ts",
+      "lineRange": [23, 38],
+      "summary": "Repository port abstracting contract/novelty/póliza operations (fetch, search contractors, create/annul novelty, activate contract, aseguradoras, póliza CRUD) so the domain doesn't depend on a concrete backend.",
+      "tags": ["interface", "port", "repository"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/infrastructure/dtos/contract-response.dto.ts",
+      "type": "file",
+      "name": "contract-response.dto.ts",
+      "filePath": "src/app/domains/contratos/infrastructure/dtos/contract-response.dto.ts",
+      "summary": "DTO shape for a contract used by the mock repository, referencing the novelty type/status enums.",
+      "tags": ["dto", "data-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/infrastructure/dtos/legacy-api.dto.ts",
+      "type": "file",
+      "name": "legacy-api.dto.ts",
+      "filePath": "src/app/domains/contratos/infrastructure/dtos/legacy-api.dto.ts",
+      "summary": "Raw DTO shapes mirroring the legacy institutional APIs (administrativa, novedades_mid, novedades_crud, core) consumed before mapping into domain entities.",
+      "tags": ["dto", "data-model", "api-schema"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/app/domains/contratos/infrastructure/http-contract.service.ts",
+      "type": "file",
+      "name": "http-contract.service.ts",
+      "filePath": "src/app/domains/contratos/infrastructure/http-contract.service.ts",
+      "summary": "Real backend implementation of IContractRepository orchestrating calls across four institutional APIs (administrativa, novedades_mid, novedades_crud, core) to fetch, create, and transition contracts and novelties, mapping legacy DTOs into domain entities.",
+      "tags": ["service", "api-handler", "http-client", "infrastructure"],
+      "complexity": "complex"
+    },
+    {
+      "id": "class:src/app/domains/contratos/infrastructure/http-contract.service.ts:HttpContractService",
+      "type": "class",
+      "name": "HttpContractService",
+      "filePath": "src/app/domains/contratos/infrastructure/http-contract.service.ts",
+      "lineRange": [50, 288],
+      "summary": "Implements IContractRepository against the real HTTP APIs, replicating the legacy client's write choreography (validar cambio de estado → crear novedad → registrar estado) and mapping responses via contract.mapper/novelty-payload.mapper.",
+      "tags": ["service", "api-handler", "http-client", "implements-interface"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts",
+      "type": "file",
+      "name": "contract.mapper.ts",
+      "filePath": "src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts",
+      "summary": "Pure mapping functions translating legacy API DTOs (contract, novelty, póliza, aseguradora, assignee) into the domain's Contract/NoveltySummary/Poliza models, including status normalization and date/term formatting.",
+      "tags": ["mapper", "data-model", "serialization"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toContractStatus",
+      "type": "function",
+      "name": "toContractStatus",
+      "filePath": "src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts",
+      "lineRange": [58, 67],
+      "summary": "Resolves the contract's current ContractStatus by matching the latest contrato_estado row against the known status list, tolerating accent/case variations.",
+      "tags": ["mapper", "status", "normalization"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toNoveltySummary",
+      "type": "function",
+      "name": "toNoveltySummary",
+      "filePath": "src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts",
+      "lineRange": [100, 116],
+      "summary": "Maps one raw novedad row (tolerating multiple legacy key spellings) into a NoveltySummary with id, type, status and formatted date.",
+      "tags": ["mapper", "data-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toNoveltySummaries",
+      "type": "function",
+      "name": "toNoveltySummaries",
+      "filePath": "src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts",
+      "lineRange": [119, 121],
+      "summary": "Maps an array of raw novedad rows into NoveltySummary domain objects.",
+      "tags": ["mapper", "data-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toContract",
+      "type": "function",
+      "name": "toContract",
+      "filePath": "src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts",
+      "lineRange": [130, 164],
+      "summary": "Assembles the full domain Contract entity from a legacy contrato_general row plus its resolved proveedor, novelty list and status, computing display fields and annulment eligibility per novelty.",
+      "tags": ["mapper", "data-model", "aggregation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toPoliza",
+      "type": "function",
+      "name": "toPoliza",
+      "filePath": "src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts",
+      "lineRange": [167, 173],
+      "summary": "Maps a legacy PolizaDto row into the domain Poliza model.",
+      "tags": ["mapper", "data-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toAseguradora",
+      "type": "function",
+      "name": "toAseguradora",
+      "filePath": "src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts",
+      "lineRange": [176, 181],
+      "summary": "Maps a legacy EntidadAseguradoraDto row into the domain Aseguradora model.",
+      "tags": ["mapper", "data-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toAssignee",
+      "type": "function",
+      "name": "toAssignee",
+      "filePath": "src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts",
+      "lineRange": [184, 191],
+      "summary": "Maps a legacy InformacionProveedorDto row into the domain Assignee model, deriving whether the party is a natural or legal person.",
+      "tags": ["mapper", "data-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts",
+      "type": "file",
+      "name": "novelty-payload.mapper.ts",
+      "filePath": "src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts",
+      "summary": "Builds the outbound API payloads for novelty creation and contract state transitions, translating each NoveltyDraft subtype into the legacy mid-service payload shape and computing the target contrato_estado id.",
+      "tags": ["mapper", "serialization", "api-handler"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts:targetStateId",
+      "type": "function",
+      "name": "targetStateId",
+      "filePath": "src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts",
+      "lineRange": [28, 38],
+      "summary": "Determines the target ESTADO_CONTRATO_ID a novelty draft should transition the contract to (e.g. suspended, en ejecución).",
+      "tags": ["mapper", "status", "state-transition"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts:tipoNovedadMid",
+      "type": "function",
+      "name": "tipoNovedadMid",
+      "filePath": "src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts",
+      "lineRange": [40, 51],
+      "summary": "Maps a NoveltyDraft's discriminant to the legacy novedades_mid 'tipo' code expected by the API.",
+      "tags": ["mapper", "serialization"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts:toNoveltyPayload",
+      "type": "function",
+      "name": "toNoveltyPayload",
+      "filePath": "src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts",
+      "lineRange": [58, 136],
+      "summary": "Builds the full novedades_mid request body for a given NoveltyDraft, contract number, vigencia and user, branching per novelty type to include its specific clauses/fields.",
+      "tags": ["mapper", "serialization", "api-handler"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts:toCambioEstadoPayload",
+      "type": "function",
+      "name": "toCambioEstadoPayload",
+      "filePath": "src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts",
+      "lineRange": [143, 156],
+      "summary": "Builds the contrato_estado payload (estado id, contract number, vigencia, user, timestamp) sent when transitioning a contract's status.",
+      "tags": ["mapper", "serialization"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/domains/contratos/infrastructure/mock-contract.service.ts",
+      "type": "file",
+      "name": "mock-contract.service.ts",
+      "filePath": "src/app/domains/contratos/infrastructure/mock-contract.service.ts",
+      "summary": "In-memory IContractRepository implementation with hardcoded contract data and simulated network delays, used for local development without a backend; toggled via app.config.ts's DI binding.",
+      "tags": ["service", "mock", "testing", "implements-interface"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:src/app/domains/contratos/infrastructure/mock-contract.service.ts:MockContractService",
+      "type": "class",
+      "name": "MockContractService",
+      "filePath": "src/app/domains/contratos/infrastructure/mock-contract.service.ts",
+      "lineRange": [22, 185],
+      "summary": "Implements IContractRepository over a static in-memory contract list with simulated delay()s, letting the UI's loading states be exercised without the real backend.",
+      "tags": ["service", "mock", "dependency-injection"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/app/shared/auth/contract-access.guard.ts",
+      "type": "file",
+      "name": "contract-access.guard.ts",
+      "filePath": "src/app/shared/auth/contract-access.guard.ts",
+      "summary": "Router guard restricting novelty-creation routes: a user whose only role is SUPERVISOR may only enter contracts they supervise (matched by documento); other roles pass through.",
+      "tags": ["guard", "authorization", "routing"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/app/shared/auth/contract-access.guard.ts:contractAccessGuard",
+      "type": "function",
+      "name": "contractAccessGuard",
+      "filePath": "src/app/shared/auth/contract-access.guard.ts",
+      "lineRange": [14, 27],
+      "summary": "CanActivateFn that loads the target contract and redirects home unless canManageContract() authorizes the current session for it.",
+      "tags": ["guard", "authorization"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/shared/auth/user-session.service.ts",
+      "type": "file",
+      "name": "user-session.service.ts",
+      "filePath": "src/app/shared/auth/user-session.service.ts",
+      "summary": "Reads the current user's session (roles, documento, email) by decoding the JWT the single-spa shell deposits in localStorage; does not validate the signature since authorization is enforced by the gateway.",
+      "tags": ["service", "auth", "jwt"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/app/shared/auth/user-session.service.ts:UserSessionService",
+      "type": "class",
+      "name": "UserSessionService",
+      "filePath": "src/app/shared/auth/user-session.service.ts",
+      "lineRange": [22, 42],
+      "summary": "Exposes session() and usuarioRegistro() by decoding the shell's id_token/access_token from localStorage on every call so a token refresh by the shell is picked up.",
+      "tags": ["service", "auth", "jwt"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/app/shared/auth/user-session.service.ts:decodeJwtPayload",
+      "type": "function",
+      "name": "decodeJwtPayload",
+      "filePath": "src/app/shared/auth/user-session.service.ts",
+      "lineRange": [45, 54],
+      "summary": "Decodes a JWT's base64url-encoded payload segment into a claims object, returning undefined on malformed tokens.",
+      "tags": ["utility", "jwt", "parsing"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    { "source": "file:src/app/app.config.ts", "target": "file:src/app/app.routes.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/app.config.ts", "target": "file:src/app/domains/contratos/domain/repositories/contract.repository.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/app.config.ts", "target": "file:src/app/domains/contratos/infrastructure/http-contract.service.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/app.config.ts", "target": "file:src/app/shared/http/auth.interceptor.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/app/app.routes.ts", "target": "file:src/app/shared/auth/contract-access.guard.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/app/domains/contratos/application/novelty.service.ts", "target": "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/application/novelty.service.ts", "target": "file:src/app/domains/contratos/domain/repositories/contract.repository.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts", "target": "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/app/domains/contratos/domain/repositories/contract.repository.ts", "target": "file:src/app/domains/contratos/domain/models/assignee.model.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/domain/repositories/contract.repository.ts", "target": "file:src/app/domains/contratos/domain/models/contract.entity.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/domain/repositories/contract.repository.ts", "target": "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/domain/repositories/contract.repository.ts", "target": "file:src/app/domains/contratos/domain/models/poliza.model.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/app/domains/contratos/infrastructure/dtos/contract-response.dto.ts", "target": "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/app/domains/contratos/infrastructure/http-contract.service.ts", "target": "file:src/app/domains/contratos/domain/contract.rules.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/http-contract.service.ts", "target": "file:src/app/domains/contratos/domain/models/assignee.model.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/http-contract.service.ts", "target": "file:src/app/domains/contratos/domain/models/contract-status.enum.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/http-contract.service.ts", "target": "file:src/app/domains/contratos/domain/models/contract.entity.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/http-contract.service.ts", "target": "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/http-contract.service.ts", "target": "file:src/app/domains/contratos/domain/models/poliza.model.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/http-contract.service.ts", "target": "file:src/app/domains/contratos/domain/repositories/contract.repository.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/http-contract.service.ts", "target": "file:src/app/domains/contratos/infrastructure/dtos/legacy-api.dto.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/http-contract.service.ts", "target": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/http-contract.service.ts", "target": "file:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/http-contract.service.ts", "target": "file:src/app/shared/auth/user-session.service.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/http-contract.service.ts", "target": "file:src/environments/environment.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "file:src/app/domains/contratos/domain/contract.rules.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "file:src/app/domains/contratos/domain/models/assignee.model.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "file:src/app/domains/contratos/domain/models/contract-status.enum.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "file:src/app/domains/contratos/domain/models/contract.entity.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "file:src/app/domains/contratos/domain/models/poliza.model.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "file:src/app/domains/contratos/infrastructure/dtos/legacy-api.dto.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "file:src/app/shared/util/format.util.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts", "target": "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts", "target": "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/app/domains/contratos/infrastructure/mock-contract.service.ts", "target": "file:src/app/domains/contratos/domain/models/assignee.model.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mock-contract.service.ts", "target": "file:src/app/domains/contratos/domain/models/contract.entity.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mock-contract.service.ts", "target": "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mock-contract.service.ts", "target": "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mock-contract.service.ts", "target": "file:src/app/domains/contratos/domain/models/poliza.model.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mock-contract.service.ts", "target": "file:src/app/domains/contratos/domain/repositories/contract.repository.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mock-contract.service.ts", "target": "file:src/app/domains/contratos/infrastructure/dtos/contract-response.dto.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/app/shared/auth/contract-access.guard.ts", "target": "file:src/app/domains/contratos/domain/contract.rules.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/shared/auth/contract-access.guard.ts", "target": "file:src/app/domains/contratos/domain/repositories/contract.repository.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/app/shared/auth/contract-access.guard.ts", "target": "file:src/app/shared/auth/user-session.service.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/app/domains/contratos/application/novelty.service.ts", "target": "class:src/app/domains/contratos/application/novelty.service.ts:NoveltyService", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/app/domains/contratos/domain/repositories/contract.repository.ts", "target": "class:src/app/domains/contratos/domain/repositories/contract.repository.ts:IContractRepository", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/app/domains/contratos/infrastructure/http-contract.service.ts", "target": "class:src/app/domains/contratos/infrastructure/http-contract.service.ts:HttpContractService", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mock-contract.service.ts", "target": "class:src/app/domains/contratos/infrastructure/mock-contract.service.ts:MockContractService", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/app/shared/auth/user-session.service.ts", "target": "class:src/app/shared/auth/user-session.service.ts:UserSessionService", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toContractStatus", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toNoveltySummary", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toNoveltySummaries", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toContract", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toPoliza", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toAseguradora", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toAssignee", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts:targetStateId", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts:tipoNovedadMid", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts:toNoveltyPayload", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts:toCambioEstadoPayload", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/app/shared/auth/contract-access.guard.ts", "target": "function:src/app/shared/auth/contract-access.guard.ts:contractAccessGuard", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/app/shared/auth/user-session.service.ts", "target": "function:src/app/shared/auth/user-session.service.ts:decodeJwtPayload", "type": "contains", "direction": "forward", "weight": 1.0 },
+
+    { "source": "file:src/app/domains/contratos/application/novelty.service.ts", "target": "class:src/app/domains/contratos/application/novelty.service.ts:NoveltyService", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/app/domains/contratos/domain/repositories/contract.repository.ts", "target": "class:src/app/domains/contratos/domain/repositories/contract.repository.ts:IContractRepository", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/app/domains/contratos/infrastructure/http-contract.service.ts", "target": "class:src/app/domains/contratos/infrastructure/http-contract.service.ts:HttpContractService", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mock-contract.service.ts", "target": "class:src/app/domains/contratos/infrastructure/mock-contract.service.ts:MockContractService", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/app/shared/auth/user-session.service.ts", "target": "class:src/app/shared/auth/user-session.service.ts:UserSessionService", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toContractStatus", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toNoveltySummaries", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toContract", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toPoliza", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toAseguradora", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toAssignee", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts:targetStateId", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts:toNoveltyPayload", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts", "target": "function:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts:toCambioEstadoPayload", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/app/shared/auth/contract-access.guard.ts", "target": "function:src/app/shared/auth/contract-access.guard.ts:contractAccessGuard", "type": "exports", "direction": "forward", "weight": 0.8 },
+
+    { "source": "class:src/app/domains/contratos/infrastructure/http-contract.service.ts:HttpContractService", "target": "class:src/app/domains/contratos/domain/repositories/contract.repository.ts:IContractRepository", "type": "implements", "direction": "forward", "weight": 0.9 },
+    { "source": "class:src/app/domains/contratos/infrastructure/mock-contract.service.ts:MockContractService", "target": "class:src/app/domains/contratos/domain/repositories/contract.repository.ts:IContractRepository", "type": "implements", "direction": "forward", "weight": 0.9 },
+
+    { "source": "class:src/app/domains/contratos/application/novelty.service.ts:NoveltyService", "target": "class:src/app/domains/contratos/domain/repositories/contract.repository.ts:IContractRepository", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "class:src/app/domains/contratos/infrastructure/http-contract.service.ts:HttpContractService", "target": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toContract", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "class:src/app/domains/contratos/infrastructure/http-contract.service.ts:HttpContractService", "target": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toContractStatus", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "class:src/app/domains/contratos/infrastructure/http-contract.service.ts:HttpContractService", "target": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toNoveltySummaries", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "class:src/app/domains/contratos/infrastructure/http-contract.service.ts:HttpContractService", "target": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toPoliza", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "class:src/app/domains/contratos/infrastructure/http-contract.service.ts:HttpContractService", "target": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toAseguradora", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "class:src/app/domains/contratos/infrastructure/http-contract.service.ts:HttpContractService", "target": "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toAssignee", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "class:src/app/domains/contratos/infrastructure/http-contract.service.ts:HttpContractService", "target": "function:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts:toNoveltyPayload", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "class:src/app/domains/contratos/infrastructure/http-contract.service.ts:HttpContractService", "target": "function:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts:targetStateId", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "class:src/app/domains/contratos/infrastructure/http-contract.service.ts:HttpContractService", "target": "function:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts:toCambioEstadoPayload", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "class:src/app/domains/contratos/infrastructure/http-contract.service.ts:HttpContractService", "target": "function:src/app/domains/contratos/domain/contract.rules.ts:currentContractorDocument", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/app/shared/auth/contract-access.guard.ts:contractAccessGuard", "target": "function:src/app/domains/contratos/domain/contract.rules.ts:canManageContract", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/app/shared/auth/contract-access.guard.ts:contractAccessGuard", "target": "class:src/app/domains/contratos/domain/repositories/contract.repository.ts:IContractRepository", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "function:src/app/shared/util/format.util.ts:numberToWords", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts", "target": "function:src/app/shared/util/format.util.ts:toDisplayDate", "type": "calls", "direction": "forward", "weight": 0.8 }
+  ]
+}

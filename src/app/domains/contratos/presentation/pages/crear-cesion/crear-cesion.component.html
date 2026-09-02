@@ -6,16 +6,17 @@
     [responsible]="state.selectedContract()?.supervisor ?? ''"
     (back)="goBack()" />
 } @else if (pageState() === 'error') {
-  <app-novelty-error [noveltyName]="noveltyName" (retry)="onRetry()" (back)="goBack()" />
+  <app-novelty-error [noveltyName]="noveltyName" [error]="errorInfo()" (retry)="onRetry()" (back)="goBack()" />
 } @else {
 <app-novelty-page-layout
   title="Crear Acta de Cesión"
   [breadcrumbItems]="breadcrumb()"
-  [contract]="state.selectedContract()">
+  [contract]="state.selectedContract()"
+  [error]="state.contractError()">
 
   <app-assignee-info-card aside [assignee]="assignee()" />
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-stack-lg">
+  <form [formGroup]="form" (ngSubmit)="onSubmit($event)" class="flex flex-col gap-stack-lg">
 
     <!-- Datos de la Solicitud -->
     <app-card title="Datos de la Solicitud" icon="folder_open">
@@ -26,20 +27,19 @@
         <app-form-field label="Fecha de expedición del acta" for="fecha_expedicion">
           <input appFormInput id="fecha_expedicion" type="date" formControlName="fechaExpedicionActa">
         </app-form-field>
-        <app-form-field label="Número oficio supervisor a ordenador*" for="num_oficio_sup">
-          <input appFormInput id="num_oficio_sup" type="text" placeholder="Ej. OFI-2024-001" formControlName="numOficioSupervisor">
+        <app-form-field label="Número oficio supervisor a ordenador" for="num_oficio_sup" [required]="true" [control]="form.controls['numOficioSupervisor']">
+          <input appFormInput id="num_oficio_sup" type="text" placeholder="Ej. 123" formControlName="numOficioSupervisor">
         </app-form-field>
         <app-form-field label="Fecha oficio supervisor a ordenador" for="fecha_oficio_sup">
           <input appFormInput id="fecha_oficio_sup" type="date" formControlName="fechaOficioSupervisor">
         </app-form-field>
-        <app-form-field label="Número oficio ordenador a OC*" for="num_oficio_ord">
-          <input appFormInput id="num_oficio_ord" type="text" placeholder="Ej. OFI-2024-002" formControlName="numOficioOrdenador">
+        <app-form-field label="Número oficio ordenador a OC" for="num_oficio_ord" [required]="true" [control]="form.controls['numOficioOrdenador']">
+          <input appFormInput id="num_oficio_ord" type="text" placeholder="Ej. 124" formControlName="numOficioOrdenador">
         </app-form-field>
         <app-form-field label="Fecha oficio ordenador a OC" for="fecha_oficio_ord">
           <input appFormInput id="fecha_oficio_ord" type="date" formControlName="fechaOficioOrdenador">
         </app-form-field>
       </div>
-      <app-document-preview-control />
     </app-card>
 
     <!-- Configuración de la Novedad -->
@@ -53,29 +53,40 @@
             <span class="font-title-md text-title-md text-on-surface">Datos de la Cesión</span>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
-            <app-form-field label="Fecha sesión" for="fecha_sesion">
-              <input appFormInput id="fecha_sesion" type="date" formControlName="fechaSesion">
+            <app-form-field label="Fecha cesión" for="fecha_sesion" [control]="form.controls['fechaSesion']">
+              <input appFormInput id="fecha_sesion" type="date" formControlName="fechaSesion" [max]="maxFechaCesion()">
             </app-form-field>
             <app-form-field label="Fecha de terminación del cedente" for="fecha_term_cedente">
               <input appFormInput id="fecha_term_cedente" type="date" formControlName="fechaTerminacionCedente">
             </app-form-field>
-            <app-money-field label="Valor desembolsado*" for="valor_desembolsado">
-              <input appFormInput class="!pl-7" id="valor_desembolsado" type="number" placeholder="0.00" formControlName="valorDesembolsado">
+            <app-money-field label="Valor desembolsado" for="valor_desembolsado" [required]="true" [control]="form.controls['valorDesembolsado']">
+              <input appFormInput class="!pl-7" id="valor_desembolsado" type="number" min="1" placeholder="Ej. 1000000" formControlName="valorDesembolsado">
             </app-money-field>
-            <app-money-field label="Valor a favor de cedente*" for="valor_favor_cedente">
-              <input appFormInput class="!pl-7" id="valor_favor_cedente" type="number" placeholder="0.00" formControlName="valorFavorCedente">
+            <app-money-field label="Valor a favor de cedente" for="valor_favor_cedente" [required]="true" [control]="form.controls['valorFavorCedente']">
+              <input appFormInput class="!pl-7" id="valor_favor_cedente" type="number" min="1" placeholder="Ej. 1000000" formControlName="valorFavorCedente">
             </app-money-field>
-            <app-form-field label="Días faltantes por pago (cedente)" for="dias_faltantes">
-              <input appFormInput id="dias_faltantes" type="number" placeholder="12" formControlName="diasFaltantes">
+            <app-form-field label="Días faltantes por pago (cedente)" for="dias_faltantes" [control]="form.controls['diasFaltantes']">
+              <input appFormInput id="dias_faltantes" type="number" min="1" placeholder="Ej. 12" formControlName="diasFaltantes">
             </app-form-field>
-            <app-form-field label="Cédula cesionario" for="cedula_cesionario">
-              <div class="relative">
-                <input appFormInput class="!pr-10" id="cedula_cesionario" type="text" placeholder="Buscar por número de documento..." formControlName="cedulaCesionario">
-                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                  <mat-icon class="text-on-surface-variant text-[18px] flex items-center justify-center">search</mat-icon>
+            <app-form-field label="Cédula cesionario" for="cedula_cesionario" [required]="true" [control]="form.controls['cedulaCesionario']">
+              <app-contractor-autocomplete
+                formControlName="cedulaCesionario"
+                placeholder="Buscar por número de documento..."
+                [soloNaturales]="true"
+                (selected)="onCesionarioSelected($event)" />
+            </app-form-field>
+            <div class="md:col-span-2">
+              <app-form-field label="Saldo restante para el Cesionario">
+                <div class="block w-full rounded-md border border-outline-variant bg-surface-container-low p-3">
+                  <div class="font-bold text-title-md" [class.text-primary]="saldoCesionario() >= 0" [class.text-error]="saldoCesionario() < 0">
+                    {{ saldoCesionarioTexto() }}
+                  </div>
+                  <div class="text-on-surface-variant text-xs italic mt-1">
+                    Valor vigente del contrato menos el valor a favor del cedente y lo desembolsado.
+                  </div>
                 </div>
-              </div>
-            </app-form-field>
+              </app-form-field>
+            </div>
           </div>
         </div>
 
@@ -85,12 +96,27 @@
             label="Agregar Considerando Adicional"
             [active]="!!considerando.controls['activo'].value"
             (activeChange)="considerando.controls['activo'].setValue($event)">
-            <div class="w-full md:w-1/3">
-              <app-form-field label="Posición (1-7)" for="posicion_considerando">
-                <input appFormInput id="posicion_considerando" type="number" min="1" max="7" step="1" placeholder="Ej. 1" formControlName="posicion">
-              </app-form-field>
-            </div>
-            <app-form-field label="Considerando adicional" for="considerando_texto">
+            <!--
+              Posición del considerando: OCULTA de la vista (2026-08-24), no eliminada.
+              Mismo criterio que la posición de la cláusula adicional; se reactiva
+              poniendo `MOSTRAR_POSICION_CONSIDERANDO` en `true`.
+            -->
+            @if (MOSTRAR_POSICION_CONSIDERANDO) {
+              <div class="w-full md:w-1/3">
+                <app-form-field
+                  label="Posición (1-7)"
+                  for="posicion_considerando"
+                  [required]="!!considerando.controls['activo'].value"
+                  [control]="considerando.controls['posicion']">
+                  <input appFormInput id="posicion_considerando" type="number" min="1" max="7" step="1" placeholder="Ej. 1" formControlName="posicion">
+                </app-form-field>
+              </div>
+            }
+            <app-form-field
+              label="Considerando adicional"
+              for="considerando_texto"
+              [required]="!!considerando.controls['activo'].value"
+              [control]="considerando.controls['texto']">
               <textarea appFormInput id="considerando_texto" rows="4" placeholder="Redacte aquí el texto del considerando adicional..." formControlName="texto"></textarea>
             </app-form-field>
           </app-toggle-section>
@@ -98,6 +124,12 @@
 
         <!-- Cláusula Adicional -->
         <app-additional-clause-section [group]="clausula" />
+
+        <app-document-preview-control
+          [(fontSize)]="tamanoLetra"
+          [loading]="previsualizando()"
+          [error]="previewError()"
+          (preview)="previsualizarActa()" />
       </div>
     </app-card>
 
@@ -111,8 +143,8 @@
       [year]="year()"
       [summary]="summary()"
       [submitting]="submitting()"
-      (confirm)="onConfirm()"
-      (cancel)="closeConfirm()" />
+      (confirm)="onConfirm($event)"
+      (dismiss)="closeConfirm()" />
   }
 </app-novelty-page-layout>
 }

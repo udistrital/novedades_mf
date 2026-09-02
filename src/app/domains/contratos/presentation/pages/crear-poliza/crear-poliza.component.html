@@ -1,0 +1,68 @@
+@if (pageState() === 'success') {
+  <app-novelty-result
+    noveltyName="Registro de Póliza"
+    title="Póliza Registrada Exitosamente"
+    message="La póliza del cesionario fue registrada correctamente por el sistema de gestión jurídica de la Universidad Distrital."
+    [contractNumber]="state.selectedContract()?.number ?? ''"
+    [executedAt]="executedAt()"
+    [responsible]="state.selectedContract()?.supervisor ?? ''"
+    (back)="goBack()" />
+} @else if (pageState() === 'error') {
+  <app-novelty-error
+    noveltyName="Registro de Póliza"
+    title="Error al Registrar Póliza"
+    [error]="errorInfo()"
+    (retry)="onRetry()"
+    (back)="goBack()" />
+} @else {
+<app-novelty-page-layout
+  title="Registrar Póliza del Cesionario"
+  [breadcrumbItems]="breadcrumb()"
+  [contract]="state.selectedContract()"
+  [error]="state.contractError()">
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit($event)" class="flex flex-col gap-stack-lg">
+
+    <app-card title="Datos de la Póliza" icon="verified_user">
+      <div class="flex flex-col gap-stack-md">
+        <p class="text-body-md font-body-md text-on-surface-variant">
+          La cesión dejó un registro de póliza pendiente: selecciona la entidad aseguradora y
+          digita el número de póliza del nuevo contratista (cesionario) para completarlo.
+        </p>
+
+        @if (!poliza()) {
+          <p class="text-label-sm font-label-sm text-on-surface-variant bg-surface-container px-3 py-2 rounded">
+            Buscando el registro de póliza de la última cesión…
+          </p>
+        }
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+          <app-form-field label="Entidad Aseguradora" for="entidad_aseguradora" [required]="true" [control]="form.controls.entidadAseguradoraId">
+            <select appFormInput class="!bg-surface-container-lowest" id="entidad_aseguradora" formControlName="entidadAseguradoraId">
+              <option [ngValue]="null" disabled>Selecciona una aseguradora…</option>
+              @for (a of aseguradoras(); track a.id) {
+                <option [ngValue]="a.id">{{ a.nombre }}</option>
+              }
+            </select>
+          </app-form-field>
+          <app-form-field label="Número de Póliza" for="numero_poliza" [required]="true" [control]="form.controls.numeroPoliza">
+            <input appFormInput id="numero_poliza" type="text" placeholder="Número que asigna la aseguradora" formControlName="numeroPoliza">
+          </app-form-field>
+        </div>
+      </div>
+    </app-card>
+
+    <app-novelty-form-actions submitLabel="Registrar Póliza" [submitting]="submitting()" (clear)="onClear()" />
+  </form>
+
+  @if (showConfirm()) {
+    <app-confirm-novelty-modal
+      noveltyLabel="registro de póliza"
+      [contractNumber]="state.selectedContract()?.number ?? ''"
+      [summary]="summary()"
+      [submitting]="submitting()"
+      (confirm)="onConfirm()"
+      (dismiss)="closeConfirm()" />
+  }
+</app-novelty-page-layout>
+}

@@ -1,0 +1,1559 @@
+{
+  "scriptCompleted": true,
+  "entryPointCandidates": [
+    {
+      "id": "document:README.md",
+      "score": 5,
+      "name": "README.md",
+      "summary": "Project overview for the novedades_mf microfrontend, describing its role in the Universidad Distrital contract-management single-spa architecture and giving setup steps for the Root, Core, and this microfrontend."
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "score": 2,
+      "name": "crear-reinicio.component.ts",
+      "summary": "Page component implementing the 'Reinicio' (resumption after suspension) novelty creation form, computing the resumed term based on the prior suspension period."
+    },
+    {
+      "id": "config:package.json",
+      "score": 2,
+      "name": "package.json",
+      "summary": "npm manifest declaring Angular 18, Angular Material, TailwindCSS, single-spa/single-spa-angular dependencies and the build/serve/test/lint scripts for the microfrontend."
+    },
+    {
+      "id": "config:tsconfig.app.json",
+      "score": 2,
+      "name": "tsconfig.app.json",
+      "summary": "TypeScript build configuration for the application, extending the base tsconfig and pointing at src/main.single-spa.ts as the compilation entry file."
+    },
+    {
+      "id": "config:tsconfig.spec.json",
+      "score": 2,
+      "name": "tsconfig.spec.json",
+      "summary": "TypeScript configuration for unit tests, extending the base tsconfig and including Jasmine types plus all *.spec.ts files for the Karma test runner."
+    }
+  ],
+  "fanInRanking": [
+    {
+      "id": "file:src/app/domains/contratos/domain/contract.rules.ts",
+      "fanIn": 17,
+      "name": "contract.rules.ts"
+    },
+    {
+      "id": "file:src/app/shared/util/format.util.ts",
+      "fanIn": 17,
+      "name": "format.util.ts"
+    },
+    {
+      "id": "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts",
+      "fanIn": 14,
+      "name": "novelty-type.enum.ts"
+    },
+    {
+      "id": "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts",
+      "fanIn": 13,
+      "name": "novelty-draft.model.ts"
+    },
+    {
+      "id": "file:src/app/domains/contratos/domain/models/contract.entity.ts",
+      "fanIn": 13,
+      "name": "contract.entity.ts"
+    },
+    {
+      "id": "file:src/app/domains/contratos/domain/repositories/contract.repository.ts",
+      "fanIn": 12,
+      "name": "contract.repository.ts"
+    },
+    {
+      "id": "file:src/app/shared/ui/form-field.component.ts",
+      "fanIn": 10,
+      "name": "form-field.component.ts"
+    },
+    {
+      "id": "file:src/app/shared/ui/form-input.directive.ts",
+      "fanIn": 10,
+      "name": "form-input.directive.ts"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts",
+      "fanIn": 8,
+      "name": "confirm-novelty-modal.component.ts"
+    },
+    {
+      "id": "file:src/app/shared/ui/card.component.ts",
+      "fanIn": 8,
+      "name": "card.component.ts"
+    },
+    {
+      "id": "file:src/app/shared/ui/no-negative-number.directive.ts",
+      "fanIn": 8,
+      "name": "no-negative-number.directive.ts"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts",
+      "fanIn": 7,
+      "name": "novelty-error.component.ts"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts",
+      "fanIn": 7,
+      "name": "novelty-result.component.ts"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "fanIn": 7,
+      "name": "create-novelty-page.base.ts"
+    },
+    {
+      "id": "class:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts:CreateNoveltyPage",
+      "fanIn": 7,
+      "name": "CreateNoveltyPage"
+    },
+    {
+      "id": "file:src/app/domains/contratos/domain/models/assignee.model.ts",
+      "fanIn": 7,
+      "name": "assignee.model.ts"
+    },
+    {
+      "id": "file:src/app/domains/contratos/domain/models/contract-status.enum.ts",
+      "fanIn": 7,
+      "name": "contract-status.enum.ts"
+    },
+    {
+      "id": "document:docs/ARCHITECTURE.md",
+      "fanIn": 7,
+      "name": "ARCHITECTURE.md"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts",
+      "fanIn": 6,
+      "name": "novelty-page-layout.component.ts"
+    },
+    {
+      "id": "file:src/app/shared/ui/novelty-form-actions.component.ts",
+      "fanIn": 6,
+      "name": "novelty-form-actions.component.ts"
+    }
+  ],
+  "fanOutRanking": [
+    {
+      "id": "file:src/app/domains/contratos/domain/contract.rules.ts",
+      "fanOut": 31,
+      "name": "contract.rules.ts"
+    },
+    {
+      "id": "file:src/app/shared/util/format.util.ts",
+      "fanOut": 24,
+      "name": "format.util.ts"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "fanOut": 23,
+      "name": "crear-cesion.component.ts"
+    },
+    {
+      "id": "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts",
+      "fanOut": 23,
+      "name": "contract.mapper.ts"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "fanOut": 19,
+      "name": "crear-adicion-prorroga.component.ts"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "fanOut": 19,
+      "name": "crear-terminacion.component.ts"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "fanOut": 17,
+      "name": "crear-poliza.component.ts"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "fanOut": 17,
+      "name": "crear-reinicio.component.ts"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "fanOut": 17,
+      "name": "crear-suspension.component.ts"
+    },
+    {
+      "id": "document:docs/DEVELOPMENT_GUIDE.md",
+      "fanOut": 17,
+      "name": "DEVELOPMENT_GUIDE.md"
+    },
+    {
+      "id": "document:docs/ARCHITECTURE.md",
+      "fanOut": 15,
+      "name": "ARCHITECTURE.md"
+    },
+    {
+      "id": "file:src/app/domains/contratos/infrastructure/http-contract.service.ts",
+      "fanOut": 14,
+      "name": "http-contract.service.ts"
+    },
+    {
+      "id": "file:src/app/domains/contratos/presentation/pages/dashboard-contratos/dashboard-contratos.component.ts",
+      "fanOut": 14,
+      "name": "dashboard-contratos.component.ts"
+    },
+    {
+      "id": "document:docs/AI_GUIDE.md",
+      "fanOut": 14,
+      "name": "AI_GUIDE.md"
+    },
+    {
+      "id": "document:docs/REVISION_CAMBIOS.md",
+      "fanOut": 14,
+      "name": "REVISION_CAMBIOS.md"
+    },
+    {
+      "id": "document:docs/README.md",
+      "fanOut": 13,
+      "name": "README.md"
+    },
+    {
+      "id": "class:src/app/domains/contratos/infrastructure/http-contract.service.ts:HttpContractService",
+      "fanOut": 11,
+      "name": "HttpContractService"
+    },
+    {
+      "id": "document:docs/CODING_STANDARDS.md",
+      "fanOut": 11,
+      "name": "CODING_STANDARDS.md"
+    },
+    {
+      "id": "document:docs/DECISION_LOG.md",
+      "fanOut": 11,
+      "name": "DECISION_LOG.md"
+    },
+    {
+      "id": "document:docs/TEST_PLAN.md",
+      "fanOut": 11,
+      "name": "TEST_PLAN.md"
+    }
+  ],
+  "bfsTraversal": {
+    "startNode": "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+    "order": [
+      "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "file:src/app/domains/contratos/domain/contract.rules.ts",
+      "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts",
+      "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts",
+      "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts",
+      "file:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts",
+      "file:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts",
+      "file:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts",
+      "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "file:src/app/shared/ui/card.component.ts",
+      "file:src/app/shared/ui/document-preview-control.component.ts",
+      "file:src/app/shared/ui/form-field.component.ts",
+      "file:src/app/shared/ui/form-input.directive.ts",
+      "file:src/app/shared/ui/no-negative-number.directive.ts",
+      "file:src/app/shared/ui/novelty-form-actions.component.ts",
+      "file:src/app/shared/util/format.util.ts",
+      "file:src/app/domains/contratos/domain/models/contract-status.enum.ts",
+      "file:src/app/domains/contratos/domain/models/contract.entity.ts",
+      "file:src/app/shared/ui/modal-shell.component.ts",
+      "file:src/app/shared/ui/feedback-card.component.ts",
+      "file:src/app/domains/contratos/presentation/components/contract-info-card/contract-info-card.component.ts",
+      "file:src/app/shared/ui/breadcrumb.component.ts",
+      "file:src/app/domains/contratos/application/contract-state.service.ts",
+      "file:src/app/domains/contratos/application/novelty.service.ts",
+      "file:src/app/domains/contratos/domain/repositories/contract.repository.ts",
+      "file:src/app/domains/contratos/domain/models/assignee.model.ts",
+      "file:src/app/domains/contratos/domain/models/poliza.model.ts"
+    ],
+    "depthMap": {
+      "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts": 0,
+      "file:src/app/domains/contratos/domain/contract.rules.ts": 1,
+      "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts": 1,
+      "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts": 1,
+      "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts": 1,
+      "file:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts": 1,
+      "file:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts": 1,
+      "file:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts": 1,
+      "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts": 1,
+      "file:src/app/shared/ui/card.component.ts": 1,
+      "file:src/app/shared/ui/document-preview-control.component.ts": 1,
+      "file:src/app/shared/ui/form-field.component.ts": 1,
+      "file:src/app/shared/ui/form-input.directive.ts": 1,
+      "file:src/app/shared/ui/no-negative-number.directive.ts": 1,
+      "file:src/app/shared/ui/novelty-form-actions.component.ts": 1,
+      "file:src/app/shared/util/format.util.ts": 1,
+      "file:src/app/domains/contratos/domain/models/contract-status.enum.ts": 2,
+      "file:src/app/domains/contratos/domain/models/contract.entity.ts": 2,
+      "file:src/app/shared/ui/modal-shell.component.ts": 2,
+      "file:src/app/shared/ui/feedback-card.component.ts": 2,
+      "file:src/app/domains/contratos/presentation/components/contract-info-card/contract-info-card.component.ts": 2,
+      "file:src/app/shared/ui/breadcrumb.component.ts": 2,
+      "file:src/app/domains/contratos/application/contract-state.service.ts": 2,
+      "file:src/app/domains/contratos/application/novelty.service.ts": 2,
+      "file:src/app/domains/contratos/domain/repositories/contract.repository.ts": 3,
+      "file:src/app/domains/contratos/domain/models/assignee.model.ts": 4,
+      "file:src/app/domains/contratos/domain/models/poliza.model.ts": 4
+    },
+    "byDepth": {
+      "0": [
+        "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts"
+      ],
+      "1": [
+        "file:src/app/domains/contratos/domain/contract.rules.ts",
+        "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts",
+        "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts",
+        "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts",
+        "file:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts",
+        "file:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts",
+        "file:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts",
+        "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+        "file:src/app/shared/ui/card.component.ts",
+        "file:src/app/shared/ui/document-preview-control.component.ts",
+        "file:src/app/shared/ui/form-field.component.ts",
+        "file:src/app/shared/ui/form-input.directive.ts",
+        "file:src/app/shared/ui/no-negative-number.directive.ts",
+        "file:src/app/shared/ui/novelty-form-actions.component.ts",
+        "file:src/app/shared/util/format.util.ts"
+      ],
+      "2": [
+        "file:src/app/domains/contratos/domain/models/contract-status.enum.ts",
+        "file:src/app/domains/contratos/domain/models/contract.entity.ts",
+        "file:src/app/shared/ui/modal-shell.component.ts",
+        "file:src/app/shared/ui/feedback-card.component.ts",
+        "file:src/app/domains/contratos/presentation/components/contract-info-card/contract-info-card.component.ts",
+        "file:src/app/shared/ui/breadcrumb.component.ts",
+        "file:src/app/domains/contratos/application/contract-state.service.ts",
+        "file:src/app/domains/contratos/application/novelty.service.ts"
+      ],
+      "3": [
+        "file:src/app/domains/contratos/domain/repositories/contract.repository.ts"
+      ],
+      "4": [
+        "file:src/app/domains/contratos/domain/models/assignee.model.ts",
+        "file:src/app/domains/contratos/domain/models/poliza.model.ts"
+      ]
+    }
+  },
+  "nonCodeFiles": {
+    "documentation": [
+      {
+        "id": "document:README.md",
+        "name": "README.md",
+        "type": "document",
+        "summary": "Project overview for the novedades_mf microfrontend, describing its role in the Universidad Distrital contract-management single-spa architecture and giving setup steps for the Root, Core, and this microfrontend."
+      },
+      {
+        "id": "document:docs/AI_GUIDE.md",
+        "name": "AI_GUIDE.md",
+        "type": "document",
+        "summary": "Operational guide for AI coding agents working on novedades_mf: reading order by task type, non-negotiable architectural rules (layer dependencies, signals-only state, repository port, single-spa contract), implementation conventions, and known project state (real writes, dev-only token, deferred features)."
+      },
+      {
+        "id": "document:docs/ARCHITECTURE.md",
+        "name": "ARCHITECTURE.md",
+        "type": "document",
+        "summary": "Describes the project's DDD layering (domain/application/infrastructure/presentation) for the single `contratos` domain, the layer-dependency rules, data-read and novelty-creation flows, routing, and the single-spa integration lifecycle with the shell."
+      },
+      {
+        "id": "document:docs/CODING_STANDARDS.md",
+        "name": "CODING_STANDARDS.md",
+        "type": "document",
+        "summary": "Defines naming conventions, Angular/DDD/signals principles, Tailwind and Angular Material usage rules, accessibility minimums, and a list of anti-patterns rejected in review for this microfrontend."
+      },
+      {
+        "id": "document:docs/DECISION_LOG.md",
+        "name": "DECISION_LOG.md",
+        "type": "document",
+        "summary": "Chronological index of architectural and operational decisions taken during the project's development, linking each entry to its ADR (when applicable) and git evidence."
+      },
+      {
+        "id": "document:docs/DEVELOPMENT_GUIDE.md",
+        "name": "DEVELOPMENT_GUIDE.md",
+        "type": "document",
+        "summary": "Practical how-to manual for building new components, domain entities, use-case services, endpoints, mappers, signals-based state, error handling, and full features, each recipe pointing to a real exemplar in the repo."
+      },
+      {
+        "id": "document:docs/DOMAIN.md",
+        "name": "DOMAIN.md",
+        "type": "document",
+        "summary": "Functional description of the post-contractual novelty business domain: contracts, contractors, novelty types (addition/extension, suspension, restart, assignment, early termination), and the domain rules encoded in the codebase."
+      },
+      {
+        "id": "document:docs/GLOSSARY.md",
+        "name": "GLOSSARY.md",
+        "type": "document",
+        "summary": "Glossary of business and technical terms used throughout the project, cross-referenced with DOMAIN.md and ARCHITECTURE.md."
+      },
+      {
+        "id": "document:docs/MIGRATION.md",
+        "name": "MIGRATION.md",
+        "type": "document",
+        "summary": "Historical context of the migration from the legacy AngularJS novedades_cliente application: what was carried over, what changed, current status, and known technical debt and historical inconsistencies."
+      },
+      {
+        "id": "document:docs/README.md",
+        "name": "README.md",
+        "type": "document",
+        "summary": "Official documentation entry point for novedades_mf: project overview, tech stack, one-line architecture summary, run/build commands, folder structure, and an index linking to every other document."
+      },
+      {
+        "id": "document:docs/REVISION_CAMBIOS.md",
+        "name": "REVISION_CAMBIOS.md",
+        "type": "document",
+        "summary": "Task-by-task changelog of the migration-plan execution (2026-07-07), detailing the domain/infrastructure/shared/presentation changes made for each MIG-XXX item, plus documented assumptions and what was intentionally left untouched."
+      },
+      {
+        "id": "document:docs/TEST_PLAN.md",
+        "name": "TEST_PLAN.md",
+        "type": "document",
+        "summary": "Manual, feature-by-feature test plan covering search/listing, contract-state-driven actions, form validations, all five novelty types, policy registration, annulment/activation, and role-based access control, with environment preconditions and known testing limitations."
+      },
+      {
+        "id": "document:docs/adr/ADR-001-reescritura-angular18.md",
+        "name": "ADR-001-reescritura-angular18.md",
+        "type": "document",
+        "summary": "Decides to fully rewrite the legacy AngularJS 1.7.9/Grunt/Bower 'novedades_cliente' module as a new Angular 18 application rather than doing an incremental ngUpgrade migration, since the AngularJS-to-modern-Angular gap makes a hybrid bridge as costly as a rewrite. Only functional behavior is migrated from the gathered legacy requirements, not code; functional parity is tracked explicitly in MIGRATION_PLAN.md, and upgrading Angular further requires an explicit new decision."
+      },
+      {
+        "id": "document:docs/adr/ADR-002-parcel-single-spa.md",
+        "name": "ADR-002-parcel-single-spa.md",
+        "type": "document",
+        "summary": "Decides to package the app as a single-spa UMD parcel ('novedades-mf') via @angular-builders/custom-webpack + single-spa-angular, per OAS institutional guidelines, instead of Module Federation or iframes. main.single-spa.ts is the sole entry point exporting bootstrap/mount/unmount and auto-bootstraps standalone only via its own index.html; APP_BASE_HREF is '/novedades' and zone.js is excluded from the bundle (provided by the root via CDN). Establishes permanent constraints: no unscoped global styles (see ADR-007), no mat-typography on the root template, and deployUrl-driven chunk resolution (see ADR-010)."
+      },
+      {
+        "id": "document:docs/adr/ADR-003-standalone-zoneless-signals.md",
+        "name": "ADR-003-standalone-zoneless-signals.md",
+        "type": "document",
+        "summary": "Decides to build the whole microfrontend with standalone components, zoneless change detection, and signals as the reactive state model, diverging deliberately from the institutional guide project (solicitudes_sabaticos_mf) which uses NgModules + zone.js. RxJS is reserved for I/O (HTTP, valueChanges); the divergence was validated as an acceptable equivalence in COMPLIANCE_REPORT.md. Derived rule: never depend on zone.js as a patch (e.g. no detectChanges() workaround) — if a view doesn't react, the state wasn't a signal."
+      },
+      {
+        "id": "document:docs/adr/ADR-004-ddd-dominio-unico.md",
+        "name": "ADR-004-ddd-dominio-unico.md",
+        "type": "document",
+        "summary": "Decides to organize the codebase as layered DDD within a single domain folder (src/app/domains/contratos/: domain/application/infrastructure/presentation) instead of a flat Angular components/services structure (which repeats the legacy defect of business logic embedded in components) or full tactical DDD (aggregates, domain events, judged over-engineered for current scope). Future domains replicate the same four-layer pattern as sibling folders; shared/ stays outside the layers and holds no business logic. Explicitly forbids adding more DDD concepts without demonstrated need."
+      },
+      {
+        "id": "document:docs/adr/ADR-005-repositorio-como-puerto.md",
+        "name": "ADR-005-repositorio-como-puerto.md",
+        "type": "document",
+        "summary": "Decides to model IContractRepository as an abstract class used simultaneously as a DI token and a port, with HttpContractService (real) and MockContractService (dev) as swappable implementations bound in a single line in app.config.ts. All tolerance for the legacy backend's messy, undocumented schema lives in infrastructure/dtos + infrastructure/mappers (anti-corruption layer) — the domain never sees a DTO. Consequence: every new operation must be implemented twice (real and mock), a documented obligation in AI_GUIDE.md."
+      },
+      {
+        "id": "document:docs/adr/ADR-006-estado-con-signals.md",
+        "name": "ADR-006-estado-con-signals.md",
+        "type": "document",
+        "summary": "Decides to manage shared UI state (search results, selected contract, loading/error flags) with signals inside application services rather than adopting NgRx (disproportionate ceremony for ~2 state slices) or BehaviorSubject-based services (double reactivity mechanism, clashes with zoneless per ADR-003). Canonical example is ContractStateService: a private signal plus public computed selectors and action methods; RxJS is only a transport converted at the edge. BehaviorSubject as a view store is an explicitly forbidden anti-pattern in CODING_STANDARDS.md."
+      },
+      {
+        "id": "document:docs/adr/ADR-007-tailwind-tokens.md",
+        "name": "ADR-007-tailwind-tokens.md",
+        "type": "document",
+        "summary": "Decides to style the microfrontend with Tailwind and custom semantic design tokens (the 'Stitch' garnet/gold visual redesign) rather than a full Angular Material theme (would fight the non-Material design) or per-component SCSS (no token system, prone to divergence); Angular Material is kept only where it adds behavior (icons, accessible autocomplete). Tailwind's Preflight reset is disabled because its unscoped global reset leaked into the single-spa shell and broke root elements; an equivalent reset is scoped to the 'novedades-mf' host in styles.css. Permanent rules: never re-enable Preflight, no unscoped global selectors, no new Material surface components."
+      },
+      {
+        "id": "document:docs/adr/ADR-008-clase-base-paginas-novedad.md",
+        "name": "ADR-008-clase-base-paginas-novedad.md",
+        "type": "document",
+        "summary": "Decides to introduce an abstract base class CreateNoveltyPage (a @Directive() for DI support) shared by the five novelty-creation pages (adición/prórroga, suspensión, cesión, terminación, reinicio) so they don't each duplicate the load-contract/breadcrumb/validate/confirm-modal/submit lifecycle. Each page only defines noveltyName, form, buildDraft(), and buildSummary(); visual composition remains component-based. Explicitly documented as an exceptional, deliberate use of inheritance — not a general pattern — and no further component hierarchies should be added without a new ADR."
+      },
+      {
+        "id": "document:docs/adr/ADR-009-autenticacion-delegada.md",
+        "name": "ADR-009-autenticacion-delegada.md",
+        "type": "document",
+        "summary": "Decides that this microfrontend only consumes the OAuth2/WSO2 access token from localStorage rather than implementing its own login flow, preserving the shell's single-session model. auth.interceptor.ts re-reads access_token/id_token/token on every request (supporting shell-driven renewal, unlike the guide project's RequestManager which captures it once) and attaches it only to allowlisted URLs (environment *_SERVICE), preventing token leakage to third parties. dev-token.ts is a temporary local-dev hook that must stay empty in commits. Role-based access control from token contents is deferred to MIG-010 in MIGRATION_PLAN.md."
+      },
+      {
+        "id": "document:docs/adr/ADR-010-deployurl-por-ambiente.md",
+        "name": "ADR-010-deployurl-por-ambiente.md",
+        "type": "document",
+        "summary": "Fixes a bug where production builds emitted lazy-chunk/asset URLs pointing at localhost:4209 (the shared deployUrl in angular.json) instead of each environment's public single-spa host. Decides to set deployUrl per build configuration to the real public URL (production/test/development), matching the institutional guide project's pattern, rather than deriving the public path at runtime via a generic set-public-path.ts. If deployment hosting changed frequently, the runtime-derivation alternative should be reconsidered via a new ADR."
+      },
+      {
+        "id": "document:docs/adr/ADR-011-escrituras-simuladas.md",
+        "name": "ADR-011-escrituras-simuladas.md",
+        "type": "document",
+        "summary": "Decides on a phased backend integration: connect read endpoints (contracts, providers, novedades) to the real backend immediately, while write operations (create/annul novelty) stay simulated behind HttpContractService (delay(400) + console.warn + TODO(escrituras) markers) until the POST/PATCH payload contract and the Ágora replication mechanism are defined with the backend team. forceError test switches let the UI's error paths be exercised meanwhile. Documented as the #1 production-blocking risk in MIGRATION_PLAN.md. Superseded by ADR-014 once real writes were connected (2026-07-07, closing MIG-001)."
+      },
+      {
+        "id": "document:docs/adr/ADR-012-regla-mes-30-dias.md",
+        "name": "ADR-012-regla-mes-30-dias.md",
+        "type": "document",
+        "summary": "Decides to preserve the legacy system's fixed 30-days-per-month arithmetic for contract term calculations (DIAS_POR_MES = 30 in format.util.ts's addDaysToTerm) rather than switching to real calendar-month arithmetic, to keep parity with historical actas and the still-live production system. This is explicitly a business/legal decision pending formal ratification (tracked as technical debt TD-010 in MIGRATION_PLAN.md); format.util.ts is the single change point if business later decides otherwise."
+      },
+      {
+        "id": "document:docs/adr/ADR-013-normalizacion-fechas-legado.md",
+        "name": "ADR-013-normalizacion-fechas-legado.md",
+        "type": "document",
+        "summary": "Decides NOT to replicate two legacy date behaviors (normalizing to noon, and auto-correcting day 31 to the 1st of the next month), concluding they were technical workarounds for JavaScript Date/timezone bugs rather than real business rules. The microfrontend's date arithmetic parses yyyy-mm-dd/dd/mm/yyyy strings to local Date objects (format.util.ts#parseAnyDate), where the midnight/UTC offset bug doesn't apply, so only the visible correct result is preserved, not the literal legacy mechanism. Edge cases (Jan 31 + 1 day/month, leap-year Feb) are covered by format.util.spec.ts."
+      },
+      {
+        "id": "document:docs/adr/ADR-014-escrituras-reales-sin-replica.md",
+        "name": "ADR-014-escrituras-reales-sin-replica.md",
+        "type": "document",
+        "summary": "Decides to connect real writes to novedades_mid with a minimal documented cascade — validate state transition, create the novelty (novelty-payload.mapper.ts, discriminated by tiponovedad), then register the resulting contract state — deliberately NOT replicating the legacy client's full choreography of replica-to-Ágora plus manual compensation on failure (that transactionality is deferred to the backend as TD-007). Annulment lets the mid revert state in cascade. The mid's {Type, Code, Body} envelope is validated explicitly since it can return HTTP 200 with a business error. Supersedes ADR-011; forceError test switches are kept since there's still no way to exercise UI error paths otherwise. Known accepted risk: without backend-side replication, created novedades are not yet reflected in Titan/preliquidación."
+      }
+    ],
+    "infrastructure": [],
+    "data": [],
+    "config": [
+      {
+        "id": "config:angular.json",
+        "name": "angular.json",
+        "type": "config",
+        "summary": "Angular CLI workspace configuration for the novedades-mf project, defining custom-webpack build/serve/test/lint targets and per-environment file replacements for single-spa packaging."
+      },
+      {
+        "id": "config:package.json",
+        "name": "package.json",
+        "type": "config",
+        "summary": "npm manifest declaring Angular 18, Angular Material, TailwindCSS, single-spa/single-spa-angular dependencies and the build/serve/test/lint scripts for the microfrontend."
+      },
+      {
+        "id": "config:tsconfig.app.json",
+        "name": "tsconfig.app.json",
+        "type": "config",
+        "summary": "TypeScript build configuration for the application, extending the base tsconfig and pointing at src/main.single-spa.ts as the compilation entry file."
+      },
+      {
+        "id": "config:tsconfig.json",
+        "name": "tsconfig.json",
+        "type": "config",
+        "summary": "Base TypeScript compiler configuration for the workspace, enabling strict mode, strict Angular template/injection checks, and ES2022 module/target output."
+      },
+      {
+        "id": "config:tsconfig.spec.json",
+        "name": "tsconfig.spec.json",
+        "type": "config",
+        "summary": "TypeScript configuration for unit tests, extending the base tsconfig and including Jasmine types plus all *.spec.ts files for the Karma test runner."
+      },
+      {
+        "id": "config:.ua/.understandignore",
+        "name": ".understandignore",
+        "type": "config",
+        "summary": "Understand-Anything tool ignore-pattern configuration, not part of the application"
+      }
+    ]
+  },
+  "clusters": [
+    {
+      "nodes": [
+        "file:src/app/domains/contratos/domain/contract.rules.spec.ts",
+        "file:src/app/domains/contratos/domain/contract.rules.ts",
+        "file:src/app/domains/contratos/domain/models/contract-status.enum.ts",
+        "file:src/app/domains/contratos/domain/models/contract.entity.ts",
+        "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts"
+      ],
+      "edgeCount": 10
+    },
+    {
+      "nodes": [
+        "file:src/app/shared/util/format.util.spec.ts",
+        "file:src/app/shared/util/format.util.ts",
+        "function:src/app/shared/util/format.util.ts:todayIso",
+        "function:src/app/shared/util/format.util.ts:toDisplayDate",
+        "function:src/app/shared/util/format.util.ts:addDaysToDate"
+      ],
+      "edgeCount": 8
+    },
+    {
+      "nodes": [
+        "file:src/app/app.component.spec.ts",
+        "file:src/app/app.component.ts",
+        "class:src/app/app.component.ts:AppComponent",
+        "file:src/main.single-spa.ts"
+      ],
+      "edgeCount": 7
+    }
+  ],
+  "layers": {
+    "count": 10,
+    "list": [
+      {
+        "id": "layer:presentation",
+        "name": "Presentation Layer",
+        "description": "Angular standalone components, pages, and templates for creating and managing contract novelties (additions, extensions, assignments, suspensions, terminations, restarts) and the contract dashboard."
+      },
+      {
+        "id": "layer:shared-ui",
+        "name": "Shared UI Components",
+        "description": "Reusable presentation-agnostic Angular Material building blocks (form fields, cards, modals, directives) consumed across all novelty and contract presentation components."
+      },
+      {
+        "id": "layer:domain",
+        "name": "Domain Layer",
+        "description": "Framework-free business models, entities, enums, business rules (e.g. contract status transitions, date normalization) and the repository port that define the core contratos domain."
+      },
+      {
+        "id": "layer:application",
+        "name": "Application Layer",
+        "description": "Application services orchestrating novelty submission and contract state, coordinating between the domain and infrastructure layers."
+      },
+      {
+        "id": "layer:infrastructure",
+        "name": "Infrastructure Layer",
+        "description": "Adapters implementing the repository port: HTTP/mock contract services, DTOs, and mappers that translate the legacy backend API into domain models."
+      },
+      {
+        "id": "layer:shared-cross-cutting",
+        "name": "Shared Cross-Cutting Concerns",
+        "description": "Cross-domain guards, HTTP auth interceptor/token handling, session service, and generic formatting utilities shared by presentation and infrastructure alike."
+      },
+      {
+        "id": "layer:app-bootstrap",
+        "name": "Application Bootstrap",
+        "description": "single-spa/Angular application shell: root component, routes, DI providers, environment configuration, and the single-spa lifecycle entry point."
+      },
+      {
+        "id": "layer:config",
+        "name": "Build & Tooling Configuration",
+        "description": "Angular CLI, TypeScript, ESLint, Webpack, and Tailwind configuration files plus the understand-anything tool ignore file that govern how the microfrontend is built, linted, and tested."
+      },
+      {
+        "id": "layer:documentation",
+        "name": "Documentation",
+        "description": "Top-level project documentation: README, architecture overview, coding standards, development guide, glossary, domain notes, migration notes, and test plan."
+      },
+      {
+        "id": "layer:decision-records",
+        "name": "Architecture Decision Records",
+        "description": "The 14 ADRs capturing key architectural decisions for this microfrontend, e.g. the Angular 18 rewrite, single-spa/Parcel integration, standalone/zoneless/signals adoption, single-domain DDD, and delegated authentication."
+      }
+    ]
+  },
+  "nodeSummaryIndex": {
+    "file:src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts": {
+      "name": "additional-clause-section.component.ts",
+      "type": "file",
+      "summary": "Angular component rendering the additional-clause form section used in novelty creation forms, wiring conditional validators for position and text fields when the clause toggle is active."
+    },
+    "class:src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts:AdditionalClauseSectionComponent": {
+      "name": "AdditionalClauseSectionComponent",
+      "type": "class",
+      "summary": "Component class managing the reactive form group and toggle-driven validators for an optional contract clause section."
+    },
+    "file:src/app/domains/contratos/presentation/components/assignee-info-card/assignee-info-card.component.ts": {
+      "name": "assignee-info-card.component.ts",
+      "type": "file",
+      "summary": "Presentational component that displays contractor/assignee information within a card, used in cesion (assignment) novelty flows."
+    },
+    "class:src/app/domains/contratos/presentation/components/assignee-info-card/assignee-info-card.component.ts:AssigneeInfoCardComponent": {
+      "name": "AssigneeInfoCardComponent",
+      "type": "class",
+      "summary": "Displays the bound assignee input as a read-only info card."
+    },
+    "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts": {
+      "name": "confirm-novelty-modal.component.ts",
+      "type": "file",
+      "summary": "Confirmation modal shown before submitting a contract novelty, displaying a summary and handling confirm/dismiss/error states."
+    },
+    "class:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts:ConfirmNoveltyModalComponent": {
+      "name": "ConfirmNoveltyModalComponent",
+      "type": "class",
+      "summary": "Modal component exposing novelty summary details plus confirm/dismiss outputs and a submitting/error state."
+    },
+    "file:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts": {
+      "name": "novelty-error.component.ts",
+      "type": "file",
+      "summary": "Displays an error state page after a failed novelty submission, showing the error code/detail with retry and back actions."
+    },
+    "class:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts:NoveltyErrorComponent": {
+      "name": "NoveltyErrorComponent",
+      "type": "class",
+      "summary": "Renders novelty submission error details and exposes retry/back action outputs."
+    },
+    "file:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts": {
+      "name": "novelty-page-layout.component.ts",
+      "type": "file",
+      "summary": "Shared layout wrapper for novelty creation pages, rendering a breadcrumb trail and contract info card around page content."
+    },
+    "class:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts:NoveltyPageLayoutComponent": {
+      "name": "NoveltyPageLayoutComponent",
+      "type": "class",
+      "summary": "Wraps novelty page content with breadcrumb and contract-info-card inputs."
+    },
+    "file:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts": {
+      "name": "novelty-result.component.ts",
+      "type": "file",
+      "summary": "Displays the success/result page after a novelty is executed, showing contract, execution date and responsible party."
+    },
+    "class:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts:NoveltyResultComponent": {
+      "name": "NoveltyResultComponent",
+      "type": "class",
+      "summary": "Renders the confirmation summary for a successfully executed novelty."
+    },
+    "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts": {
+      "name": "crear-adicion-prorroga.component.ts",
+      "type": "file",
+      "summary": "Page component implementing the 'Adicion y Prorroga' (value addition and term extension) novelty creation form, applying contract-rules caps and building the novelty draft/summary."
+    },
+    "class:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts:CrearAdicionProrrogaComponent": {
+      "name": "CrearAdicionProrrogaComponent",
+      "type": "class",
+      "summary": "Extends the novelty-creation base page to collect additional value and extended term, validating against TOPE_ADICION/TOPE_PRORROGA business rules."
+    },
+    "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts": {
+      "name": "crear-cesion.component.ts",
+      "type": "file",
+      "summary": "Page component implementing the 'Cesion de Contrato' (contract assignment) novelty creation form, capturing the new contractor/assignee and computing balances."
+    },
+    "class:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts:CrearCesionComponent": {
+      "name": "CrearCesionComponent",
+      "type": "class",
+      "summary": "Extends the novelty-creation base page to assign a contract to a new contractor, wiring conditional validators and balance calculations."
+    },
+    "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts": {
+      "name": "crear-poliza.component.ts",
+      "type": "file",
+      "summary": "Page component for updating a contract's insurance policy (poliza) novelty, loading the current policy, submitting confirmation, and handling success/error states directly against the contract repository."
+    },
+    "class:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts:CrearPolizaComponent": {
+      "name": "CrearPolizaComponent",
+      "type": "class",
+      "summary": "Standalone novelty page (does not extend the shared base) that manages its own submit/confirm/retry lifecycle for updating a contract insurance policy."
+    },
+    "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts": {
+      "name": "crear-reinicio.component.ts",
+      "type": "file",
+      "summary": "Page component implementing the 'Reinicio' (resumption after suspension) novelty creation form, computing the resumed term based on the prior suspension period."
+    },
+    "class:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts:CrearReinicioComponent": {
+      "name": "CrearReinicioComponent",
+      "type": "class",
+      "summary": "Extends the novelty-creation base page to resume a suspended contract, recalculating dates via date utility helpers."
+    },
+    "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts": {
+      "name": "crear-suspension.component.ts",
+      "type": "file",
+      "summary": "Page component implementing the 'Suspension' novelty creation form, validating the suspension date range against the contract's current term."
+    },
+    "class:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts:CrearSuspensionComponent": {
+      "name": "CrearSuspensionComponent",
+      "type": "class",
+      "summary": "Extends the novelty-creation base page to suspend a contract, deriving minimum end date and custom form-control errors."
+    },
+    "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts": {
+      "name": "crear-terminacion.component.ts",
+      "type": "file",
+      "summary": "Page component implementing the 'Terminacion' (contract termination) novelty creation form, tracking contractor/university balances."
+    },
+    "class:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts:CrearTerminacionComponent": {
+      "name": "CrearTerminacionComponent",
+      "type": "class",
+      "summary": "Extends the novelty-creation base page to terminate a contract, computing and validating settlement balances."
+    },
+    "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts": {
+      "name": "create-novelty-page.base.ts",
+      "type": "file",
+      "summary": "Shared base class for novelty-creation pages, encapsulating the submit/confirm/retry lifecycle, contract loading, and abstract draft/summary building delegated to subclasses."
+    },
+    "class:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts:CreateNoveltyPage": {
+      "name": "CreateNoveltyPage",
+      "type": "class",
+      "summary": "Template-method base class implementing the common novelty submission workflow (validate, confirm, submit via NoveltyService, handle success/error) reused by concrete novelty page components."
+    },
+    "file:src/app/shared/ui/breadcrumb.component.ts": {
+      "name": "breadcrumb.component.ts",
+      "type": "file",
+      "summary": "Simple presentational breadcrumb navigation component rendering a list of items."
+    },
+    "class:src/app/shared/ui/breadcrumb.component.ts:BreadcrumbComponent": {
+      "name": "BreadcrumbComponent",
+      "type": "class",
+      "summary": "Renders a breadcrumb trail from an input list of items."
+    },
+    "file:src/app/shared/ui/card.component.ts": {
+      "name": "card.component.ts",
+      "type": "file",
+      "summary": "Generic reusable card UI component with title, icon and style-variant inputs, used across contract and novelty views."
+    },
+    "class:src/app/shared/ui/card.component.ts:CardComponent": {
+      "name": "CardComponent",
+      "type": "class",
+      "summary": "Renders a styled card container with computed classes based on the selected variant."
+    },
+    "file:src/app/shared/ui/document-preview-control.component.ts": {
+      "name": "document-preview-control.component.ts",
+      "type": "file",
+      "summary": "Control component that previews a generated document and lets the user adjust its preview font size."
+    },
+    "class:src/app/shared/ui/document-preview-control.component.ts:DocumentPreviewControlComponent": {
+      "name": "DocumentPreviewControlComponent",
+      "type": "class",
+      "summary": "Manages a font-size signal for adjusting the readability of a document preview."
+    },
+    "file:src/app/shared/ui/feedback-card.component.ts": {
+      "name": "feedback-card.component.ts",
+      "type": "file",
+      "summary": "Generic feedback/status card component used by success and error result pages to display a title, message and icon variant."
+    },
+    "class:src/app/shared/ui/feedback-card.component.ts:FeedbackCardComponent": {
+      "name": "FeedbackCardComponent",
+      "type": "class",
+      "summary": "Renders a styled feedback card whose classes are derived from the success/error variant input."
+    },
+    "file:src/app/shared/ui/form-field.component.ts": {
+      "name": "form-field.component.ts",
+      "type": "file",
+      "summary": "Generic reusable form field wrapper component providing a label, required indicator and validation error message display."
+    },
+    "class:src/app/shared/ui/form-field.component.ts:FormFieldComponent": {
+      "name": "FormFieldComponent",
+      "type": "class",
+      "summary": "Wraps a form control with a label and computed error message based on control state."
+    },
+    "file:src/app/shared/ui/form-input.directive.ts": {
+      "name": "form-input.directive.ts",
+      "type": "file",
+      "summary": "Directive applying shared styling/behavior conventions to native form input elements across the app."
+    },
+    "class:src/app/shared/ui/form-input.directive.ts:FormInputDirective": {
+      "name": "FormInputDirective",
+      "type": "class",
+      "summary": "Marker/styling directive attached to form input elements."
+    },
+    "file:src/app/shared/ui/money-field.component.ts": {
+      "name": "money-field.component.ts",
+      "type": "file",
+      "summary": "Specialized currency input field wrapper built on top of the shared form-field component."
+    },
+    "class:src/app/shared/ui/money-field.component.ts:MoneyFieldComponent": {
+      "name": "MoneyFieldComponent",
+      "type": "class",
+      "summary": "Composes the shared form-field component to present a labeled money/currency input."
+    },
+    "file:src/app/shared/ui/no-negative-number.directive.ts": {
+      "name": "no-negative-number.directive.ts",
+      "type": "file",
+      "summary": "Input-restriction directive that blocks keystrokes, paste and drop actions which would introduce a negative number into a numeric field."
+    },
+    "class:src/app/shared/ui/no-negative-number.directive.ts:NoNegativeNumberDirective": {
+      "name": "NoNegativeNumberDirective",
+      "type": "class",
+      "summary": "Intercepts keydown, paste and drop DOM events to prevent negative values in numeric inputs."
+    },
+    "file:src/app/shared/ui/novelty-form-actions.component.ts": {
+      "name": "novelty-form-actions.component.ts",
+      "type": "file",
+      "summary": "Shared submit/clear action button row used at the bottom of every novelty creation form."
+    },
+    "class:src/app/shared/ui/novelty-form-actions.component.ts:NoveltyFormActionsComponent": {
+      "name": "NoveltyFormActionsComponent",
+      "type": "class",
+      "summary": "Renders submit and clear buttons, disabling submit while a submission is in progress."
+    },
+    "file:src/app/shared/ui/toggle-section.component.ts": {
+      "name": "toggle-section.component.ts",
+      "type": "file",
+      "summary": "Collapsible/toggleable section wrapper UI component used to show or hide optional form content."
+    },
+    "class:src/app/shared/ui/toggle-section.component.ts:ToggleSectionComponent": {
+      "name": "ToggleSectionComponent",
+      "type": "class",
+      "summary": "Renders a labeled section that can be toggled active/inactive."
+    },
+    "file:src/app/app.config.ts": {
+      "name": "app.config.ts",
+      "type": "file",
+      "summary": "Root Angular application config wiring routing, HTTP client with auth interceptor, and zoneless change detection, plus the DI binding from the IContractRepository port to its active implementation (HttpContractService by default, swappable to MockContractService)."
+    },
+    "file:src/app/app.routes.ts": {
+      "name": "app.routes.ts",
+      "type": "file",
+      "summary": "Defines the standalone lazy-loaded routes for the dashboard and the novedad-creation flows (adición/prórroga, suspensión, cesión, terminación, reinicio, póliza), guarding the creation routes with contractAccessGuard."
+    },
+    "file:src/app/domains/contratos/application/novelty.service.ts": {
+      "name": "novelty.service.ts",
+      "type": "file",
+      "summary": "Application service exposing create/annul/activate use cases for novedades, delegating persistence to the injected IContractRepository so presentation components don't touch the repository directly."
+    },
+    "class:src/app/domains/contratos/application/novelty.service.ts:NoveltyService": {
+      "name": "NoveltyService",
+      "type": "class",
+      "summary": "Thin use-case layer around IContractRepository for creating and annulling novelties and activating contracts; includes a test-only forceError switch to simulate failures for modal testing."
+    },
+    "file:src/app/domains/contratos/domain/models/assignee.model.ts": {
+      "name": "assignee.model.ts",
+      "type": "file",
+      "summary": "Domain model describing an Assignee (contractor/supervisor) with id, document and display name used across novelty forms."
+    },
+    "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts": {
+      "name": "novelty-draft.model.ts",
+      "type": "file",
+      "summary": "Domain models for in-progress novelty drafts (adición/prórroga, suspensión, cesión, terminación, reinicio, póliza) capturing form data before submission to the repository."
+    },
+    "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts": {
+      "name": "novelty-type.enum.ts",
+      "type": "file",
+      "summary": "Enumerates the novelty types (adición, prórroga, suspensión, cesión, terminación, reinicio) and their status values used throughout the contratos domain."
+    },
+    "file:src/app/domains/contratos/domain/models/poliza.model.ts": {
+      "name": "poliza.model.ts",
+      "type": "file",
+      "summary": "Domain models for insurance policy (póliza) data and its update payload, including the insuring entity (aseguradora)."
+    },
+    "file:src/app/domains/contratos/domain/repositories/contract.repository.ts": {
+      "name": "contract.repository.ts",
+      "type": "file",
+      "summary": "Defines the IContractRepository port (hexagonal architecture boundary) with the full set of operations the domain layer needs from any backend implementation."
+    },
+    "class:src/app/domains/contratos/domain/repositories/contract.repository.ts:IContractRepository": {
+      "name": "IContractRepository",
+      "type": "class",
+      "summary": "Repository port abstracting contract/novelty/póliza operations (fetch, search contractors, create/annul novelty, activate contract, aseguradoras, póliza CRUD) so the domain doesn't depend on a concrete backend."
+    },
+    "file:src/app/domains/contratos/infrastructure/dtos/contract-response.dto.ts": {
+      "name": "contract-response.dto.ts",
+      "type": "file",
+      "summary": "DTO shape for a contract used by the mock repository, referencing the novelty type/status enums."
+    },
+    "file:src/app/domains/contratos/infrastructure/dtos/legacy-api.dto.ts": {
+      "name": "legacy-api.dto.ts",
+      "type": "file",
+      "summary": "Raw DTO shapes mirroring the legacy institutional APIs (administrativa, novedades_mid, novedades_crud, core) consumed before mapping into domain entities."
+    },
+    "file:src/app/domains/contratos/infrastructure/http-contract.service.ts": {
+      "name": "http-contract.service.ts",
+      "type": "file",
+      "summary": "Real backend implementation of IContractRepository orchestrating calls across four institutional APIs (administrativa, novedades_mid, novedades_crud, core) to fetch, create, and transition contracts and novelties, mapping legacy DTOs into domain entities."
+    },
+    "class:src/app/domains/contratos/infrastructure/http-contract.service.ts:HttpContractService": {
+      "name": "HttpContractService",
+      "type": "class",
+      "summary": "Implements IContractRepository against the real HTTP APIs, replicating the legacy client's write choreography (validar cambio de estado → crear novedad → registrar estado) and mapping responses via contract.mapper/novelty-payload.mapper."
+    },
+    "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts": {
+      "name": "contract.mapper.ts",
+      "type": "file",
+      "summary": "Pure mapping functions translating legacy API DTOs (contract, novelty, póliza, aseguradora, assignee) into the domain's Contract/NoveltySummary/Poliza models, including status normalization and date/term formatting."
+    },
+    "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toContractStatus": {
+      "name": "toContractStatus",
+      "type": "function",
+      "summary": "Resolves the contract's current ContractStatus by matching the latest contrato_estado row against the known status list, tolerating accent/case variations."
+    },
+    "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toNoveltySummary": {
+      "name": "toNoveltySummary",
+      "type": "function",
+      "summary": "Maps one raw novedad row (tolerating multiple legacy key spellings) into a NoveltySummary with id, type, status and formatted date."
+    },
+    "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toNoveltySummaries": {
+      "name": "toNoveltySummaries",
+      "type": "function",
+      "summary": "Maps an array of raw novedad rows into NoveltySummary domain objects."
+    },
+    "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toContract": {
+      "name": "toContract",
+      "type": "function",
+      "summary": "Assembles the full domain Contract entity from a legacy contrato_general row plus its resolved proveedor, novelty list and status, computing display fields and annulment eligibility per novelty."
+    },
+    "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toPoliza": {
+      "name": "toPoliza",
+      "type": "function",
+      "summary": "Maps a legacy PolizaDto row into the domain Poliza model."
+    },
+    "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toAseguradora": {
+      "name": "toAseguradora",
+      "type": "function",
+      "summary": "Maps a legacy EntidadAseguradoraDto row into the domain Aseguradora model."
+    },
+    "function:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts:toAssignee": {
+      "name": "toAssignee",
+      "type": "function",
+      "summary": "Maps a legacy InformacionProveedorDto row into the domain Assignee model, deriving whether the party is a natural or legal person."
+    },
+    "file:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts": {
+      "name": "novelty-payload.mapper.ts",
+      "type": "file",
+      "summary": "Builds the outbound API payloads for novelty creation and contract state transitions, translating each NoveltyDraft subtype into the legacy mid-service payload shape and computing the target contrato_estado id."
+    },
+    "function:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts:targetStateId": {
+      "name": "targetStateId",
+      "type": "function",
+      "summary": "Determines the target ESTADO_CONTRATO_ID a novelty draft should transition the contract to (e.g. suspended, en ejecución)."
+    },
+    "function:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts:tipoNovedadMid": {
+      "name": "tipoNovedadMid",
+      "type": "function",
+      "summary": "Maps a NoveltyDraft's discriminant to the legacy novedades_mid 'tipo' code expected by the API."
+    },
+    "function:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts:toNoveltyPayload": {
+      "name": "toNoveltyPayload",
+      "type": "function",
+      "summary": "Builds the full novedades_mid request body for a given NoveltyDraft, contract number, vigencia and user, branching per novelty type to include its specific clauses/fields."
+    },
+    "function:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts:toCambioEstadoPayload": {
+      "name": "toCambioEstadoPayload",
+      "type": "function",
+      "summary": "Builds the contrato_estado payload (estado id, contract number, vigencia, user, timestamp) sent when transitioning a contract's status."
+    },
+    "file:src/app/domains/contratos/infrastructure/mock-contract.service.ts": {
+      "name": "mock-contract.service.ts",
+      "type": "file",
+      "summary": "In-memory IContractRepository implementation with hardcoded contract data and simulated network delays, used for local development without a backend; toggled via app.config.ts's DI binding."
+    },
+    "class:src/app/domains/contratos/infrastructure/mock-contract.service.ts:MockContractService": {
+      "name": "MockContractService",
+      "type": "class",
+      "summary": "Implements IContractRepository over a static in-memory contract list with simulated delay()s, letting the UI's loading states be exercised without the real backend."
+    },
+    "file:src/app/shared/auth/contract-access.guard.ts": {
+      "name": "contract-access.guard.ts",
+      "type": "file",
+      "summary": "Router guard restricting novelty-creation routes: a user whose only role is SUPERVISOR may only enter contracts they supervise (matched by documento); other roles pass through."
+    },
+    "function:src/app/shared/auth/contract-access.guard.ts:contractAccessGuard": {
+      "name": "contractAccessGuard",
+      "type": "function",
+      "summary": "CanActivateFn that loads the target contract and redirects home unless canManageContract() authorizes the current session for it."
+    },
+    "file:src/app/shared/auth/user-session.service.ts": {
+      "name": "user-session.service.ts",
+      "type": "file",
+      "summary": "Reads the current user's session (roles, documento, email) by decoding the JWT the single-spa shell deposits in localStorage; does not validate the signature since authorization is enforced by the gateway."
+    },
+    "class:src/app/shared/auth/user-session.service.ts:UserSessionService": {
+      "name": "UserSessionService",
+      "type": "class",
+      "summary": "Exposes session() and usuarioRegistro() by decoding the shell's id_token/access_token from localStorage on every call so a token refresh by the shell is picked up."
+    },
+    "function:src/app/shared/auth/user-session.service.ts:decodeJwtPayload": {
+      "name": "decodeJwtPayload",
+      "type": "function",
+      "summary": "Decodes a JWT's base64url-encoded payload segment into a claims object, returning undefined on malformed tokens."
+    },
+    "file:src/app/domains/contratos/application/contract-state.service.ts": {
+      "name": "contract-state.service.ts",
+      "type": "file",
+      "summary": "Angular application-layer service holding reactive contract-list and single-contract state, delegating data fetching to IContractRepository and exposing signals for loading and error status."
+    },
+    "class:src/app/domains/contratos/application/contract-state.service.ts:ContractStateService": {
+      "name": "ContractStateService",
+      "type": "class",
+      "summary": "Injectable state service that loads contract lists and single contracts through the repository abstraction, exposing Angular signals (contracts, isLoading, error, selectedContract, filters) for UI consumption."
+    },
+    "file:src/app/domains/contratos/domain/contract.rules.spec.ts": {
+      "name": "contract.rules.spec.ts",
+      "type": "file",
+      "summary": "Unit test suite for the domain contract rules, using novelty/contract factory helpers to build fixtures and assert business logic such as status transitions and eligible actions."
+    },
+    "function:src/app/domains/contratos/domain/contract.rules.spec.ts:novelty": {
+      "name": "novelty",
+      "type": "function",
+      "summary": "Test fixture factory building a novelty entity with sensible defaults, overridable via a partial input, used to set up contract.rules test scenarios."
+    },
+    "function:src/app/domains/contratos/domain/contract.rules.spec.ts:contract": {
+      "name": "contract",
+      "type": "function",
+      "summary": "Test fixture factory building a Contract aggregate with defaults and nested novelties for testing domain rule functions."
+    },
+    "file:src/app/domains/contratos/domain/contract.rules.ts": {
+      "name": "contract.rules.ts",
+      "type": "file",
+      "summary": "Central domain-rules module implementing the post-contractual business logic: computed contract status, eligible novelty actions, addition/extension value and term caps, and role-based authorization checks."
+    },
+    "function:src/app/domains/contratos/domain/contract.rules.ts:availableVigencias": {
+      "name": "availableVigencias",
+      "type": "function",
+      "summary": "Generates the list of selectable contract 'vigencia' years spanning a fixed range around the current year."
+    },
+    "function:src/app/domains/contratos/domain/contract.rules.ts:getLatestNovelty": {
+      "name": "getLatestNovelty",
+      "type": "function",
+      "summary": "Returns the most recently dated novelty on a contract by comparing parsed expedition dates, or undefined if none exist."
+    },
+    "function:src/app/domains/contratos/domain/contract.rules.ts:isContractSuspended": {
+      "name": "isContractSuspended",
+      "type": "function",
+      "summary": "Determines whether a contract's latest novelty places it in a suspended state."
+    },
+    "function:src/app/domains/contratos/domain/contract.rules.ts:effectiveStatus": {
+      "name": "effectiveStatus",
+      "type": "function",
+      "summary": "Computes the contract's effective status, overriding the stored status with SUSPENDED when applicable."
+    },
+    "function:src/app/domains/contratos/domain/contract.rules.ts:hasNoveltyInProgress": {
+      "name": "hasNoveltyInProgress",
+      "type": "function",
+      "summary": "Checks whether the contract currently has a novelty being processed, used to block conflicting actions."
+    },
+    "function:src/app/domains/contratos/domain/contract.rules.ts:availableActions": {
+      "name": "availableActions",
+      "type": "function",
+      "summary": "Computes the list of novelty actions a contract is eligible for based on its current status and history, encoding the allowed post-contractual workflow transitions."
+    },
+    "function:src/app/domains/contratos/domain/contract.rules.ts:canAnnulNovelty": {
+      "name": "canAnnulNovelty",
+      "type": "function",
+      "summary": "Validates whether a given novelty can be annulled, checking that it is the latest novelty, the contract status, and novelty-type restrictions."
+    },
+    "function:src/app/domains/contratos/domain/contract.rules.ts:currentContractValue": {
+      "name": "currentContractValue",
+      "type": "function",
+      "summary": "Sums the base contract value with all addition-type novelty amounts to compute the current contract value."
+    },
+    "function:src/app/domains/contratos/domain/contract.rules.ts:currentTermDays": {
+      "name": "currentTermDays",
+      "type": "function",
+      "summary": "Computes the contract's current term in days by adding extension-related novelty days to the parsed base term."
+    },
+    "function:src/app/domains/contratos/domain/contract.rules.ts:maxAdditionValue": {
+      "name": "maxAdditionValue",
+      "type": "function",
+      "summary": "Computes the maximum allowed addition value as a percentage cap (TOPE_ADICION) of the current contract value."
+    },
+    "function:src/app/domains/contratos/domain/contract.rules.ts:maxExtensionDays": {
+      "name": "maxExtensionDays",
+      "type": "function",
+      "summary": "Computes the maximum allowed extension in days as a percentage cap (TOPE_PRORROGA) of the current term."
+    },
+    "function:src/app/domains/contratos/domain/contract.rules.ts:currentContractorDocument": {
+      "name": "currentContractorDocument",
+      "type": "function",
+      "summary": "Resolves the contractor's current identifying document by folding assignment (cesion) novelties over the original contractor document."
+    },
+    "function:src/app/domains/contratos/domain/contract.rules.ts:canManageContract": {
+      "name": "canManageContract",
+      "type": "function",
+      "summary": "Determines whether a user, by role or by matching contractor document, is authorized to manage or act on a given contract."
+    },
+    "file:src/app/domains/contratos/domain/models/contract-status.enum.ts": {
+      "name": "contract-status.enum.ts",
+      "type": "file",
+      "summary": "TypeScript enum defining the possible contract lifecycle statuses (e.g. active, suspended, terminated) used throughout the contratos domain."
+    },
+    "file:src/app/domains/contratos/domain/models/contract.entity.ts": {
+      "name": "contract.entity.ts",
+      "type": "file",
+      "summary": "Domain model defining the Contract entity and related novelty/poliza aggregate types used across the contratos domain and infrastructure layers."
+    },
+    "file:src/app/domains/contratos/presentation/components/confirm-annul-modal/confirm-annul-modal.component.ts": {
+      "name": "confirm-annul-modal.component.ts",
+      "type": "file",
+      "summary": "Presentational Angular component rendering a confirmation modal for annulling a contract novelty, emitting confirm/dismiss events."
+    },
+    "class:src/app/domains/contratos/presentation/components/confirm-annul-modal/confirm-annul-modal.component.ts:ConfirmAnnulModalComponent": {
+      "name": "ConfirmAnnulModalComponent",
+      "type": "class",
+      "summary": "Dumb modal component displaying contract/novelty details and a confirm action, wrapping the shared ModalShellComponent."
+    },
+    "file:src/app/domains/contratos/presentation/components/contract-accordion/contract-accordion.component.ts": {
+      "name": "contract-accordion.component.ts",
+      "type": "file",
+      "summary": "Angular component rendering a single contract as an accordion row, deriving vigencia/status/value display data via domain rules and exposing a contextual actions menu gated by user permissions."
+    },
+    "class:src/app/domains/contratos/presentation/components/contract-accordion/contract-accordion.component.ts:ContractAccordionComponent": {
+      "name": "ContractAccordionComponent",
+      "type": "class",
+      "summary": "Accordion-row component for a contract, computing derived display fields (vigencia, status, current value, read-only/blocked state) from domain rules and managing an actions dropdown menu with document-click-outside and escape handling."
+    },
+    "file:src/app/domains/contratos/presentation/components/contract-info-card/contract-info-card.component.ts": {
+      "name": "contract-info-card.component.ts",
+      "type": "file",
+      "summary": "Small presentational card component displaying the contractor document and current contract value using shared formatting utilities."
+    },
+    "class:src/app/domains/contratos/presentation/components/contract-info-card/contract-info-card.component.ts:ContractInfoCardComponent": {
+      "name": "ContractInfoCardComponent",
+      "type": "class",
+      "summary": "Card component that formats and displays a contract's contractor document and current value, composed inside the novelty page layout."
+    },
+    "file:src/app/domains/contratos/presentation/components/contractor-autocomplete/contractor-autocomplete.component.ts": {
+      "name": "contractor-autocomplete.component.ts",
+      "type": "file",
+      "summary": "Reactive-forms ControlValueAccessor component providing an autocomplete input for selecting a contractor, wiring query text changes to a debounced contract-state search."
+    },
+    "class:src/app/domains/contratos/presentation/components/contractor-autocomplete/contractor-autocomplete.component.ts:ContractorAutocompleteComponent": {
+      "name": "ContractorAutocompleteComponent",
+      "type": "class",
+      "summary": "Implements Angular's ControlValueAccessor to expose a contractor autocomplete as a reactive form control, syncing query text with the selected contractor and exposing basic validation."
+    },
+    "file:src/app/domains/contratos/presentation/pages/dashboard-contratos/dashboard-contratos.component.ts": {
+      "name": "dashboard-contratos.component.ts",
+      "type": "file",
+      "summary": "Main contratos dashboard page: search/filter form for contracts, contract list view, and confirm/execute workflows for annulling a novelty or activating a contract."
+    },
+    "class:src/app/domains/contratos/presentation/pages/dashboard-contratos/dashboard-contratos.component.ts:DashboardContratosComponent": {
+      "name": "DashboardContratosComponent",
+      "type": "class",
+      "summary": "Orchestrates the contracts dashboard: filter form handling by contract number or contractor, contract list state via ContractStateService, and confirm/execute flows for annulling a novelty or activating a contract via NoveltyService."
+    },
+    "file:src/app/shared/ui/modal-shell.component.ts": {
+      "name": "modal-shell.component.ts",
+      "type": "file",
+      "summary": "Generic reusable modal shell component providing backdrop click, escape-key dismissal, and configurable max-width for other modal components to compose."
+    },
+    "class:src/app/shared/ui/modal-shell.component.ts:ModalShellComponent": {
+      "name": "ModalShellComponent",
+      "type": "class",
+      "summary": "Shared modal shell that emits a dismiss event on backdrop click or Escape key, with a configurable max-width class, used as the wrapper for the app's confirmation modals."
+    },
+    "file:src/app/shared/util/format.util.spec.ts": {
+      "name": "format.util.spec.ts",
+      "type": "file",
+      "summary": "Unit tests covering the shared date, currency, and document formatting utilities, including edge cases like Spanish number-to-words conversion."
+    },
+    "file:src/app/shared/util/format.util.ts": {
+      "name": "format.util.ts",
+      "type": "file",
+      "summary": "Shared formatting and calculation utilities: date parsing/formatting, Colombian peso currency formatting (including number-to-Spanish-words conversion), and contract term/day conversions used across the contratos presentation layer."
+    },
+    "function:src/app/shared/util/format.util.ts:todayIso": {
+      "name": "todayIso",
+      "type": "function",
+      "summary": "Returns today's date formatted as an ISO (yyyy-MM-dd) string."
+    },
+    "function:src/app/shared/util/format.util.ts:toDisplayDate": {
+      "name": "toDisplayDate",
+      "type": "function",
+      "summary": "Converts an ISO date string to a localized display format for the UI."
+    },
+    "function:src/app/shared/util/format.util.ts:addDaysToDate": {
+      "name": "addDaysToDate",
+      "type": "function",
+      "summary": "Adds a number of days to a given date and returns the resulting date formatted as an ISO string."
+    },
+    "function:src/app/shared/util/format.util.ts:daysBetween": {
+      "name": "daysBetween",
+      "type": "function",
+      "summary": "Computes the whole number of days between two dates."
+    },
+    "function:src/app/shared/util/format.util.ts:formatCop": {
+      "name": "formatCop",
+      "type": "function",
+      "summary": "Formats a numeric value as a Colombian peso (COP) currency string using locale-aware thousands separators."
+    },
+    "function:src/app/shared/util/format.util.ts:hundredsToWords": {
+      "name": "hundredsToWords",
+      "type": "function",
+      "summary": "Internal helper converting a number under one thousand into its Spanish word representation (centenas/decenas), used by the currency-to-words conversion."
+    },
+    "function:src/app/shared/util/format.util.ts:numberToWords": {
+      "name": "numberToWords",
+      "type": "function",
+      "summary": "Converts an arbitrary numeric value into its full Spanish word representation, composing millones/miles/hundreds segments."
+    },
+    "function:src/app/shared/util/format.util.ts:formatCopWords": {
+      "name": "formatCopWords",
+      "type": "function",
+      "summary": "Formats a numeric contract value as its Spanish-words currency representation (e.g. for legal document text)."
+    },
+    "function:src/app/shared/util/format.util.ts:termToDays": {
+      "name": "termToDays",
+      "type": "function",
+      "summary": "Parses a contract term string (e.g. containing months/days tokens) and converts it into a total number of days."
+    },
+    "function:src/app/shared/util/format.util.ts:addDaysToTerm": {
+      "name": "addDaysToTerm",
+      "type": "function",
+      "summary": "Adds extra days to an initial contract term string, returning both the updated term words and its numeric words representation."
+    },
+    "function:src/app/shared/util/format.util.ts:formatDocument": {
+      "name": "formatDocument",
+      "type": "function",
+      "summary": "Formats a numeric identity/document string by grouping digits into blocks of three for display."
+    },
+    "function:src/app/shared/util/format.util.ts:formatExecutionDate": {
+      "name": "formatExecutionDate",
+      "type": "function",
+      "summary": "Formats a Date into localized (es-CO) date and time strings, used to display when a novelty action was executed."
+    },
+    "file:src/app/app.component.spec.ts": {
+      "name": "app.component.spec.ts",
+      "type": "file",
+      "summary": "Unit tests verifying that the root AppComponent creates successfully and renders its router-outlet."
+    },
+    "file:src/app/app.component.ts": {
+      "name": "app.component.ts",
+      "type": "file",
+      "summary": "Root standalone component of the microfrontend; the element single-spa mounts in the shell (or index.html mounts in standalone mode), hosting only the domain's router-outlet."
+    },
+    "file:src/app/shared/http/auth.interceptor.ts": {
+      "name": "auth.interceptor.ts",
+      "type": "file",
+      "summary": "Functional HTTP interceptor that attaches the OAuth2 Bearer token (read from localStorage, set by the shell's OAuth flow) to requests targeting the institutional WSO2-gated APIs."
+    },
+    "file:src/app/shared/http/dev-token.ts": {
+      "name": "dev-token.ts",
+      "type": "file",
+      "summary": "Local-testing-only constant holding a manually pasted access token so the interceptor can authenticate without running the shell's OAuth flow; must be deleted before production."
+    },
+    "file:src/environments/environment.ts": {
+      "name": "environment.ts",
+      "type": "file",
+      "summary": "Production environment configuration defining the institutional API base URLs (administrativa, novedades mid/crud, core amazon) and the OAuth2/OIDC endpoint and client settings used for authentication."
+    },
+    "file:src/main.single-spa.ts": {
+      "name": "main.single-spa.ts",
+      "type": "file",
+      "summary": "Single-spa entry point wiring Angular lifecycle functions (bootstrap/mount/unmount) for the microfrontend; bootstraps AppComponent under the /novedades base href when hosted by the shell, or auto-bootstraps when run standalone."
+    },
+    "class:src/app/app.component.ts:AppComponent": {
+      "name": "AppComponent",
+      "type": "class",
+      "summary": "Root component class for the microfrontend; empty body, purely a shell wrapping the standalone RouterOutlet template."
+    },
+    "function:src/app/shared/http/auth.interceptor.ts:authInterceptor": {
+      "name": "authInterceptor",
+      "type": "function",
+      "summary": "Checks whether the outgoing request targets a known institutional API, then attaches a Bearer token read from localStorage (or DEV_TOKEN as a local fallback) to the request headers."
+    },
+    "document:README.md": {
+      "name": "README.md",
+      "type": "document",
+      "summary": "Project overview for the novedades_mf microfrontend, describing its role in the Universidad Distrital contract-management single-spa architecture and giving setup steps for the Root, Core, and this microfrontend."
+    },
+    "config:angular.json": {
+      "name": "angular.json",
+      "type": "config",
+      "summary": "Angular CLI workspace configuration for the novedades-mf project, defining custom-webpack build/serve/test/lint targets and per-environment file replacements for single-spa packaging."
+    },
+    "config:package.json": {
+      "name": "package.json",
+      "type": "config",
+      "summary": "npm manifest declaring Angular 18, Angular Material, TailwindCSS, single-spa/single-spa-angular dependencies and the build/serve/test/lint scripts for the microfrontend."
+    },
+    "config:tsconfig.app.json": {
+      "name": "tsconfig.app.json",
+      "type": "config",
+      "summary": "TypeScript build configuration for the application, extending the base tsconfig and pointing at src/main.single-spa.ts as the compilation entry file."
+    },
+    "config:tsconfig.json": {
+      "name": "tsconfig.json",
+      "type": "config",
+      "summary": "Base TypeScript compiler configuration for the workspace, enabling strict mode, strict Angular template/injection checks, and ES2022 module/target output."
+    },
+    "config:tsconfig.spec.json": {
+      "name": "tsconfig.spec.json",
+      "type": "config",
+      "summary": "TypeScript configuration for unit tests, extending the base tsconfig and including Jasmine types plus all *.spec.ts files for the Karma test runner."
+    },
+    "document:docs/AI_GUIDE.md": {
+      "name": "AI_GUIDE.md",
+      "type": "document",
+      "summary": "Operational guide for AI coding agents working on novedades_mf: reading order by task type, non-negotiable architectural rules (layer dependencies, signals-only state, repository port, single-spa contract), implementation conventions, and known project state (real writes, dev-only token, deferred features)."
+    },
+    "document:docs/ARCHITECTURE.md": {
+      "name": "ARCHITECTURE.md",
+      "type": "document",
+      "summary": "Describes the project's DDD layering (domain/application/infrastructure/presentation) for the single `contratos` domain, the layer-dependency rules, data-read and novelty-creation flows, routing, and the single-spa integration lifecycle with the shell."
+    },
+    "document:docs/CODING_STANDARDS.md": {
+      "name": "CODING_STANDARDS.md",
+      "type": "document",
+      "summary": "Defines naming conventions, Angular/DDD/signals principles, Tailwind and Angular Material usage rules, accessibility minimums, and a list of anti-patterns rejected in review for this microfrontend."
+    },
+    "document:docs/DECISION_LOG.md": {
+      "name": "DECISION_LOG.md",
+      "type": "document",
+      "summary": "Chronological index of architectural and operational decisions taken during the project's development, linking each entry to its ADR (when applicable) and git evidence."
+    },
+    "document:docs/DEVELOPMENT_GUIDE.md": {
+      "name": "DEVELOPMENT_GUIDE.md",
+      "type": "document",
+      "summary": "Practical how-to manual for building new components, domain entities, use-case services, endpoints, mappers, signals-based state, error handling, and full features, each recipe pointing to a real exemplar in the repo."
+    },
+    "document:docs/DOMAIN.md": {
+      "name": "DOMAIN.md",
+      "type": "document",
+      "summary": "Functional description of the post-contractual novelty business domain: contracts, contractors, novelty types (addition/extension, suspension, restart, assignment, early termination), and the domain rules encoded in the codebase."
+    },
+    "document:docs/GLOSSARY.md": {
+      "name": "GLOSSARY.md",
+      "type": "document",
+      "summary": "Glossary of business and technical terms used throughout the project, cross-referenced with DOMAIN.md and ARCHITECTURE.md."
+    },
+    "document:docs/MIGRATION.md": {
+      "name": "MIGRATION.md",
+      "type": "document",
+      "summary": "Historical context of the migration from the legacy AngularJS novedades_cliente application: what was carried over, what changed, current status, and known technical debt and historical inconsistencies."
+    },
+    "document:docs/README.md": {
+      "name": "README.md",
+      "type": "document",
+      "summary": "Official documentation entry point for novedades_mf: project overview, tech stack, one-line architecture summary, run/build commands, folder structure, and an index linking to every other document."
+    },
+    "document:docs/REVISION_CAMBIOS.md": {
+      "name": "REVISION_CAMBIOS.md",
+      "type": "document",
+      "summary": "Task-by-task changelog of the migration-plan execution (2026-07-07), detailing the domain/infrastructure/shared/presentation changes made for each MIG-XXX item, plus documented assumptions and what was intentionally left untouched."
+    },
+    "document:docs/TEST_PLAN.md": {
+      "name": "TEST_PLAN.md",
+      "type": "document",
+      "summary": "Manual, feature-by-feature test plan covering search/listing, contract-state-driven actions, form validations, all five novelty types, policy registration, annulment/activation, and role-based access control, with environment preconditions and known testing limitations."
+    },
+    "document:docs/adr/ADR-001-reescritura-angular18.md": {
+      "name": "ADR-001-reescritura-angular18.md",
+      "type": "document",
+      "summary": "Decides to fully rewrite the legacy AngularJS 1.7.9/Grunt/Bower 'novedades_cliente' module as a new Angular 18 application rather than doing an incremental ngUpgrade migration, since the AngularJS-to-modern-Angular gap makes a hybrid bridge as costly as a rewrite. Only functional behavior is migrated from the gathered legacy requirements, not code; functional parity is tracked explicitly in MIGRATION_PLAN.md, and upgrading Angular further requires an explicit new decision."
+    },
+    "document:docs/adr/ADR-002-parcel-single-spa.md": {
+      "name": "ADR-002-parcel-single-spa.md",
+      "type": "document",
+      "summary": "Decides to package the app as a single-spa UMD parcel ('novedades-mf') via @angular-builders/custom-webpack + single-spa-angular, per OAS institutional guidelines, instead of Module Federation or iframes. main.single-spa.ts is the sole entry point exporting bootstrap/mount/unmount and auto-bootstraps standalone only via its own index.html; APP_BASE_HREF is '/novedades' and zone.js is excluded from the bundle (provided by the root via CDN). Establishes permanent constraints: no unscoped global styles (see ADR-007), no mat-typography on the root template, and deployUrl-driven chunk resolution (see ADR-010)."
+    },
+    "document:docs/adr/ADR-003-standalone-zoneless-signals.md": {
+      "name": "ADR-003-standalone-zoneless-signals.md",
+      "type": "document",
+      "summary": "Decides to build the whole microfrontend with standalone components, zoneless change detection, and signals as the reactive state model, diverging deliberately from the institutional guide project (solicitudes_sabaticos_mf) which uses NgModules + zone.js. RxJS is reserved for I/O (HTTP, valueChanges); the divergence was validated as an acceptable equivalence in COMPLIANCE_REPORT.md. Derived rule: never depend on zone.js as a patch (e.g. no detectChanges() workaround) — if a view doesn't react, the state wasn't a signal."
+    },
+    "document:docs/adr/ADR-004-ddd-dominio-unico.md": {
+      "name": "ADR-004-ddd-dominio-unico.md",
+      "type": "document",
+      "summary": "Decides to organize the codebase as layered DDD within a single domain folder (src/app/domains/contratos/: domain/application/infrastructure/presentation) instead of a flat Angular components/services structure (which repeats the legacy defect of business logic embedded in components) or full tactical DDD (aggregates, domain events, judged over-engineered for current scope). Future domains replicate the same four-layer pattern as sibling folders; shared/ stays outside the layers and holds no business logic. Explicitly forbids adding more DDD concepts without demonstrated need."
+    },
+    "document:docs/adr/ADR-005-repositorio-como-puerto.md": {
+      "name": "ADR-005-repositorio-como-puerto.md",
+      "type": "document",
+      "summary": "Decides to model IContractRepository as an abstract class used simultaneously as a DI token and a port, with HttpContractService (real) and MockContractService (dev) as swappable implementations bound in a single line in app.config.ts. All tolerance for the legacy backend's messy, undocumented schema lives in infrastructure/dtos + infrastructure/mappers (anti-corruption layer) — the domain never sees a DTO. Consequence: every new operation must be implemented twice (real and mock), a documented obligation in AI_GUIDE.md."
+    },
+    "document:docs/adr/ADR-006-estado-con-signals.md": {
+      "name": "ADR-006-estado-con-signals.md",
+      "type": "document",
+      "summary": "Decides to manage shared UI state (search results, selected contract, loading/error flags) with signals inside application services rather than adopting NgRx (disproportionate ceremony for ~2 state slices) or BehaviorSubject-based services (double reactivity mechanism, clashes with zoneless per ADR-003). Canonical example is ContractStateService: a private signal plus public computed selectors and action methods; RxJS is only a transport converted at the edge. BehaviorSubject as a view store is an explicitly forbidden anti-pattern in CODING_STANDARDS.md."
+    },
+    "document:docs/adr/ADR-007-tailwind-tokens.md": {
+      "name": "ADR-007-tailwind-tokens.md",
+      "type": "document",
+      "summary": "Decides to style the microfrontend with Tailwind and custom semantic design tokens (the 'Stitch' garnet/gold visual redesign) rather than a full Angular Material theme (would fight the non-Material design) or per-component SCSS (no token system, prone to divergence); Angular Material is kept only where it adds behavior (icons, accessible autocomplete). Tailwind's Preflight reset is disabled because its unscoped global reset leaked into the single-spa shell and broke root elements; an equivalent reset is scoped to the 'novedades-mf' host in styles.css. Permanent rules: never re-enable Preflight, no unscoped global selectors, no new Material surface components."
+    },
+    "document:docs/adr/ADR-008-clase-base-paginas-novedad.md": {
+      "name": "ADR-008-clase-base-paginas-novedad.md",
+      "type": "document",
+      "summary": "Decides to introduce an abstract base class CreateNoveltyPage (a @Directive() for DI support) shared by the five novelty-creation pages (adición/prórroga, suspensión, cesión, terminación, reinicio) so they don't each duplicate the load-contract/breadcrumb/validate/confirm-modal/submit lifecycle. Each page only defines noveltyName, form, buildDraft(), and buildSummary(); visual composition remains component-based. Explicitly documented as an exceptional, deliberate use of inheritance — not a general pattern — and no further component hierarchies should be added without a new ADR."
+    },
+    "document:docs/adr/ADR-009-autenticacion-delegada.md": {
+      "name": "ADR-009-autenticacion-delegada.md",
+      "type": "document",
+      "summary": "Decides that this microfrontend only consumes the OAuth2/WSO2 access token from localStorage rather than implementing its own login flow, preserving the shell's single-session model. auth.interceptor.ts re-reads access_token/id_token/token on every request (supporting shell-driven renewal, unlike the guide project's RequestManager which captures it once) and attaches it only to allowlisted URLs (environment *_SERVICE), preventing token leakage to third parties. dev-token.ts is a temporary local-dev hook that must stay empty in commits. Role-based access control from token contents is deferred to MIG-010 in MIGRATION_PLAN.md."
+    },
+    "document:docs/adr/ADR-010-deployurl-por-ambiente.md": {
+      "name": "ADR-010-deployurl-por-ambiente.md",
+      "type": "document",
+      "summary": "Fixes a bug where production builds emitted lazy-chunk/asset URLs pointing at localhost:4209 (the shared deployUrl in angular.json) instead of each environment's public single-spa host. Decides to set deployUrl per build configuration to the real public URL (production/test/development), matching the institutional guide project's pattern, rather than deriving the public path at runtime via a generic set-public-path.ts. If deployment hosting changed frequently, the runtime-derivation alternative should be reconsidered via a new ADR."
+    },
+    "document:docs/adr/ADR-011-escrituras-simuladas.md": {
+      "name": "ADR-011-escrituras-simuladas.md",
+      "type": "document",
+      "summary": "Decides on a phased backend integration: connect read endpoints (contracts, providers, novedades) to the real backend immediately, while write operations (create/annul novelty) stay simulated behind HttpContractService (delay(400) + console.warn + TODO(escrituras) markers) until the POST/PATCH payload contract and the Ágora replication mechanism are defined with the backend team. forceError test switches let the UI's error paths be exercised meanwhile. Documented as the #1 production-blocking risk in MIGRATION_PLAN.md. Superseded by ADR-014 once real writes were connected (2026-07-07, closing MIG-001)."
+    },
+    "document:docs/adr/ADR-012-regla-mes-30-dias.md": {
+      "name": "ADR-012-regla-mes-30-dias.md",
+      "type": "document",
+      "summary": "Decides to preserve the legacy system's fixed 30-days-per-month arithmetic for contract term calculations (DIAS_POR_MES = 30 in format.util.ts's addDaysToTerm) rather than switching to real calendar-month arithmetic, to keep parity with historical actas and the still-live production system. This is explicitly a business/legal decision pending formal ratification (tracked as technical debt TD-010 in MIGRATION_PLAN.md); format.util.ts is the single change point if business later decides otherwise."
+    },
+    "document:docs/adr/ADR-013-normalizacion-fechas-legado.md": {
+      "name": "ADR-013-normalizacion-fechas-legado.md",
+      "type": "document",
+      "summary": "Decides NOT to replicate two legacy date behaviors (normalizing to noon, and auto-correcting day 31 to the 1st of the next month), concluding they were technical workarounds for JavaScript Date/timezone bugs rather than real business rules. The microfrontend's date arithmetic parses yyyy-mm-dd/dd/mm/yyyy strings to local Date objects (format.util.ts#parseAnyDate), where the midnight/UTC offset bug doesn't apply, so only the visible correct result is preserved, not the literal legacy mechanism. Edge cases (Jan 31 + 1 day/month, leap-year Feb) are covered by format.util.spec.ts."
+    },
+    "document:docs/adr/ADR-014-escrituras-reales-sin-replica.md": {
+      "name": "ADR-014-escrituras-reales-sin-replica.md",
+      "type": "document",
+      "summary": "Decides to connect real writes to novedades_mid with a minimal documented cascade — validate state transition, create the novelty (novelty-payload.mapper.ts, discriminated by tiponovedad), then register the resulting contract state — deliberately NOT replicating the legacy client's full choreography of replica-to-Ágora plus manual compensation on failure (that transactionality is deferred to the backend as TD-007). Annulment lets the mid revert state in cascade. The mid's {Type, Code, Body} envelope is validated explicitly since it can return HTTP 200 with a business error. Supersedes ADR-011; forceError test switches are kept since there's still no way to exercise UI error paths otherwise. Known accepted risk: without backend-side replication, created novedades are not yet reflected in Titan/preliquidación."
+    },
+    "config:.ua/.understandignore": {
+      "name": ".understandignore",
+      "type": "config",
+      "summary": "Understand-Anything tool ignore-pattern configuration, not part of the application"
+    },
+    "file:eslint.config.js": {
+      "name": "eslint.config.js",
+      "type": "file",
+      "summary": "ESLint flat-config for the Angular workspace: applies TypeScript/Angular recommended and stylistic rules to .ts files (enforcing app/novedades-mf selector prefixes) and Angular template rules to .html files."
+    },
+    "file:extra-webpack.config.js": {
+      "name": "extra-webpack.config.js",
+      "type": "file",
+      "summary": "Custom webpack override for the single-spa Angular build: wraps single-spa-angular's generated webpack config and suppresses a style-loader runtime deprecation warning."
+    },
+    "file:src/app/app.component.html": {
+      "name": "app.component.html",
+      "type": "file",
+      "summary": "Root application template: renders only a router-outlet to host the routed views of the microfrontend."
+    },
+    "file:src/app/domains/contratos/presentation/components/confirm-annul-modal/confirm-annul-modal.component.html": {
+      "name": "confirm-annul-modal.component.html",
+      "type": "file",
+      "summary": "Template for the confirm-annul-modal component: a warning-styled confirmation dialog showing contract/novelty details before annulling a novedad, with a debug-only 'force error' test switch."
+    },
+    "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.html": {
+      "name": "confirm-novelty-modal.component.html",
+      "type": "file",
+      "summary": "Template for the confirm-novelty-modal component: a generic confirmation dialog summarizing a novedad (acta) before generation, with a warning banner and a debug-only 'force error' test switch."
+    },
+    "file:src/app/domains/contratos/presentation/components/contract-accordion/contract-accordion.component.html": {
+      "name": "contract-accordion.component.html",
+      "type": "file",
+      "summary": "Template for the contract-accordion component: a collapsible <details> card showing contract summary/details and a table of its novedades, with an 'add novedad' action menu and per-row annul/view-acta actions."
+    },
+    "file:src/app/domains/contratos/presentation/components/contract-info-card/contract-info-card.component.html": {
+      "name": "contract-info-card.component.html",
+      "type": "file",
+      "summary": "Template for the contract-info-card component: displays read-only contract metadata (type, number, object, value, contractor, term, supervisor) inside an app-card."
+    },
+    "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.html": {
+      "name": "crear-adicion-prorroga.component.html",
+      "type": "file",
+      "summary": "Page template for creating a contract addition-and-extension (adición y prórroga) novedad: a multi-section reactive form for budget addition and time extension, plus success/error/confirmation states."
+    },
+    "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.html": {
+      "name": "crear-cesion.component.html",
+      "type": "file",
+      "summary": "Page template for creating a contract assignment (cesión) novedad: reactive form capturing assignee, disbursement values, and an optional additional 'considerando' clause, plus success/error/confirmation states."
+    },
+    "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.html": {
+      "name": "crear-poliza.component.html",
+      "type": "file",
+      "summary": "Page template for registering the assignee's insurance policy (póliza) left pending after a cesión: form to pick the insurer and enter the policy number, plus success/error/confirmation states."
+    },
+    "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.html": {
+      "name": "crear-reinicio.component.html",
+      "type": "file",
+      "summary": "Page template for creating a contract restart (reinicio) novedad after a suspension: reactive form for request/suspension/restart dates, plus success/error/confirmation states."
+    },
+    "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.html": {
+      "name": "crear-suspension.component.html",
+      "type": "file",
+      "summary": "Page template for creating a contract suspension novedad: reactive form for office/date fields, suspension start/end dates with min-date constraints, motive text, and an optional additional clause, plus success/error/confirmation states."
+    },
+    "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.html": {
+      "name": "crear-terminacion.component.html",
+      "type": "file",
+      "summary": "Page template for creating an early-termination (terminación anticipada) novedad: reactive form for termination/certification dates and settlement amounts owed to contractor/university, plus success/error/confirmation states."
+    },
+    "file:src/app/domains/contratos/presentation/pages/dashboard-contratos/dashboard-contratos.component.html": {
+      "name": "dashboard-contratos.component.html",
+      "type": "file",
+      "summary": "Main contracts dashboard template: search/filter panel (by year, contract number or contractor) plus a results list of contract-accordion cards, with modals for annulling a novedad and reactivating a finalized contract."
+    },
+    "file:src/environments/environment.development.ts": {
+      "name": "environment.development.ts",
+      "type": "file",
+      "summary": "Development environment configuration providing legacy UD backend API base URLs (novedades, core-amazon, administrativa) and OAuth2/OIDC token settings for local runs."
+    },
+    "file:src/environments/environment.test.ts": {
+      "name": "environment.test.ts",
+      "type": "file",
+      "summary": "Test/staging environment configuration mirroring development, but pointing the OAuth redirect and sign-out URLs at the pruebasnovedades staging host."
+    },
+    "file:src/index.html": {
+      "name": "index.html",
+      "type": "file",
+      "summary": "Application HTML shell that loads Roboto and Material Icons fonts and mounts the <novedades-mf> root single-spa web component."
+    },
+    "file:src/styles.css": {
+      "name": "styles.css",
+      "type": "file",
+      "summary": "Global stylesheet importing the Angular Material theme and web fonts, enabling Tailwind layers, and re-implementing a scoped Preflight-equivalent reset limited to the <novedades-mf> host so it doesn't leak into the single-spa shell."
+    },
+    "file:tailwind.config.js": {
+      "name": "tailwind.config.js",
+      "type": "file",
+      "summary": "Tailwind CSS configuration defining the design-system color palette, spacing, border-radius, and typography scale, and disabling Preflight (replaced by a scoped reset in styles.css) to avoid style leakage into the single-spa shell."
+    }
+  },
+  "totalNodes": 186,
+  "totalEdges": 548
+}

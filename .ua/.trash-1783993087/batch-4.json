@@ -1,0 +1,173 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/app/app.component.spec.ts",
+      "type": "file",
+      "name": "app.component.spec.ts",
+      "filePath": "src/app/app.component.spec.ts",
+      "summary": "Unit tests verifying that the root AppComponent creates successfully and renders its router-outlet.",
+      "tags": ["test", "unit-test", "component", "angular"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/app.component.ts",
+      "type": "file",
+      "name": "app.component.ts",
+      "filePath": "src/app/app.component.ts",
+      "summary": "Root standalone component of the microfrontend; the element single-spa mounts in the shell (or index.html mounts in standalone mode), hosting only the domain's router-outlet.",
+      "tags": ["entry-point", "component", "root-component", "standalone"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/shared/http/auth.interceptor.ts",
+      "type": "file",
+      "name": "auth.interceptor.ts",
+      "filePath": "src/app/shared/http/auth.interceptor.ts",
+      "summary": "Functional HTTP interceptor that attaches the OAuth2 Bearer token (read from localStorage, set by the shell's OAuth flow) to requests targeting the institutional WSO2-gated APIs.",
+      "tags": ["middleware", "http-interceptor", "authentication", "security"],
+      "complexity": "simple",
+      "languageNotes": "Falls back to a DEV_TOKEN constant for local testing when no token is found in localStorage; that fallback and dev-token.ts are meant to be deleted before production."
+    },
+    {
+      "id": "file:src/app/shared/http/dev-token.ts",
+      "type": "file",
+      "name": "dev-token.ts",
+      "filePath": "src/app/shared/http/dev-token.ts",
+      "summary": "Local-testing-only constant holding a manually pasted access token so the interceptor can authenticate without running the shell's OAuth flow; must be deleted before production.",
+      "tags": ["dev-only", "testing", "temporary", "security"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/environments/environment.ts",
+      "type": "file",
+      "name": "environment.ts",
+      "filePath": "src/environments/environment.ts",
+      "summary": "Production environment configuration defining the institutional API base URLs (administrativa, novedades mid/crud, core amazon) and the OAuth2/OIDC endpoint and client settings used for authentication.",
+      "tags": ["configuration", "environment", "api-endpoints", "oauth"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/main.single-spa.ts",
+      "type": "file",
+      "name": "main.single-spa.ts",
+      "filePath": "src/main.single-spa.ts",
+      "summary": "Single-spa entry point wiring Angular lifecycle functions (bootstrap/mount/unmount) for the microfrontend; bootstraps AppComponent under the /novedades base href when hosted by the shell, or auto-bootstraps when run standalone.",
+      "tags": ["entry-point", "single-spa", "bootstrap", "lifecycle"],
+      "complexity": "moderate",
+      "languageNotes": "Uses single-spa-angular's singleSpaAngular() to produce the standard single-spa lifecycle exports, and only auto-bootstraps when the standalone host element exists in the DOM (absent when hosted by the shell)."
+    },
+    {
+      "id": "class:src/app/app.component.ts:AppComponent",
+      "type": "class",
+      "name": "AppComponent",
+      "filePath": "src/app/app.component.ts",
+      "lineRange": [15, 15],
+      "summary": "Root component class for the microfrontend; empty body, purely a shell wrapping the standalone RouterOutlet template.",
+      "tags": ["component", "root-component", "standalone", "angular"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/app/shared/http/auth.interceptor.ts:authInterceptor",
+      "type": "function",
+      "name": "authInterceptor",
+      "filePath": "src/app/shared/http/auth.interceptor.ts",
+      "lineRange": [22, 27],
+      "summary": "Checks whether the outgoing request targets a known institutional API, then attaches a Bearer token read from localStorage (or DEV_TOKEN as a local fallback) to the request headers.",
+      "tags": ["middleware", "authentication", "http-interceptor", "security"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/app/app.component.spec.ts",
+      "target": "file:src/app/app.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/shared/http/auth.interceptor.ts",
+      "target": "file:src/app/shared/http/dev-token.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/shared/http/auth.interceptor.ts",
+      "target": "file:src/environments/environment.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/main.single-spa.ts",
+      "target": "file:src/app/app.component.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/main.single-spa.ts",
+      "target": "file:src/app/app.config.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/main.single-spa.ts",
+      "target": "file:src/environments/environment.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/app.component.ts",
+      "target": "class:src/app/app.component.ts:AppComponent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/app/app.component.ts",
+      "target": "class:src/app/app.component.ts:AppComponent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/shared/http/auth.interceptor.ts",
+      "target": "function:src/app/shared/http/auth.interceptor.ts:authInterceptor",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/app/shared/http/auth.interceptor.ts",
+      "target": "function:src/app/shared/http/auth.interceptor.ts:authInterceptor",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/app/app.component.ts",
+      "target": "file:src/app/app.component.spec.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/main.single-spa.ts",
+      "target": "class:src/app/app.component.ts:AppComponent",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/app/app.component.spec.ts",
+      "target": "class:src/app/app.component.ts:AppComponent",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

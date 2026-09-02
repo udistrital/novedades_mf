@@ -1,0 +1,181 @@
+[
+  {
+    "id": "layer:presentation",
+    "name": "Presentation Layer",
+    "description": "Angular standalone components, pages, and templates for creating and managing contract novelties (additions, extensions, assignments, suspensions, terminations, restarts) and the contract dashboard.",
+    "nodeIds": [
+      "file:src/app/domains/contratos/presentation/components/additional-clause-section/additional-clause-section.component.ts",
+      "file:src/app/domains/contratos/presentation/components/assignee-info-card/assignee-info-card.component.ts",
+      "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.ts",
+      "file:src/app/domains/contratos/presentation/components/novelty-error/novelty-error.component.ts",
+      "file:src/app/domains/contratos/presentation/components/novelty-page-layout/novelty-page-layout.component.ts",
+      "file:src/app/domains/contratos/presentation/components/novelty-result/novelty-result.component.ts",
+      "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.ts",
+      "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.ts",
+      "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.ts",
+      "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.ts",
+      "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.ts",
+      "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.ts",
+      "file:src/app/domains/contratos/presentation/pages/create-novelty-page.base.ts",
+      "file:src/app/domains/contratos/presentation/components/confirm-annul-modal/confirm-annul-modal.component.ts",
+      "file:src/app/domains/contratos/presentation/components/contract-accordion/contract-accordion.component.ts",
+      "file:src/app/domains/contratos/presentation/components/contract-info-card/contract-info-card.component.ts",
+      "file:src/app/domains/contratos/presentation/components/contractor-autocomplete/contractor-autocomplete.component.ts",
+      "file:src/app/domains/contratos/presentation/pages/dashboard-contratos/dashboard-contratos.component.ts",
+      "file:src/app/domains/contratos/presentation/components/confirm-annul-modal/confirm-annul-modal.component.html",
+      "file:src/app/domains/contratos/presentation/components/confirm-novelty-modal/confirm-novelty-modal.component.html",
+      "file:src/app/domains/contratos/presentation/components/contract-accordion/contract-accordion.component.html",
+      "file:src/app/domains/contratos/presentation/components/contract-info-card/contract-info-card.component.html",
+      "file:src/app/domains/contratos/presentation/pages/crear-adicion-prorroga/crear-adicion-prorroga.component.html",
+      "file:src/app/domains/contratos/presentation/pages/crear-cesion/crear-cesion.component.html",
+      "file:src/app/domains/contratos/presentation/pages/crear-poliza/crear-poliza.component.html",
+      "file:src/app/domains/contratos/presentation/pages/crear-reinicio/crear-reinicio.component.html",
+      "file:src/app/domains/contratos/presentation/pages/crear-suspension/crear-suspension.component.html",
+      "file:src/app/domains/contratos/presentation/pages/crear-terminacion/crear-terminacion.component.html",
+      "file:src/app/domains/contratos/presentation/pages/dashboard-contratos/dashboard-contratos.component.html"
+    ]
+  },
+  {
+    "id": "layer:shared-ui",
+    "name": "Shared UI Components",
+    "description": "Reusable presentation-agnostic Angular Material building blocks (form fields, cards, modals, directives) consumed across all novelty and contract presentation components.",
+    "nodeIds": [
+      "file:src/app/shared/ui/breadcrumb.component.ts",
+      "file:src/app/shared/ui/card.component.ts",
+      "file:src/app/shared/ui/document-preview-control.component.ts",
+      "file:src/app/shared/ui/feedback-card.component.ts",
+      "file:src/app/shared/ui/form-field.component.ts",
+      "file:src/app/shared/ui/form-input.directive.ts",
+      "file:src/app/shared/ui/money-field.component.ts",
+      "file:src/app/shared/ui/no-negative-number.directive.ts",
+      "file:src/app/shared/ui/novelty-form-actions.component.ts",
+      "file:src/app/shared/ui/toggle-section.component.ts",
+      "file:src/app/shared/ui/modal-shell.component.ts"
+    ]
+  },
+  {
+    "id": "layer:domain",
+    "name": "Domain Layer",
+    "description": "Framework-free business models, entities, enums, business rules (e.g. contract status transitions, date normalization) and the repository port that define the core contratos domain.",
+    "nodeIds": [
+      "file:src/app/domains/contratos/domain/models/assignee.model.ts",
+      "file:src/app/domains/contratos/domain/models/novelty-draft.model.ts",
+      "file:src/app/domains/contratos/domain/models/novelty-type.enum.ts",
+      "file:src/app/domains/contratos/domain/models/poliza.model.ts",
+      "file:src/app/domains/contratos/domain/repositories/contract.repository.ts",
+      "file:src/app/domains/contratos/domain/contract.rules.spec.ts",
+      "file:src/app/domains/contratos/domain/contract.rules.ts",
+      "file:src/app/domains/contratos/domain/models/contract-status.enum.ts",
+      "file:src/app/domains/contratos/domain/models/contract.entity.ts"
+    ]
+  },
+  {
+    "id": "layer:application",
+    "name": "Application Layer",
+    "description": "Application services orchestrating novelty submission and contract state, coordinating between the domain and infrastructure layers.",
+    "nodeIds": [
+      "file:src/app/domains/contratos/application/novelty.service.ts",
+      "file:src/app/domains/contratos/application/contract-state.service.ts"
+    ]
+  },
+  {
+    "id": "layer:infrastructure",
+    "name": "Infrastructure Layer",
+    "description": "Adapters implementing the repository port: HTTP/mock contract services, DTOs, and mappers that translate the legacy backend API into domain models.",
+    "nodeIds": [
+      "file:src/app/domains/contratos/infrastructure/dtos/contract-response.dto.ts",
+      "file:src/app/domains/contratos/infrastructure/dtos/legacy-api.dto.ts",
+      "file:src/app/domains/contratos/infrastructure/http-contract.service.ts",
+      "file:src/app/domains/contratos/infrastructure/mappers/contract.mapper.ts",
+      "file:src/app/domains/contratos/infrastructure/mappers/novelty-payload.mapper.ts",
+      "file:src/app/domains/contratos/infrastructure/mock-contract.service.ts"
+    ]
+  },
+  {
+    "id": "layer:shared-cross-cutting",
+    "name": "Shared Cross-Cutting Concerns",
+    "description": "Cross-domain guards, HTTP auth interceptor/token handling, session service, and generic formatting utilities shared by presentation and infrastructure alike.",
+    "nodeIds": [
+      "file:src/app/shared/auth/contract-access.guard.ts",
+      "file:src/app/shared/auth/user-session.service.ts",
+      "file:src/app/shared/http/auth.interceptor.ts",
+      "file:src/app/shared/http/dev-token.ts",
+      "file:src/app/shared/util/format.util.spec.ts",
+      "file:src/app/shared/util/format.util.ts"
+    ]
+  },
+  {
+    "id": "layer:app-bootstrap",
+    "name": "Application Bootstrap",
+    "description": "single-spa/Angular application shell: root component, routes, DI providers, environment configuration, and the single-spa lifecycle entry point.",
+    "nodeIds": [
+      "file:src/app/app.config.ts",
+      "file:src/app/app.routes.ts",
+      "file:src/app/app.component.spec.ts",
+      "file:src/app/app.component.ts",
+      "file:src/app/app.component.html",
+      "file:src/main.single-spa.ts",
+      "file:src/index.html",
+      "file:src/styles.css",
+      "file:src/environments/environment.ts",
+      "file:src/environments/environment.development.ts",
+      "file:src/environments/environment.test.ts"
+    ]
+  },
+  {
+    "id": "layer:config",
+    "name": "Build & Tooling Configuration",
+    "description": "Angular CLI, TypeScript, ESLint, Webpack, and Tailwind configuration files plus the understand-anything tool ignore file that govern how the microfrontend is built, linted, and tested.",
+    "nodeIds": [
+      "config:angular.json",
+      "config:package.json",
+      "config:tsconfig.app.json",
+      "config:tsconfig.json",
+      "config:tsconfig.spec.json",
+      "file:eslint.config.js",
+      "file:extra-webpack.config.js",
+      "file:tailwind.config.js",
+      "config:.ua/.understandignore"
+    ]
+  },
+  {
+    "id": "layer:documentation",
+    "name": "Documentation",
+    "description": "Top-level project documentation: README, architecture overview, coding standards, development guide, glossary, domain notes, migration notes, and test plan.",
+    "nodeIds": [
+      "document:README.md",
+      "document:docs/AI_GUIDE.md",
+      "document:docs/ARCHITECTURE.md",
+      "document:docs/CODING_STANDARDS.md",
+      "document:docs/DECISION_LOG.md",
+      "document:docs/DEVELOPMENT_GUIDE.md",
+      "document:docs/DOMAIN.md",
+      "document:docs/GLOSSARY.md",
+      "document:docs/MIGRATION.md",
+      "document:docs/README.md",
+      "document:docs/REVISION_CAMBIOS.md",
+      "document:docs/TEST_PLAN.md"
+    ]
+  },
+  {
+    "id": "layer:decision-records",
+    "name": "Architecture Decision Records",
+    "description": "The 14 ADRs capturing key architectural decisions for this microfrontend, e.g. the Angular 18 rewrite, single-spa/Parcel integration, standalone/zoneless/signals adoption, single-domain DDD, and delegated authentication.",
+    "nodeIds": [
+      "document:docs/adr/ADR-001-reescritura-angular18.md",
+      "document:docs/adr/ADR-002-parcel-single-spa.md",
+      "document:docs/adr/ADR-003-standalone-zoneless-signals.md",
+      "document:docs/adr/ADR-004-ddd-dominio-unico.md",
+      "document:docs/adr/ADR-005-repositorio-como-puerto.md",
+      "document:docs/adr/ADR-006-estado-con-signals.md",
+      "document:docs/adr/ADR-007-tailwind-tokens.md",
+      "document:docs/adr/ADR-008-clase-base-paginas-novedad.md",
+      "document:docs/adr/ADR-009-autenticacion-delegada.md",
+      "document:docs/adr/ADR-010-deployurl-por-ambiente.md",
+      "document:docs/adr/ADR-011-escrituras-simuladas.md",
+      "document:docs/adr/ADR-012-regla-mes-30-dias.md",
+      "document:docs/adr/ADR-013-normalizacion-fechas-legado.md",
+      "document:docs/adr/ADR-014-escrituras-reales-sin-replica.md"
+    ]
+  }
+]
