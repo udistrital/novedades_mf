@@ -8,6 +8,16 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--
+    Reglas de `html`/`body` del arranque standalone. Viven aquí y NO en styles.scss
+    porque ese archivo se inyecta en el documento del shell: allí `body { font-family }`
+    le cambiaba la tipografía a una app que no es esta. Este index.html solo se usa
+    con `ng serve`; el shell tiene el suyo.
+  -->
+  <style>
+    html, body { height: 100%; }
+    body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+  </style>
 </head>
 <body>
   <novedades-mf></novedades-mf>

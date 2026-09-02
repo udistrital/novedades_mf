@@ -4,6 +4,15 @@ module.exports = {
   content: [
     "./src/**/*.{html,ts}",
   ],
+  /*
+   * Acota TODAS las utilidades a `novedades-mf .clase` (estrategia de selector de
+   * Tailwind, no `!important`). En single-spa este MFE inyecta su CSS en el
+   * `document` compartido, así que sin esto sus utilidades compiten con las clases
+   * del shell por nombre: `.container`, `.hidden`, `.block`, `.grid` son genéricas
+   * y el MFE se inyecta de último, con lo que ganaría los empates de especificidad
+   * y le cambiaría el layout al shell sin que nadie lo relacione con este repo.
+   */
+  important: "novedades-mf",
   theme: {
     extend: {
       colors: {
@@ -96,7 +105,7 @@ module.exports = {
   // Sin Preflight: es un reset GLOBAL sin ámbito (table, h1, box-sizing…). En single-spa
   // este MFE comparte el DOM con el shell sin aislamiento — Preflight se filtraba hacia
   // afuera y rompía elementos del shell (p. ej. el footer institucional). El reemplazo
-  // equivalente, acotado solo al host del MFE, vive en styles.css.
+  // equivalente, acotado solo al host del MFE, vive en styles.scss.
   corePlugins: {
     preflight: false
   },
