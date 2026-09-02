@@ -31,14 +31,18 @@
       <!-- Bloqueo: falta un dato obligatorio para poder tramitar la novedad -->
       <div class="flex gap-3 p-3 bg-error-container text-on-error-container rounded-lg border border-error/40">
         <mat-icon class="text-error flex items-center justify-center">error</mat-icon>
-        <p class="text-xs font-medium">{{ blockedMessage() }}</p>
+        <p class="text-xs font-medium">
+          {{ blockedMessage() }}
+          <a [href]="soporteUrl" target="_blank" rel="noopener noreferrer" class="font-bold underline">Contactar soporte</a>
+        </p>
       </div>
     } @else {
       <!-- Advertencia -->
       <div class="flex gap-3 p-3 bg-error-container text-on-error-container rounded-lg border border-error/20">
         <mat-icon class="text-error flex items-center justify-center">warning</mat-icon>
         <p class="text-xs font-medium">
-          Verifique los datos antes de continuar. Si alguno no coincide, comuníquese con el equipo de soporte a través de <b><u>IRIS</u></b>.
+          Verifique los datos antes de continuar. Si alguno no coincide, comuníquese con el equipo de soporte a través de
+          <a [href]="soporteUrl" target="_blank" rel="noopener noreferrer" class="font-bold underline">IRIS</a>.
         </p>
       </div>
     }
@@ -58,8 +62,9 @@
     }
   </div>
 
-  <!-- Footer -->
-  <div class="px-6 py-4 bg-surface-container-low flex justify-end gap-3">
+  <!-- Footer: pegado abajo para que las acciones queden alcanzables cuando el
+       diálogo hace scroll (pantallas por debajo de 1080p). -->
+  <div class="sticky bottom-0 px-6 py-4 bg-surface-container-low border-t border-outline-variant/30 flex justify-end gap-3">
     <button
       type="button"
       (click)="dismiss.emit()"

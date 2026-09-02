@@ -1,6 +1,7 @@
 import { Component, computed, input, output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ModalShellComponent } from '../../../../../shared/ui/modal-shell.component';
+import { SOPORTE_IRIS_URL } from '../../../../../shared/soporte';
 
 export interface NoveltySummaryItem {
   label: string;
@@ -28,6 +29,8 @@ export class ConfirmNoveltyModalComponent {
   /** Cuando es `true`, bloquea la confirmación y muestra `blockedMessage` en vez de la advertencia genérica. */
   readonly blocked = input(false);
   readonly blockedMessage = input('No se puede generar la novedad.');
+
+  readonly soporteUrl = SOPORTE_IRIS_URL;
 
   // TEST SWITCH — borrar esta línea y el bloque en el HTML para quitarlo.
   readonly forceError = signal(false);

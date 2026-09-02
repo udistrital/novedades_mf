@@ -55,8 +55,9 @@
     </label>
   </div>
 
-  <!-- Acciones -->
-  <div class="px-stack-lg pb-stack-lg pt-2 flex gap-3 justify-end">
+  <!-- Acciones: pegadas abajo para quedar alcanzables cuando el diálogo hace
+       scroll (pantallas por debajo de 1080p). -->
+  <div class="sticky bottom-0 px-stack-lg pb-stack-lg pt-2 bg-surface-container-lowest flex gap-3 justify-end">
     <button
       type="button"
       (click)="dismiss.emit()"

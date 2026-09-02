@@ -4,11 +4,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { BreadcrumbComponent, BreadcrumbItem } from '../../../../../shared/ui/breadcrumb.component';
 import { ContractInfoCardComponent } from '../contract-info-card/contract-info-card.component';
 import { Contract } from '../../../domain/models/contract.entity';
+import { ApiErrorInfo } from '../../../../../shared/http/api-error';
 
 /**
  * Estructura común de las vistas de creación de novedad: migas de pan, título,
  * botón "Volver", y grid de 2 columnas (contexto a la izquierda, formulario a la derecha).
  * El formulario se proyecta por defecto; tarjetas extra de contexto van en el slot [aside].
+ *
+ * Si el contrato no se pudo cargar muestra el motivo **en lugar** del formulario:
+ * sin contrato no hay contexto que validar ni datos que enviar, así que dejar el
+ * formulario visible solo lleva a un error al confirmar. Es el punto único donde
+ * eso se resuelve para las seis vistas.
  */
 @Component({
   selector: 'app-novelty-page-layout',
@@ -28,17 +34,33 @@ import { Contract } from '../../../domain/models/contract.entity';
         </a>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-stack-lg items-start">
-        <div class="lg:col-span-4 flex flex-col gap-stack-md">
-          @if (contract(); as c) {
-            <app-contract-info-card [contract]="c" />
-          }
-          <ng-content select="[aside]" />
+      @if (error(); as e) {
+        <div role="alert"
+          class="bg-surface-container-lowest border border-error/40 rounded-xl p-stack-lg flex items-start gap-stack-md">
+          <mat-icon class="text-error flex items-center justify-center">error</mat-icon>
+          <div class="flex flex-col gap-1">
+            <p class="font-title-md text-title-md text-on-surface">{{ e.detail }}</p>
+            @if (e.action) {
+              <p class="font-body-md text-body-md text-on-surface-variant">{{ e.action }}</p>
+            }
+            <p class="font-label-sm text-label-sm text-on-surface-variant mt-1">
+              Código: {{ e.code }}@if (e.origen) { · Servicio: {{ e.origen }} }
+            </p>
+          </div>
         </div>
-        <div class="lg:col-span-8 flex flex-col gap-stack-lg">
-          <ng-content />
+      } @else {
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-stack-lg items-start">
+          <div class="lg:col-span-4 flex flex-col gap-stack-md">
+            @if (contract(); as c) {
+              <app-contract-info-card [contract]="c" />
+            }
+            <ng-content select="[aside]" />
+          </div>
+          <div class="lg:col-span-8 flex flex-col gap-stack-lg">
+            <ng-content />
+          </div>
         </div>
-      </div>
+      }
     </main>
   `
 })
@@ -46,4 +68,6 @@ export class NoveltyPageLayoutComponent {
   readonly title = input.required<string>();
   readonly breadcrumbItems = input.required<BreadcrumbItem[]>();
   readonly contract = input.required<Contract | undefined>();
+  /** Motivo por el que el contrato no se pudo cargar; sustituye al formulario. */
+  readonly error = input<ApiErrorInfo | null>(null);
 }
