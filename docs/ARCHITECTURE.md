@@ -3,7 +3,7 @@
 ## Principios rectores
 
 1. **El dominio no conoce a Angular ni al backend.** `domain/` contiene solo TypeScript puro: entidades, reglas y el puerto del repositorio. Puede testearse sin TestBed.
-2. **La infraestructura es intercambiable.** La presentación y la aplicación dependen del puerto abstracto `IContractRepository`; qué implementación responde (HTTP real o mock) se decide en un único binding de `app.config.ts` ([ADR-005](adr/ADR-005-repositorio-como-puerto.md)).
+2. **La infraestructura es intercambiable.** La presentación y la aplicación dependen de puertos abstractos (`IContractRepository`, `IActaGenerator`); qué implementación responde se decide en un único binding de `app.config.ts` ([ADR-005](adr/ADR-005-repositorio-como-puerto.md)).
 3. **Estado unidireccional con signals.** Los componentes disparan acciones sobre servicios de aplicación y leen signals de solo lectura; nunca mutan estado ajeno ni se suscriben a stores propios ([ADR-006](adr/ADR-006-estado-con-signals.md)).
 4. **Aislamiento frente al shell.** El MF comparte DOM con el root sin shadow DOM: ningún estilo global sin ámbito, zone.js delegado al root, base href propia ([ADR-002](adr/ADR-002-parcel-single-spa.md), [ADR-007](adr/ADR-007-tailwind-tokens.md)).
 5. **Simplicidad sobre patrón.** No hay NgRx, facades genéricas ni abstracciones especulativas; cada pieza existe porque una vista la necesita hoy.
@@ -30,16 +30,18 @@ graph TD
     end
     subgraph infrastructure["infrastructure/ — detalle técnico"]
         HTTP[HttpContractService]
-        MOCK[MockContractService]
+        ACTA["HttpActaMidService (temporal)"]
         MAP["mappers + DTOs (capa anticorrupción)"]
     end
     presentation --> application
     application --> PORT
     presentation -.->|solo tipos y reglas| domain
     HTTP -->|implementa| PORT
-    MOCK -->|implementa| PORT
+    ACTA -->|implementa IActaGenerator| domain
     HTTP --> MAP
 ```
+
+Hay **dos puertos**: `IContractRepository` (datos y escrituras) e `IActaGenerator` (generación del acta en PDF, [ADR-016](adr/ADR-016-generacion-de-actas-desacoplada.md)). Ambos bindings viven en `app.config.ts`; el de actas es el punto único a cambiar cuando se reemplace el middleware temporal.
 
 **Regla de dependencia**: las flechas solo apuntan hacia adentro (presentación → aplicación → dominio ← infraestructura). La infraestructura conoce al dominio para implementarlo; el dominio no conoce a nadie.
 
@@ -77,7 +79,7 @@ sequenceDiagram
 Claves del flujo:
 - El **interceptor** (`shared/http/auth.interceptor.ts`) agrega `Authorization: Bearer` leyendo el token que el shell dejó en `localStorage` — solo hacia las APIs de la allowlist ([ADR-009](adr/ADR-009-autenticacion-delegada.md)).
 - Los **mappers** absorben todas las rarezas del backend legado (campos alternativos, `[{}]` como "sin filas", envoltorio `{Code, Body}`) para que el dominio quede limpio; ver `infrastructure/mappers/contract.mapper.ts` y [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md#cómo-consumir-un-endpoint-nuevo).
-- Las **escrituras** (`createNovelty`, `annulNovelty`) siguen simuladas — estado actual en [MIGRATION.md](MIGRATION.md) y tarea MIG-001 del [MIGRATION_PLAN](../MIGRATION_PLAN.md).
+- Las **escrituras** son reales desde [ADR-015](adr/ADR-015-cascada-completa-con-replica.md): `createNovelty` ejecuta la cascada completa del legado (acta → validación de estado → novedad → réplica → compensación si la réplica falla → registro del estado). El detalle del orden y de las excepciones por tipo está en ese ADR; el estado de avance, en [MIGRATION.md](MIGRATION.md).
 
 ## Flujo de creación de una novedad
 

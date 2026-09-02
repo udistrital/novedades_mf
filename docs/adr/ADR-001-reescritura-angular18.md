@@ -23,5 +23,5 @@ Reescribir el módulo de novedades como aplicación Angular 18 nueva, migrando *
 ## Consecuencias
 
 - (+) Stack soportado, TypeScript estricto, tooling moderno, base testeable.
-- (−) La paridad funcional debe medirse y completarse explícitamente → existe [`MIGRATION_PLAN.md`](../../MIGRATION_PLAN.md) con la brecha requerimiento a requerimiento.
+- (−) La paridad funcional debe medirse y completarse explícitamente → existe [`MIGRATION_PLAN.md`](../../info/MIGRATION_PLAN.md) con la brecha requerimiento a requerimiento.
 - La compatibilidad con Angular 18 es una restricción del proyecto: no actualizar el framework sin decisión explícita.

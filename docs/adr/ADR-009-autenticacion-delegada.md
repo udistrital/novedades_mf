@@ -17,10 +17,10 @@ Qué parte del ciclo de autenticación implementa este MF.
 
 ## Decisión
 
-`shared/http/auth.interceptor.ts`: lee `access_token`/`id_token`/`token` en **cada petición** (soporta renovación por el shell, a diferencia del `RequestManager` de la guía que lo captura una vez en el constructor) y lo adjunta **solo** a las URLs de la allowlist (`environments/*_SERVICE`), evitando filtrar el token a terceros. La configuración `environment.TOKEN` se conserva con sus nombres institucionales para el flujo del shell. `dev-token.ts` existe como hook temporal de desarrollo local, con instrucciones de borrado en su cabecera y valor vacío en commits.
+`shared/http/auth.interceptor.ts`: lee `access_token`/`id_token`/`token` en **cada petición** (soporta renovación por el shell, a diferencia del `RequestManager` de la guía que lo captura una vez en el constructor) y lo adjunta **solo** a las URLs de la allowlist (`environments/*_SERVICE`), evitando filtrar el token a terceros. La configuración `environment.TOKEN` se conserva con sus nombres institucionales para el flujo del shell. Existió un `dev-token.ts` como hook de desarrollo local (token pegado a mano para probar sin el shell), **eliminado el 2026-08-23**: nunca se usó con valor real y un archivo así se compila al bundle de producción si alguien lo deja lleno. Para probar sin el shell, escribir el token directamente en `localStorage`.
 
 ## Consecuencias
 
 - (+) Sesión única gobernada por el shell; defensa en profundidad contra fuga del token.
-- (−) El MF aún no interpreta el contenido del token (rol/documento): el control de acceso por rol es la tarea MIG-010 del [MIGRATION_PLAN](../../MIGRATION_PLAN.md).
+- (−) El MF aún no interpreta el contenido del token (rol/documento): el control de acceso por rol es la tarea MIG-010 del [MIGRATION_PLAN](../../info/MIGRATION_PLAN.md).
 - API nueva ⇒ agregarla a la allowlist o no llevará token (recordatorio en [DEVELOPMENT_GUIDE.md](../DEVELOPMENT_GUIDE.md#cómo-consumir-un-endpoint-nuevo)).

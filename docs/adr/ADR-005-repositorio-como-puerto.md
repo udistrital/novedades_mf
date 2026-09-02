@@ -18,7 +18,7 @@ Cómo desacoplar dominio y vistas de ese backend hostil, y cómo alternar mock �
 
 ## Decisión
 
-`IContractRepository` (clase abstracta en `domain/repositories/`) es a la vez contrato y token. Implementaciones: `HttpContractService` (real) y `MockContractService` (desarrollo). El binding vive únicamente en `app.config.ts`. Todo lo tolerante al esquema legado vive en `infrastructure/dtos/` + `infrastructure/mappers/` (capa anticorrupción): el dominio nunca ve un DTO.
+`IContractRepository` (clase abstracta en `domain/repositories/`) es a la vez contrato y token. El binding vive únicamente en `app.config.ts`. Implementaciones: `HttpContractService` (real) y, en su momento, `MockContractService` para desarrollo sin backend — **eliminado el 2026-07-23** por no tener uso; hoy el puerto tiene una sola implementación. Que siga siendo un puerto no es abstracción especulativa: `IActaGenerator`, el segundo puerto (ADR-016), existe justamente porque su implementación es temporal y va a cambiarse. Todo lo tolerante al esquema legado vive en `infrastructure/dtos/` + `infrastructure/mappers/` (capa anticorrupción): el dominio nunca ve un DTO.
 
 ## Consecuencias
 

@@ -1,6 +1,8 @@
 # ADR-014 — Escrituras reales contra novedades_mid, sin réplica ni compensación en el cliente
 
-**Fecha**: 2026-07-07 · **Estado**: Aceptada (reemplaza a [ADR-011](ADR-011-escrituras-simuladas.md))
+**Fecha**: 2026-07-07 · **Estado**: ⚠️ **Reemplazada** por [ADR-015](ADR-015-cascada-completa-con-replica.md) (2026-08-01) — a su vez reemplazó a [ADR-011](ADR-011-escrituras-simuladas.md)
+
+> Las trazas reales del cliente legado ([`endpoints_registrados.md`](../endpoints_registrados.md)) mostraron que la réplica y su compensación sí forman parte del flujo, y que `validarCambioEstado` en modo objeto ya aplica el cambio de estado. ADR-015 documenta la cascada completa que hoy implementa el código.
 
 ## Contexto
 

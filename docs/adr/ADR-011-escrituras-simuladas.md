@@ -22,5 +22,5 @@ Bloquear toda la integración hasta resolver las escrituras, o entregar valor po
 ## Consecuencias
 
 - (+) Las lecturas y toda la UX quedaron validadas contra datos reales sin esperar al backend de escrituras.
-- (−) **Riesgo mayor conocido**: el sistema "finge" registrar novedades — bloqueante absoluto de producción, registrado como riesgo #1 del [MIGRATION_PLAN](../../MIGRATION_PLAN.md#6-riesgos-para-salida-a-producción).
+- (−) **Riesgo mayor conocido**: el sistema "finge" registrar novedades — bloqueante absoluto de producción, registrado como riesgo #1 del [MIGRATION_PLAN](../../info/MIGRATION_PLAN.md#6-riesgos-para-salida-a-producción).
 - Los `console.warn`/TODO no deben "limpiarse" sin conectar la escritura (regla en [AI_GUIDE.md](../AI_GUIDE.md)); al cerrar MIG-001 este ADR pasa a estado **Reemplazada**.
