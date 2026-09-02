@@ -1,4 +1,5 @@
 import { NoveltyType } from './novelty-type.enum';
+import { Assignee } from './assignee.model';
 
 /** Datos de la solicitud comunes a las novedades que parten de oficios supervisor/ordenador. */
 export interface RequestData {
@@ -71,6 +72,13 @@ export interface CesionDraft {
   valorFavorCedente: number | null;
   diasFaltantes: number | null;
   cedulaCesionario: string;
+  /**
+   * Cesionario elegido en el autocomplete. El backend solo necesita su cédula
+   * (resuelve el resto contra `informacion_proveedor`), pero el acta imprime su
+   * nombre, así que se conserva lo que ya se mostró en pantalla en vez de volver
+   * a consultarlo.
+   */
+  cesionario?: Assignee;
   considerando: { activo: boolean; posicion: number | null; texto: string };
   clausula: AdditionalClause;
 }

@@ -32,6 +32,14 @@ export function addDaysToDate(date: string | null | undefined, days: number): st
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
+/**
+ * Normaliza una fecha (dd/mm/yyyy del backend o yyyy-mm-dd) al formato que exige
+ * un `<input type="date">`. Inverso de `toDisplayDate`.
+ */
+export function toIsoDate(date: string | null | undefined): string {
+  return addDaysToDate(date, 0);
+}
+
 /** Días entre dos fechas (dateB - dateA); null si falta alguna. */
 export function daysBetween(dateA: string | null | undefined, dateB: string | null | undefined): number | null {
   if (!dateA || !dateB) return null;
@@ -106,37 +114,96 @@ export function formatCopWords(value: number | null | undefined): string {
 }
 
 /** Regla contable del negocio: un mes equivale siempre a 30 días, sin importar el mes calendario. */
-const DIAS_POR_MES = 30;
+export const DIAS_POR_MES = 30;
 
-/** Extrae el número de meses de un plazo con formato "NUEVE ( 9 ) MESES". */
+/** Grupos "( n ) UNIDAD" de un plazo: "NUEVE ( 9 ) MESES Y QUINCE ( 15 ) DÍAS" → dos grupos. */
+const GRUPOS_PLAZO = /\(\s*(-?\d+)\s*\)\s*(MES(?:ES)?|D[ÍI]AS?)/gi;
+
+/** Extrae el número de un plazo sin unidad reconocible ("NUEVE ( 9 )"), que se asume en meses. */
 function parseMonthsTerm(term: string | null | undefined): number {
   return Number((term ?? '').match(/\(\s*(-?\d+)\s*\)/)?.[1]) || 0;
 }
 
 /**
  * Plazo total en días de un término "NUEVE ( 9 ) MESES [Y QUINCE ( 15 ) DÍAS]",
- * aplicando la regla mes = 30 días. Si la unidad del primer grupo es DÍAS
+ * aplicando la regla mes = 30 días. Si la unidad de un grupo es DÍAS
  * (contratos pactados en días), no multiplica por 30.
+ *
+ * Es la **única** lectura de un plazo en el proyecto: cualquier cálculo sobre
+ * plazos parte de aquí. `addDaysToTerm` la usaba a medias y por eso un contrato
+ * pactado en días salía multiplicado por 30.
  */
 export function termToDays(term: string | null | undefined): number {
   const t = term ?? '';
-  const grupos = [...t.matchAll(/\(\s*(-?\d+)\s*\)\s*(MES(?:ES)?|D[ÍI]AS?)/gi)];
+  const grupos = [...t.matchAll(GRUPOS_PLAZO)];
   if (!grupos.length) return parseMonthsTerm(t) * DIAS_POR_MES;
   return grupos.reduce((total, [, n, unidad]) =>
     total + Number(n) * (unidad.toUpperCase().startsWith('MES') ? DIAS_POR_MES : 1), 0);
 }
 
+const PLURAL_PLAZO = { MES: 'MESES', 'DÍA': 'DÍAS' } as const;
+
+/** Un grupo del plazo en el formato del negocio: "QUINCE ( 15 ) DÍAS". */
+function grupoPlazo(n: number, singular: keyof typeof PLURAL_PLAZO): string {
+  return `${numberToWords(n)} ( ${n} ) ${n === 1 ? singular : PLURAL_PLAZO[singular]}`;
+}
+
 /**
- * Suma días de prórroga a un plazo inicial ("NUEVE ( 9 ) MESES") y devuelve el nuevo
- * plazo en el mismo formato, aplicando la regla de mes = 30 días.
+ * Plazo en el formato del negocio a partir de sus días: "DIEZ ( 10 ) MESES Y
+ * QUINCE ( 15 ) DÍAS", con la regla mes = 30 días.
+ *
+ * **Única forma de mostrar un plazo**, en pantalla y en las actas. Ágora los guarda
+ * en la unidad con que se pactó cada contrato —unos en meses, otros en días— y eso
+ * llegaba tal cual a la vista: dos contratos de la misma duración se leían distinto
+ * ("TRESCIENTOS QUINCE ( 315 ) DÍAS" frente a "DIEZ ( 10 ) MESES Y QUINCE ( 15 ) DÍAS").
+ * La unidad de origen se conserva en el dato numérico (`executionTerm`, `plazo_dias`),
+ * no en el texto.
+ *
+ * Los meses se imprimen siempre, aunque sean cero: "CERO ( 0 ) MESES Y VEINTICUATRO
+ * ( 24 ) DÍAS" deja claro que el plazo es corto, y no que se perdió la parte de meses.
+ */
+export function formatTerm(totalDays: number | null | undefined): string {
+  const total = Math.max(0, Math.floor(Number(totalDays) || 0));
+  const meses = grupoPlazo(Math.floor(total / DIAS_POR_MES), 'MES');
+  const dias = total % DIAS_POR_MES;
+  return dias === 0 ? meses : `${meses} Y ${grupoPlazo(dias, 'DÍA')}`;
+}
+
+/**
+ * Duración de un período del negocio: regla contable mes = 30 días y **ambos
+ * extremos incluidos** (el primer y el último día cuentan).
+ *
+ * No es `daysBetween`, que cuenta días de calendario: esta es la cuenta del negocio,
+ * la que el backend guarda en `periodosuspension` y la que se imprime como plazo en
+ * las actas. Confirmada con las dos trazas del contrato 653/2025
+ * (`docs/endpoints_registrados.md`): 10/02→05/03 = 26 y 08/02→26/03 = 49.
+ *
+ * Se aplica **también a las suspensiones**: se evaluó contarlas en días de calendario
+ * (darían 24 donde el legado registra 26) y negocio decidió el **2026-08-29** mantener
+ * la regla del legado, por fidelidad con el sistema en producción y con las actas ya
+ * emitidas. Ver [ADR-012](../../../../docs/adr/ADR-012-regla-mes-30-dias.md).
+ */
+export function periodDays(
+  inicio: string | null | undefined,
+  fin: string | null | undefined
+): number | null {
+  if (!inicio || !fin) return null;
+  const a = parseAnyDate(inicio);
+  const b = parseAnyDate(fin);
+  const meses = (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth());
+  return meses * DIAS_POR_MES + (b.getDate() - a.getDate()) + 1;
+}
+
+/**
+ * Suma días de prórroga a un plazo y lo devuelve en el formato del negocio.
+ *
+ * Lee con `termToDays` (que respeta la unidad de cada grupo) y formatea con
+ * `formatTerm`: el resultado sale en meses y días sea cual sea la unidad de origen.
+ * Antes conservaba la unidad del plazo pactado, y un contrato en días seguía
+ * mostrando su nuevo plazo en días.
  */
 export function addDaysToTerm(initialTerm: string | null | undefined, extraDays: number | null | undefined): string {
-  const totalDays = parseMonthsTerm(initialTerm) * DIAS_POR_MES + (Number(extraDays) || 0);
-  const months = Math.floor(totalDays / DIAS_POR_MES);
-  const days = totalDays % DIAS_POR_MES;
-
-  const monthsPart = `${numberToWords(months)} ( ${months} ) ${months === 1 ? 'MES' : 'MESES'}`;
-  return days === 0 ? monthsPart : `${monthsPart} Y ${numberToWords(days)} ( ${days} ) ${days === 1 ? 'DÍA' : 'DÍAS'}`;
+  return formatTerm(termToDays(initialTerm) + (Number(extraDays) || 0));
 }
 
 /** Puntos de separación visuales para NIT/CC, agrupando de a 3 desde el último dígito: 80732423 → 80.732.423. */

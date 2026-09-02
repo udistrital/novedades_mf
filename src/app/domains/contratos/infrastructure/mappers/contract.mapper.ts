@@ -4,8 +4,7 @@ import { ContractStatus } from '../../domain/models/contract-status.enum';
 import { Assignee } from '../../domain/models/assignee.model';
 import { Aseguradora, Poliza } from '../../domain/models/poliza.model';
 import { canAnnulNovelty } from '../../domain/contract.rules';
-import { numberToWords, toDisplayDate } from '../../../../shared/util/format.util';
-import { environment } from '../../../../../environments/environment';
+import { DIAS_POR_MES, formatTerm, toDisplayDate } from '../../../../shared/util/format.util';
 import {
   ContratoEstadoDto,
   ContratoGeneralDto,
@@ -44,7 +43,7 @@ function normalizado(value: string): string {
 // anticipada se leería como un Finalizado normal (habilitaría "Activar contrato" cuando
 // no debería). Claves = nombre crudo real del catálogo `estado_contrato` (confirmado
 // 2026-07-22), no el nombre de negocio del enum.
-const ESTADOS_CONTRATO: ReadonlyArray<[string, ContractStatus]> = [
+const ESTADOS_CONTRATO: readonly [string, ContractStatus][] = [
   ['ANTICIPADO', ContractStatus.TERMINADO], // "Finalizado(Anticipado)", id 8.
   ['SUSCRITO', ContractStatus.SUSCRITO],
   ['EN EJECUCION', ContractStatus.EN_EJECUCION],
@@ -75,28 +74,62 @@ export function toContractStatus(rows: ContratoEstadoDto[] | null | undefined): 
 }
 
 /** Normaliza fechas del backend (ISO `yyyy-mm-dd...` o ya `dd/mm/yyyy`) a dd/mm/yyyy. */
-function toDdMmYyyy(value: string | null | undefined): string {
+export function toDdMmYyyy(value: string | null | undefined): string {
   if (!value) return '';
   return value.includes('/') ? value.split(' ')[0] : toDisplayDate(value.slice(0, 10));
 }
 
-/** Lee un valor que puede llegar como string plano o como objeto con Nombre. */
-function readNombre(value: { Nombre?: string; TipoContrato?: string } | string | undefined): string {
+/**
+ * Lee un valor que puede llegar como string plano o como objeto con el nombre en
+ * `Nombre`, `TipoContrato` o `Descripcion` (p. ej. `UnidadEjecucion` usa
+ * `Descripcion: "Dia(s)"`, y sin leerla el plazo se interpretaría en meses).
+ * Devuelve '' cuando el backend manda solo un id numérico (`OrdenadorGasto`).
+ */
+function readNombre(
+  value: { Nombre?: string; TipoContrato?: string; Descripcion?: string } | string | number | undefined
+): string {
   if (!value) return '';
-  return typeof value === 'string' ? value : value.Nombre ?? value.TipoContrato ?? '';
-}
-
-/** Plazo en el formato que espera el dominio: "NUEVE ( 9 ) MESES". */
-function toInitialTerm(plazo: number | string | undefined, unidad: string): string {
-  const n = Number(plazo);
-  if (!plazo || Number.isNaN(n) || n <= 0) return String(plazo ?? '');
-  return `${numberToWords(n)} ( ${n} ) ${unidad.toUpperCase() || 'MESES'}`;
+  if (typeof value === 'string') return value;
+  if (typeof value === 'number') return '';
+  return value.Nombre ?? value.TipoContrato ?? value.Descripcion ?? '';
 }
 
 /**
- * Lee el primer campo presente entre varios nombres candidatos. Los `GetNovedad*`
- * del mid no están documentados campo a campo (models/*.go del backend): esta
- * lectura por candidatos es el único punto a corregir al confirmar los nombres.
+ * Plazo del contrato en el formato único del negocio: "DIEZ ( 10 ) MESES Y
+ * QUINCE ( 15 ) DÍAS".
+ *
+ * Ágora lo guarda en la unidad con que se pactó el contrato (`PlazoEjecucion` +
+ * `UnidadEjecucion`), así que aquí se pasa a días con la regla mes = 30 días y se
+ * formatea una sola vez. Es el punto donde nace el plazo que ven la tarjeta del
+ * contrato, los resúmenes y las actas: normalizarlo aquí evita convertirlo en cada
+ * vista. El número crudo sigue disponible en `executionTerm`.
+ */
+function toInitialTerm(plazo: number | string | undefined, unidad: string): string {
+  const n = Number(plazo);
+  if (!plazo || Number.isNaN(n) || n <= 0) return String(plazo ?? '');
+  return formatTerm(n * (esUnidadEnDias(unidad) ? 1 : DIAS_POR_MES));
+}
+
+/** `UnidadEjecucion.Descripcion` viene como "Dia(s)" / "Mes(es)"; sin dato se asumen meses. */
+function esUnidadEnDias(unidad: string): boolean {
+  return normalizado(unidad).startsWith('DIA');
+}
+
+
+/**
+ * Lee el primer campo presente entre varios nombres candidatos.
+ *
+ * Los nombres quedaron **fijados el 2026-08-29** contra `novedades_mid/models/*.go`:
+ * las cinco funciones `GetNovedad*` arman exactamente el mismo mapa de respuesta
+ * (`ValorAdicion`, `TiempoProrroga`, `PeriodoSuspension`, `Cesionario`, `Poliza`,
+ * `FechaExpedicion`, `FechaSuspension`, `FechaFinSuspension`, `NombreEstado`,
+ * `Estado`, `Enlace`…), así que se borraron los candidatos inventados que quedaban
+ * de cuando el esquema no estaba confirmado.
+ *
+ * Sobreviven solo dos alternativas, y por una razón concreta: cuando la respuesta
+ * llega **anidada** (`{NovedadPoscontractual:{…}}`) el objeto interno es la fila
+ * cruda del CRUD, que nombra distinto esos dos campos (`FechaCreacion` en vez de
+ * `FechaExpedicion` y `EnlaceDocumento` en vez de `Enlace`).
  */
 function readCandidate(raw: NovedadMidDto, keys: string[]): unknown {
   for (const key of keys) {
@@ -107,32 +140,61 @@ function readCandidate(raw: NovedadMidDto, keys: string[]): unknown {
 
 function toNoveltySummary(item: NovedadMidDto): NoveltySummary {
   const raw = item.NovedadPoscontractual ?? item;
+  const type = TIPO_NOVEDAD[Number(raw.TipoNovedad)] ?? NoveltyType.ADDITION_EXTENSION;
   // Todos los campos de negocio se leen del objeto ya desanidado (`raw`), igual que
   // tipo/estado/fecha: cuando el mid responde con la forma anidada ({NovedadPoscontractual:{…}})
   // estos datos viven dentro, no en el envoltorio — leerlos de `item` los perdía y, sin
   // `cesionarioId`, la tarjeta seguía mostrando el contratista original tras una cesión.
-  const valorAdicion = Number(readCandidate(raw, ['ValorAdicion', 'valor_adicion', 'ValorNovedad', 'Valor', 'valor']));
-  const diasProrroga = Number(readCandidate(raw, ['DiasProrroga', 'dias_prorroga', 'Dias', 'dias', 'PeriodoProrroga']));
-  const cesionarioId = readCandidate(raw, ['Cesionario', 'cesionario', 'DocumentoNuevo', 'documento_nuevo']);
+  const valorAdicion = Number(readCandidate(raw, ['ValorAdicion']));
+  // Los días se leen según el tipo: los candidatos genéricos (`Dias`) son comunes a
+  // prórroga y suspensión, y sin discriminar una suspensión inflaría el plazo vigente.
+  const esProrroga = type === NoveltyType.EXTENSION || type === NoveltyType.ADDITION_EXTENSION;
+  const diasProrroga = esProrroga ? Number(readCandidate(raw, ['TiempoProrroga'])) : NaN;
+  const diasSuspension = type === NoveltyType.SUSPENSION ? Number(readCandidate(raw, ['PeriodoSuspension'])) : NaN;
+  const cesionarioId = readCandidate(raw, ['Cesionario']);
+  // El mid resuelve la póliza de la cesión y la devuelve en `Poliza` (es el
+  // `NumeroPolizaId` del CRUD): con eso basta para saber si el trámite quedó a medias.
+  const numeroPoliza = type === NoveltyType.ASSIGNMENT ? readCandidate(raw, ['Poliza']) : undefined;
+  const finEfectivo = readCandidate(raw, ['FechaFinEfectiva']);
   const enlace = readCandidate(raw, ['Enlace', 'EnlaceDocumento']);
   const fechaExpedicion = readCandidate(raw, ['FechaExpedicion', 'FechaCreacion']);
-  // NombreEstado es el campo confirmado contra el servicio real; Estado queda como alternativa.
+  // Período real de la suspensión, distinto de la expedición del acta: el formulario
+  // de Reinicio lo precarga para no obligar a redigitar lo que ya está registrado.
+  const fechaSuspension = readCandidate(raw, ['FechaSuspension']);
+  const fechaFinSuspension = readCandidate(raw, ['FechaFinSuspension']);
+  // Las dos existen: `NombreEstado` es el nombre legible y `Estado` el código
+  // abreviado (ENEJ/TERM), que sirve de respaldo si el mid no resolvió el nombre.
   const nombreEstado = readCandidate(raw, ['NombreEstado', 'Estado']);
   return {
     id: String(raw.Id ?? ''),
-    type: TIPO_NOVEDAD[Number(raw.TipoNovedad)] ?? NoveltyType.ADDITION_EXTENSION,
+    type,
     expeditionDate: toDdMmYyyy(String(fechaExpedicion ?? '')),
+    effectiveDate: toDdMmYyyy(String(fechaSuspension ?? '')) || undefined,
+    effectiveEndDate: toDdMmYyyy(String(fechaFinSuspension ?? '')) || undefined,
     status: toStatus(String(nombreEstado ?? '')),
-    // El acta se sirve desde novedades_mid; el query de la novedad solo trae el enlace (id del documento).
-    documentUrl: enlace ? `${environment.NOVEDADES_MID_SERVICE}gestor_documental/${String(enlace)}` : undefined,
+    // El `enlace` de la novedad es el id del acta en el gestor documental; el
+    // contenido se descarga aparte (ver `getNoveltyDocument`).
+    documentId: enlace ? String(enlace) : undefined,
+    // El mid no devuelve `Activo`: filtra por `activo:true` en el CRUD, así que todo
+    // lo que llega está activo. Se conserva la lectura como red por si eso cambia.
     canAnnul: raw.Activo !== false,
     valorAdicion: Number.isFinite(valorAdicion) && valorAdicion > 0 ? valorAdicion : undefined,
     diasProrroga: Number.isFinite(diasProrroga) && diasProrroga > 0 ? diasProrroga : undefined,
-    cesionarioId: cesionarioId !== undefined ? String(cesionarioId) : undefined
+    diasSuspension: Number.isFinite(diasSuspension) && diasSuspension > 0 ? diasSuspension : undefined,
+    cesionarioId: cesionarioId !== undefined ? String(cesionarioId) : undefined,
+    numeroPoliza: numeroPoliza !== undefined ? String(numeroPoliza) : undefined,
+    fechaFinEfectiva: toDdMmYyyy(String(finEfectivo ?? '')) || undefined
   };
 }
 
-/** Convierte las novedades del mid; la anulabilidad definitiva se resuelve en `toContract`. */
+/**
+ * Convierte las novedades del mid; la anulabilidad definitiva se resuelve en `toContract`.
+ *
+ * No hace falta descartar las novedades desactivadas por la compensación: el mid ya
+ * consulta el CRUD con `activo:true` (`GET /v1/novedad/:id/:vigencia`, ver
+ * `info/backend/API_ENDPOINTS_mid.md`), así que una novedad cuya réplica falló no llega
+ * hasta aquí. Filtrarlo otra vez en el cliente sería código inalcanzable.
+ */
 export function toNoveltySummaries(items: NovedadMidDto[]): NoveltySummary[] {
   // El mid las devuelve en orden de inserción (más antigua primero); la UI quiere la más
   // reciente arriba. `Id` es autoincremental, así que ordenar por él descendente basta.
@@ -158,23 +220,34 @@ export function toContract(
   const numero = String(suscrito?.NumeroContratoSuscrito ?? row.NumeroContrato ?? '');
   const vigencia = String(row.VigenciaContrato ?? row.Vigencia ?? suscrito?.Vigencia ?? '');
   const supervisor = typeof row.Supervisor === 'object' ? row.Supervisor : undefined;
+  const unidadEjecucion = typeof row.UnidadEjecucion === 'object' ? row.UnidadEjecucion : undefined;
+  const contratistaId = typeof row.Contratista === 'object' ? row.Contratista?.Id : row.Contratista;
   const contract: Contract = {
     // Id compuesto: el backend identifica contratos por número + vigencia, no por un id único.
     id: `${numero}_${vigencia}`,
+    principalId: String(row.Id ?? ''),
     number: numero,
     contractType: readNombre(row.TipoContrato),
     contractorName: proveedor?.NomProveedor ?? '',
     contractorId: String(proveedor?.NumDocumento ?? ''),
+    contractorProviderId: String(contratistaId ?? ''),
     contractingEntity: 'Universidad Distrital Francisco José de Caldas',
     totalValue: Number(row.ValorContrato ?? row.Valor) || 0,
     object: String(row.ObjetoContrato ?? row.Objeto ?? ''),
     initialTerm: toInitialTerm(row.PlazoEjecucion, readNombre(row.UnidadEjecucion) || 'MESES'),
+    executionUnitId: unidadEjecucion?.Id,
+    executionTerm: Number(row.PlazoEjecucion) || undefined,
+    subscriptionDate: toDdMmYyyy(suscrito?.FechaSuscripcion ?? row.FechaRegistro) || undefined,
     // ponytail: fecha de registro como inicio; la fecha real de inicio vive en
     // acta_inicio (vía contrato_suscrito) — encadenar cuando se conecten las actas.
     startDate: toDdMmYyyy(row.FechaRegistro) || `01/01/${vigencia}`,
+    executingUnit: Number(row.UnidadEjecutora) || undefined,
     supervisor: readNombre(row.Supervisor),
     supervisorDocument: String(supervisor?.Documento ?? ''),
-    spendingManager: readNombre(row.OrdenadorGasto),
+    supervisorRole: supervisor?.Cargo || undefined,
+    // `OrdenadorGasto` solo trae un id: el nombre se resuelve aparte contra
+    // `ordenadores` (ver `ordenadorGastoId` y el enriquecimiento del detalle).
+    spendingManager: '',
     status,
     novelties
   };
@@ -182,6 +255,17 @@ export function toContract(
   // (última novedad cuyo tipo corresponde al estado actual del contrato).
   contract.novelties = novelties.map(n => ({ ...n, canAnnul: n.canAnnul && canAnnulNovelty(contract, n) }));
   return contract;
+}
+
+/**
+ * Id del ordenador del gasto del contrato, o `undefined` si no tiene uno
+ * asignado (`OrdenadorGasto: null`). El backend guarda el id, no el nombre.
+ */
+export function ordenadorGastoId(row: ContratoGeneralDto): number | undefined {
+  const valor = row.OrdenadorGasto;
+  if (valor === null || valor === undefined || valor === '') return undefined;
+  const id = typeof valor === 'object' ? valor.Id : valor;
+  return Number(id) || undefined;
 }
 
 /** Convierte una fila de `poliza` (novedades_crud) al modelo de dominio. */

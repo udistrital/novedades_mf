@@ -3,6 +3,7 @@ import { Observable, throwError, timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { IContractRepository } from '../domain/repositories/contract.repository';
 import { NoveltyDraft } from '../domain/models/novelty-draft.model';
+import { NoveltyType } from '../domain/models/novelty-type.enum';
 
 /**
  * Casos de uso de escritura sobre novedades: crear y anular.
@@ -20,14 +21,14 @@ export class NoveltyService {
   // TEST SWITCH — `forceError` solo existe para el switch de pruebas de los modales
   // de confirmación/anulación. Borrar el parámetro y el `if` de cada método para quitarlo.
   // El delay imita la latencia del mock real para que el estado de carga sea visible.
-  create(contractId: string, draft: NoveltyDraft, forceError = false): Observable<void> {
+  create(contractId: string, draft: NoveltyDraft, actaBase64 = '', forceError = false): Observable<void> {
     if (forceError) return timer(400).pipe(switchMap(() => throwError(() => new Error('[TEST] Falla simulada'))));
-    return this.contractRepository.createNovelty(contractId, draft);
+    return this.contractRepository.createNovelty(contractId, draft, actaBase64);
   }
 
-  annul(contractId: string, noveltyId: string, forceError = false): Observable<void> {
+  annul(contractId: string, noveltyId: string, type: NoveltyType, forceError = false): Observable<void> {
     if (forceError) return timer(400).pipe(switchMap(() => throwError(() => new Error('[TEST] Falla simulada'))));
-    return this.contractRepository.annulNovelty(contractId, noveltyId);
+    return this.contractRepository.annulNovelty(contractId, noveltyId, type);
   }
 
   /** Reapertura administrativa de un contrato Finalizado (vuelve a "En ejecución"). */

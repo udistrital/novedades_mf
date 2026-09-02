@@ -1,12 +1,19 @@
 import { Contract, NoveltySummary } from './models/contract.entity';
 import { NoveltyType, NoveltyStatus } from './models/novelty-type.enum';
 import { ContractAction, ContractStatus } from './models/contract-status.enum';
-import { termToDays } from '../../../shared/util/format.util';
+import { addDaysToDate, termToDays } from '../../../shared/util/format.util';
 
-/** Primer año con contratos en el sistema. */
+/** Primer año con contratos en el sistema, según el catálogo de Ágora de 2026-08-30. */
 const PRIMERA_VIGENCIA = 2015;
 
-/** Vigencias seleccionables, del año actual hacia atrás hasta la primera registrada. */
+/**
+ * Vigencias del año actual hacia atrás hasta la primera registrada.
+ *
+ * **Respaldo**, no la fuente: las vigencias reales las lista Ágora
+ * (`IContractRepository.getVigencias`). Esto solo se usa mientras esa consulta
+ * responde, o si falla — un desplegable de años vacío dejaría al usuario sin poder
+ * buscar. Depende del reloj del equipo, así que puede errar en los extremos.
+ */
 export function availableVigencias(): string[] {
   const current = new Date().getFullYear();
   return Array.from({ length: current - PRIMERA_VIGENCIA + 1 }, (_, i) => String(current - i));
@@ -26,30 +33,66 @@ export function getLatestNovelty(contract: Contract): NoveltySummary | undefined
 }
 
 /**
+ * Suspensión que un reinicio reanuda: la última novedad del contrato, si es de
+ * tipo Suspensión. Es el registro del que el reinicio toma sus fechas y el que
+ * su réplica actualiza en Ágora (ver `HttpContractService.replicar`).
+ */
+export function activeSuspension(contract: Contract): NoveltySummary | undefined {
+  const latest = getLatestNovelty(contract);
+  return latest?.type === NoveltyType.SUSPENSION ? latest : undefined;
+}
+
+/**
  * Un contrato está suspendido cuando su última novedad es de tipo Suspensión.
  * (Un posterior Reinicio vuelve a dejar la última novedad en otro tipo.)
  */
 export function isContractSuspended(contract: Contract): boolean {
-  return getLatestNovelty(contract)?.type === NoveltyType.SUSPENSION;
+  return !!activeSuspension(contract);
+}
+
+/**
+ * Cesión cuya póliza todavía no se ha registrado, si el contrato está en esa
+ * situación: es la última novedad y llegó sin número de póliza.
+ *
+ * Hasta que se registre, el contrato no puede recibir más novedades (§5.1): la
+ * garantía del cesionario es condición para seguir ejecutándolo.
+ */
+export function assignmentPendingPoliza(contract: Contract): NoveltySummary | undefined {
+  const latest = getLatestNovelty(contract);
+  return latest?.type === NoveltyType.ASSIGNMENT && !latest.numeroPoliza ? latest : undefined;
 }
 
 /**
  * Estado efectivo del contrato: el registrado en el backend si existe, y si
  * no, el inferido de las novedades (complemento documentado en MIG-002: el
  * backend de pruebas no siempre tiene registros en `contrato_estado`).
+ *
+ * "Cesión pendiente de póliza" va **antes** que el estado del backend, y no como
+ * respaldo: ese estado no existe en el catálogo `estado_contrato` y la cesión no
+ * registra ningún cambio de estado (ver `NOVEDAD_BACKEND`, `estadoDestinoId: null`),
+ * así que Ágora sigue reportando "En ejecución". Solo se puede derivar de la novedad.
  */
 export function effectiveStatus(contract: Contract): ContractStatus {
+  if (assignmentPendingPoliza(contract)) return ContractStatus.CESION_PENDIENTE_POLIZA;
   return contract.status
     ?? (isContractSuspended(contract) ? ContractStatus.SUSPENDIDO : ContractStatus.EN_EJECUCION);
 }
 
 /**
- * Etiqueta visible del estado del contrato: coincide con el valor del enum
- * salvo "Suscrito", cuyo nombre de negocio en la UI es "Sin acta de inicio"
- * (el contrato aún no tiene acta de inicio registrada).
+ * Etiqueta visible del estado del contrato. Coincide con el valor del enum salvo
+ * en dos casos cuyo nombre de negocio en la UI es distinto: "Suscrito" se muestra
+ * como "Sin acta de inicio" (aún no tiene acta registrada) y "Terminado" como
+ * "Terminado (Anticipado)", que es como lo nombra el catálogo del backend
+ * (`Finalizado(Anticipado)`, id 8) y como lo distingue el usuario de un
+ * "Finalizado" normal.
  */
+const ETIQUETAS_ESTADO: Partial<Record<ContractStatus, string>> = {
+  [ContractStatus.SUSCRITO]: 'Sin acta de inicio',
+  [ContractStatus.TERMINADO]: 'Terminado (Anticipado)'
+};
+
 export function contractStatusLabel(status: ContractStatus): string {
-  return status === ContractStatus.SUSCRITO ? 'Sin acta de inicio' : status;
+  return ETIQUETAS_ESTADO[status] ?? status;
 }
 
 /** Hay una novedad "en curso" (estado ENTR del legado) cuando la última está En trámite. */
@@ -104,7 +147,10 @@ export function canAnnulNovelty(contract: Contract, novelty: NoveltySummary): bo
       return novelty.type === NoveltyType.EARLY_TERMINATION;
     case ContractStatus.EN_EJECUCION:
       // En ejecución la última novedad puede ser una adición/prórroga o un reinicio.
-      return [NoveltyType.ADDITION_EXTENSION, NoveltyType.EXTENSION, NoveltyType.RESTART, NoveltyType.ASSIGNMENT]
+      // La **cesión no**: si el contrato volvió a "En ejecución" es porque su póliza
+      // ya se registró, y una cesión con garantía vigente es un trámite terminado, no
+      // un error que revertir. Solo es anulable mientras está pendiente de póliza.
+      return [NoveltyType.ADDITION_EXTENSION, NoveltyType.EXTENSION, NoveltyType.RESTART]
         .includes(novelty.type);
     default:
       return false;
@@ -120,7 +166,73 @@ export function currentContractValue(contract: Contract): number {
 
 /** Plazo vigente en días: plazo inicial (mes = 30 días) + todas las prórrogas históricas. */
 export function currentTermDays(contract: Contract): number {
-  return termToDays(contract.initialTerm) + contract.novelties.reduce((sum, n) => sum + (n.diasProrroga ?? 0), 0);
+  return termToDays(contract.initialTerm) + diasProrrogaAcumulados(contract);
+}
+
+/** Días de prórroga acumulados por las novedades históricas del contrato. */
+function diasProrrogaAcumulados(contract: Contract): number {
+  return contract.novelties.reduce((sum, n) => sum + (n.diasProrroga ?? 0), 0);
+}
+
+/**
+ * Días que las novedades históricas corren la fecha de fin del contrato: las
+ * prórrogas (alargan el plazo) y las suspensiones (lo pausan, pero desplazan el
+ * fin en calendario). El reinicio no suma: sus fechas se derivan de la suspensión
+ * que reanuda, así que sus días ya están contados en ella.
+ */
+function diasQueCorrenElFin(contract: Contract): number {
+  return contract.novelties.reduce((sum, n) => sum + (n.diasProrroga ?? 0) + (n.diasSuspension ?? 0), 0);
+}
+
+/**
+ * Fecha de fin vigente del contrato (yyyy-mm-dd): el fin pactado en el acta de
+ * inicio, corrido por las novedades posteriores.
+ *
+ * El acta de inicio es la fuente autoritativa del período pactado (`FechaFin`) y
+ * **nunca se actualiza** —es el acta de *inicio*—, así que ni prórrogas ni
+ * suspensiones se ven ahí: se suman aquí. Cuando no hay acta cargada (el listado
+ * no la consulta) se cae a la aproximación por plazo, que puede desviarse unos
+ * días del dato real.
+ */
+export function contractEndDate(contract: Contract): string {
+  return contract.endDate
+    ? addDaysToDate(contract.endDate, diasQueCorrenElFin(contract))
+    : addDaysToDate(contract.startDate, currentTermDays(contract) + diasSuspensionAcumulados(contract));
+}
+
+/** Días de suspensión acumulados; solo afectan el calendario, no el plazo de ejecución. */
+function diasSuspensionAcumulados(contract: Contract): number {
+  return contract.novelties.reduce((sum, n) => sum + (n.diasSuspension ?? 0), 0);
+}
+
+/**
+ * Último día válido para una terminación anticipada (yyyy-mm-dd): un día antes
+ * del fin vigente del contrato. Terminar el mismo día en que el contrato ya
+ * vencía no es una terminación *anticipada*, y después de esa fecha el contrato
+ * ya no está en ejecución.
+ */
+export function maxEarlyTerminationDate(contract: Contract): string {
+  return addDaysToDate(contractEndDate(contract), -1);
+}
+
+/**
+ * Lo que falta por repartir en la liquidación de una terminación anticipada:
+ * `valor vigente − (desembolsado + saldo del contratista + saldo de la universidad)`.
+ * Cero = la liquidación cuadra; positivo = falta asignar; negativo = se pasó.
+ *
+ * Los tres valores reparten el contrato completo: lo ya pagado, lo ejecutado y
+ * pendiente de pago, y lo no ejecutado que vuelve a la universidad. El servicio de
+ * actas rechaza el documento cuando no suman ("el balance no cuadra"), así que la
+ * regla se comprueba aquí antes de llegar allá.
+ */
+export function terminationImbalance(
+  contract: Contract,
+  desembolsado: number | null | undefined,
+  saldoContratista: number | null | undefined,
+  saldoUniversidad: number | null | undefined
+): number {
+  const repartido = (Number(desembolsado) || 0) + (Number(saldoContratista) || 0) + (Number(saldoUniversidad) || 0);
+  return currentContractValue(contract) - repartido;
 }
 
 // --- Topes normativos (requerimientos §5.2; TD-006: parametrizar en backend a futuro) ---
