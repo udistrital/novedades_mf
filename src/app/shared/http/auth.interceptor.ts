@@ -1,6 +1,5 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { DEV_TOKEN } from './dev-token'; // TEST TOKEN — borrar junto con dev-token.ts
 
 /** Claves bajo las que el flujo OAuth del shell puede dejar el token; ajustar cuando se confirme la del root. */
 const TOKEN_KEYS = ['access_token', 'id_token', 'token'];
@@ -10,7 +9,8 @@ const API_BASES = [
   environment.ADMINISTRATIVA_PRUEBAS_SERVICE,
   environment.NOVEDADES_MID_SERVICE,
   environment.NOVEDADES_SERVICE,
-  environment.CORE_AMAZON_SERVICE
+  environment.CORE_AMAZON_SERVICE,
+  environment.FINANCIERA_JBPM_SERVICE
 ];
 
 /**
@@ -21,7 +21,6 @@ const API_BASES = [
  */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (!API_BASES.some(base => req.url.startsWith(base))) return next(req);
-  const stored = TOKEN_KEYS.map(k => localStorage.getItem(k)).find(Boolean);
-  const token = stored ?? DEV_TOKEN; // TEST TOKEN — dejar `const token = stored;` al borrar dev-token.ts
+  const token = TOKEN_KEYS.map(k => localStorage.getItem(k)).find(Boolean);
   return next(token ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }) : req);
 };
