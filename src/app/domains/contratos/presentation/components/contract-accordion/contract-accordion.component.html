@@ -1,4 +1,4 @@
-<details class="bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm group">
+<details [open]="expanded" class="bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm group">
   <summary class="p-4 cursor-pointer hover:bg-surface-container-low transition-colors flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-lg">
     <div class="flex-1">
       <div class="flex items-center gap-2 mb-1">
@@ -47,6 +47,16 @@
         </div>
       }
     </div>
+    @if (pendientePoliza) {
+      <div class="flex items-start gap-3 p-3 mb-4 rounded-lg border border-error/40 bg-error-container/30">
+        <mat-icon class="text-error flex items-center justify-center">gpp_maybe</mat-icon>
+        <p class="text-body-md font-body-md text-on-surface">
+          <span class="font-semibold">Contrato cedido sin póliza registrada.</span>
+          Registra la póliza del cesionario para habilitar nuevas novedades sobre el contrato.
+        </p>
+      </div>
+    }
+
     <!-- Novedades Section -->
     <div class="mt-4">
       <div class="flex justify-between items-center mb-3">
@@ -121,12 +131,18 @@
                 </td>
                 <td class="px-3 py-2 text-right">
                   <div class="flex justify-end gap-1">
-                    <a [href]="novelty.documentUrl" target="_blank" rel="noopener"
-                      [class.pointer-events-none]="!novelty.documentUrl"
-                      [class]="novelty.documentUrl ? 'border-outline-variant text-on-surface-variant hover:bg-surface-container-low' : 'border-outline-variant/40 text-on-surface-variant/40'"
-                      class="bg-surface-container-lowest border px-3 py-1 rounded text-label-sm font-bold transition-colors flex items-center gap-1" title="Ver Acta">
-                      <mat-icon class="text-[16px]">visibility</mat-icon> Ver Acta
-                    </a>
+                    <!-- Botón, no enlace: el mid devuelve el documento en base64 dentro de un
+                         JSON, así que navegar al endpoint mostraría el JSON en vez del PDF. -->
+                    <button type="button" (click)="verActa(novelty)"
+                      [disabled]="!novelty.documentId || abriendoActa() === novelty.id"
+                      [title]="novelty.documentId ? 'Ver Acta' : 'Sin acta registrada'"
+                      class="bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:bg-surface-container-low px-3 py-1 rounded text-label-sm font-bold transition-colors flex items-center gap-1 disabled:border-outline-variant/40 disabled:text-on-surface-variant/40 disabled:hover:bg-transparent disabled:cursor-not-allowed">
+                      @if (abriendoActa() === novelty.id) {
+                        <mat-icon class="text-[16px] animate-spin">sync</mat-icon> Abriendo…
+                      } @else {
+                        <mat-icon class="text-[16px]">visibility</mat-icon> Ver Acta
+                      }
+                    </button>
                     @if (!readOnly) {
                       <!-- disabled:text-error/40 en vez de disabled:opacity-50: `opacity` crea un
                            stacking context que se pinta encima del panel de filtros (sticky) al
@@ -146,6 +162,9 @@
           </tbody>
         </table>
       </div>
+      @if (actaError()) {
+        <p role="alert" class="mt-2 text-label-sm font-label-sm text-error">{{ actaError() }}</p>
+      }
     </div>
   </div>
 </details>

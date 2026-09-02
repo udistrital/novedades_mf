@@ -25,7 +25,7 @@ import { addDaysToDate, formatCop, toDisplayDate, todayIso } from '../../../../.
 import { NoveltyType } from '../../../domain/models/novelty-type.enum';
 import { CesionDraft, NoveltyDraft } from '../../../domain/models/novelty-draft.model';
 import { Assignee } from '../../../domain/models/assignee.model';
-import { currentContractValue } from '../../../domain/contract.rules';
+import { contractEndDate, currentContractValue } from '../../../domain/contract.rules';
 
 /**
  * Página de creación de la novedad de Cesión: transfiere el contrato del
@@ -63,6 +63,14 @@ export class CrearCesionComponent extends CreateNoveltyPage {
   private readonly fb = inject(FormBuilder);
 
   readonly noveltyName = 'Cesión';
+
+  /**
+   * Interruptor de la posición del considerando, hoy **apagado** por decisión de
+   * negocio: el campo no se le pide al usuario, pero el control, el draft y el
+   * payload siguen intactos. Ponerlo en `true` restituye el campo y su
+   * obligatoriedad. Equivalente a `MOSTRAR_POSICION` de la cláusula adicional.
+   */
+  protected readonly MOSTRAR_POSICION_CONSIDERANDO = false;
 
   /** Sin selección todavía: la tarjeta permanece visible pero sin datos hasta elegir la cédula. */
   readonly assignee = signal<Assignee | null>(null);
@@ -112,6 +120,24 @@ export class CrearCesionComponent extends CreateNoveltyPage {
 
   readonly saldoCesionarioTexto = computed(() => formatCop(this.saldoCesionario()));
 
+  /**
+   * Tope de "Fecha cesión": el fin vigente del contrato.
+   *
+   * Ceder después de esa fecha no deja nada que ejecutar al cesionario, y el acta lo
+   * hace evidente: su "por un plazo de …" —que se deriva de esta fecha hasta el fin
+   * del contrato— sale en blanco (`________`) porque el plazo resultante es negativo.
+   */
+  readonly maxFechaCesion = computed(() => {
+    const c = this.state.selectedContract();
+    return c ? contractEndDate(c) : '';
+  });
+
+  /** La cesión no puede ser posterior al fin vigente del contrato. */
+  private readonly topeFechaCesion = (ctrl: AbstractControl): ValidationErrors | null => {
+    const max = this.maxFechaCesion();
+    return max && ctrl.value && ctrl.value > max ? { maxDate: { max } } : null;
+  };
+
   /** Los valores de la cesión no pueden superar el valor vigente del contrato (§5.3). */
   private readonly topeValorContrato = (ctrl: AbstractControl): ValidationErrors | null => {
     const c = this.state.selectedContract();
@@ -128,11 +154,15 @@ export class CrearCesionComponent extends CreateNoveltyPage {
     const favorCedente = this.form.controls.valorFavorCedente;
     desembolsado.addValidators(this.topeValorContrato);
     favorCedente.addValidators(this.topeValorContrato);
-    // El tope depende del contrato: al cargarlo se revalida lo ya digitado.
+    this.form.controls.fechaSesion.addValidators(this.topeFechaCesion);
+    // El tope depende del contrato: al cargarlo se revalida lo ya digitado. La fecha
+    // entra aquí porque su valor por defecto es hoy: en un contrato ya vencido queda
+    // fuera de rango desde el arranque, y el usuario tiene que enterarse.
     effect(() => {
       this.state.selectedContract();
       desembolsado.updateValueAndValidity({ emitEvent: false });
       favorCedente.updateValueAndValidity({ emitEvent: false });
+      this.form.controls.fechaSesion.updateValueAndValidity({ emitEvent: false });
     });
 
     // Fecha de terminación del cedente: siempre un día antes de la fecha de cesión.
@@ -147,7 +177,9 @@ export class CrearCesionComponent extends CreateNoveltyPage {
     const considerandoPosicion = this.considerando.controls['posicion'];
     const considerandoTexto = this.considerando.controls['texto'];
     considerandoActivo.valueChanges.pipe(startWith(considerandoActivo.value), takeUntilDestroyed()).subscribe((isActive: boolean) => {
-      considerandoPosicion.setValidators(isActive ? [Validators.required, Validators.min(1)] : [Validators.min(1)]);
+      // Solo obligatoria si además se está pidiendo (ver MOSTRAR_POSICION_CONSIDERANDO).
+      const exigirPosicion = isActive && this.MOSTRAR_POSICION_CONSIDERANDO;
+      considerandoPosicion.setValidators(exigirPosicion ? [Validators.required, Validators.min(1)] : [Validators.min(1)]);
       considerandoTexto.setValidators(isActive ? [Validators.required] : []);
       considerandoPosicion.updateValueAndValidity({ emitEvent: false });
       considerandoTexto.updateValueAndValidity({ emitEvent: false });
@@ -188,6 +220,7 @@ export class CrearCesionComponent extends CreateNoveltyPage {
       valorFavorCedente: v.valorFavorCedente ?? null,
       diasFaltantes: v.diasFaltantes ?? null,
       cedulaCesionario: v.cedulaCesionario ?? '',
+      cesionario: this.assignee() ?? undefined,
       considerando: v.considerando as CesionDraft['considerando'],
       clausula: v.clausula as CesionDraft['clausula']
     };

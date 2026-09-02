@@ -6,12 +6,13 @@
     [responsible]="state.selectedContract()?.supervisor ?? ''"
     (back)="goBack()" />
 } @else if (pageState() === 'error') {
-  <app-novelty-error [noveltyName]="noveltyName" (retry)="onRetry()" (back)="goBack()" />
+  <app-novelty-error [noveltyName]="noveltyName" [error]="errorInfo()" (retry)="onRetry()" (back)="goBack()" />
 } @else {
 <app-novelty-page-layout
   title="Crear Acta de Terminación Anticipada"
   [breadcrumbItems]="breadcrumb()"
-  [contract]="state.selectedContract()">
+  [contract]="state.selectedContract()"
+  [error]="state.contractError()">
 
   <form [formGroup]="form" (ngSubmit)="onSubmit($event)" class="flex flex-col gap-stack-lg">
 
@@ -25,13 +26,13 @@
           <input appFormInput id="fecha_expedicion" type="date" formControlName="fechaExpedicionActa">
         </app-form-field>
         <app-form-field label="Número oficio supervisor a ordenador" for="num_oficio_sup" [required]="true" [control]="form.controls['numOficioSupervisor']">
-          <input appFormInput id="num_oficio_sup" type="text" placeholder="Ej. OFI-2024-001" formControlName="numOficioSupervisor">
+          <input appFormInput id="num_oficio_sup" type="text" placeholder="Ej. 123" formControlName="numOficioSupervisor">
         </app-form-field>
         <app-form-field label="Fecha oficio supervisor a ordenador" for="fecha_oficio_sup">
           <input appFormInput id="fecha_oficio_sup" type="date" formControlName="fechaOficioSupervisor">
         </app-form-field>
         <app-form-field label="Número oficio ordenador a OC" for="num_oficio_ord" [required]="true" [control]="form.controls['numOficioOrdenador']">
-          <input appFormInput id="num_oficio_ord" type="text" placeholder="Ej. OFI-2024-002" formControlName="numOficioOrdenador">
+          <input appFormInput id="num_oficio_ord" type="text" placeholder="Ej. 124" formControlName="numOficioOrdenador">
         </app-form-field>
         <app-form-field label="Fecha oficio ordenador a OC" for="fecha_oficio_ord">
           <input appFormInput id="fecha_oficio_ord" type="date" formControlName="fechaOficioOrdenador">
@@ -50,28 +51,48 @@
             <span class="font-title-md text-title-md text-on-surface">Datos de la terminación</span>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
-            <app-form-field label="Fecha Terminación Anticipada (Último día trabajado):" for="fecha_terminacion">
-              <input appFormInput id="fecha_terminacion" type="date" formControlName="fechaTerminacion">
+            <app-form-field label="Fecha Terminación Anticipada (Último día trabajado):" for="fecha_terminacion" [control]="form.controls['fechaTerminacion']">
+              <input appFormInput id="fecha_terminacion" type="date" formControlName="fechaTerminacion" [max]="maxFechaTerminacion()">
             </app-form-field>
             <app-form-field label="Fecha certificación" for="fecha_certificacion">
               <input appFormInput id="fecha_certificacion" type="date" formControlName="fechaCertificacion">
             </app-form-field>
             <app-money-field label="Valor desembolsado" for="valor_desembolsado" [required]="true" [control]="form.controls['valorDesembolsado']">
-              <input appFormInput class="!pl-7" id="valor_desembolsado" type="number" min="1" placeholder="0.00" formControlName="valorDesembolsado">
+              <input appFormInput class="!pl-7" id="valor_desembolsado" type="number" min="1" placeholder="Ej. 1000000" formControlName="valorDesembolsado">
             </app-money-field>
             <app-money-field label="Saldo a favor del contratista" for="saldo_contratista" [required]="true" [control]="form.controls['saldoFavorContratista']">
-              <input appFormInput class="!pl-7" id="saldo_contratista" type="number" min="0" placeholder="0.00" formControlName="saldoFavorContratista">
+              <input appFormInput class="!pl-7" id="saldo_contratista" type="number" min="0" placeholder="Ej. 1000000" formControlName="saldoFavorContratista">
             </app-money-field>
             <app-money-field label="Saldo a favor de la Universidad" for="saldo_universidad" [required]="true" [control]="form.controls['saldoFavorUniversidad']">
-              <input appFormInput class="!pl-7" id="saldo_universidad" type="number" min="0" placeholder="0.00" formControlName="saldoFavorUniversidad">
+              <input appFormInput class="!pl-7" id="saldo_universidad" type="number" min="0" placeholder="Ej. 1000000" formControlName="saldoFavorUniversidad">
             </app-money-field>
+            <!-- Los tres valores reparten el contrato completo: si no suman su valor
+                 vigente, el acta se rechaza. Se avisa aquí con la diferencia exacta. -->
+            @if (restanteLiquidacion() !== 0) {
+              <div class="md:col-span-2 flex items-start gap-3 p-3 rounded-lg border border-error/40 bg-error-container/30">
+                <mat-icon class="text-error flex items-center justify-center">calculate</mat-icon>
+                <p class="text-body-md font-body-md text-on-surface">
+                  El valor desembolsado y los dos saldos deben sumar el valor vigente del contrato
+                  (<span class="font-semibold">{{ valorVigenteTexto() }}</span>).
+                  @if (restanteLiquidacion() > 0) {
+                    Faltan <span class="font-semibold">{{ restanteTexto() }}</span> por asignar.
+                  } @else {
+                    Se exceden en <span class="font-semibold">{{ restanteTexto() }}</span>.
+                  }
+                </p>
+              </div>
+            }
           </div>
         </div>
 
         <!-- Cláusula Adicional -->
         <app-additional-clause-section [group]="clausula" />
 
-        <app-document-preview-control />
+        <app-document-preview-control
+          [(fontSize)]="tamanoLetra"
+          [loading]="previsualizando()"
+          [error]="previewError()"
+          (preview)="previsualizarActa()" />
       </div>
     </app-card>
 

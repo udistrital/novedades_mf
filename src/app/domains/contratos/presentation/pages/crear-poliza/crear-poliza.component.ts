@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ContractStateService } from '../../../application/contract-state.service';
 import { IContractRepository } from '../../../domain/repositories/contract.repository';
 import { NoveltyType } from '../../../domain/models/novelty-type.enum';
+import { volverAlContrato } from '../create-novelty-page.base';
 import { getLatestNovelty } from '../../../domain/contract.rules';
 import { Poliza } from '../../../domain/models/poliza.model';
 
@@ -20,6 +21,7 @@ import { FormInputDirective } from '../../../../../shared/ui/form-input.directiv
 import { NoveltyFormActionsComponent } from '../../../../../shared/ui/novelty-form-actions.component';
 import { BreadcrumbItem } from '../../../../../shared/ui/breadcrumb.component';
 import { formatExecutionDate } from '../../../../../shared/util/format.util';
+import { ApiErrorInfo, describeApiError } from '../../../../../shared/http/api-error';
 
 type PageState = 'form' | 'success' | 'error';
 
@@ -63,16 +65,22 @@ export class CrearPolizaComponent {
   readonly showConfirm = signal(false);
   readonly executedAt = signal('');
   readonly summary = signal<NoveltySummaryItem[]>([]);
+  /** Error real del último registro fallido, ya traducido para el usuario. */
+  readonly errorInfo = signal<ApiErrorInfo | null>(null);
   /** Póliza existente de la última cesión; null mientras carga o si no se encontró. */
   readonly poliza = signal<Poliza | null>(null);
 
   readonly aseguradoras = toSignal(this.repository.getAseguradoras(), { initialValue: [] });
 
-  readonly breadcrumb = computed<BreadcrumbItem[]>(() => [
-    { label: 'Seguimiento Legal', link: '/' },
-    { label: `Contrato No. ${this.state.selectedContract()?.number ?? ''}`, link: '/' },
-    { label: 'Registrar Póliza' }
-  ]);
+  readonly breadcrumb = computed<BreadcrumbItem[]>(() => {
+    // Igual que en las páginas de novedad: el panel vuelve a consultar este contrato.
+    const alPanel = volverAlContrato(this.contractId);
+    return [
+      { label: 'Seguimiento Legal', link: '/', queryParams: alPanel },
+      { label: `Contrato No. ${this.state.selectedContract()?.number ?? ''}`, link: '/', queryParams: alPanel },
+      { label: 'Registrar Póliza' }
+    ];
+  });
 
   readonly form = this.fb.group({
     entidadAseguradoraId: [null as number | null, Validators.required],
@@ -147,9 +155,10 @@ export class CrearPolizaComponent {
         this.executedAt.set(formatExecutionDate());
         this.pageState.set('success');
       },
-      error: () => {
+      error: (err: unknown) => {
         this.submitting.set(false);
         this.showConfirm.set(false);
+        this.errorInfo.set(describeApiError(err));
         this.pageState.set('error');
       }
     });
@@ -163,7 +172,8 @@ export class CrearPolizaComponent {
     this.pageState.set('form');
   }
 
+  /** Igual que en las páginas de novedad: el panel vuelve a consultar este contrato. */
   goBack(): void {
-    this.router.navigateByUrl('/');
+    this.router.navigate(['/'], { queryParams: volverAlContrato(this.contractId) });
   }
 }

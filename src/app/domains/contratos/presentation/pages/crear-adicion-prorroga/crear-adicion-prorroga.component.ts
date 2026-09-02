@@ -21,7 +21,6 @@ import { addDaysToTerm, formatCop, formatCopWords, todayIso } from '../../../../
 import { NoveltyType } from '../../../domain/models/novelty-type.enum';
 import { AdicionProrrogaDraft, NoveltyDraft } from '../../../domain/models/novelty-draft.model';
 import {
-  availableVigencias,
   currentContractValue,
   maxAdditionValue,
   maxExtensionDays
@@ -62,7 +61,8 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
   private readonly fb = inject(FormBuilder);
 
   readonly noveltyName = 'Adición y Prórroga';
-  readonly vigencias = availableVigencias();
+  /** Vigencias del catálogo del backend (ver `ContractStateService.vigencias`). */
+  readonly vigencias = this.state.vigencias;
 
   readonly form = this.fb.group({
     solicitud: this.fb.group({
@@ -73,8 +73,13 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
       fechaActa: [todayIso()]
     }),
     adicion: this.fb.group({
-      numCdp: ['', Validators.min(0)],
-      vigencia: [this.vigencias[0]],
+      // El número de CDP es un IDENTIFICADOR, no una cantidad: puede traer letras y
+      // guiones ("CDP-001"). Con `type="number"` el navegador descartaba en silencio
+      // todo lo que no fuera un número —el usuario veía su texto y el control llegaba
+      // vacío—, así que el acta imprimía el CDP en blanco. Sin `Validators.min`, que
+      // no aplica a una cadena.
+      numCdp: [''],
+      vigencia: [this.vigencias()[0]],
       valorAdicional: [null as number | null, [Validators.required, Validators.min(1)]],
       fechaAdicion: [todayIso()]
     }),
@@ -97,24 +102,51 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
     return c ? currentContractValue(c) : 0;
   });
 
-  readonly nuevoValor = computed(() => {
-    const add = Number(this.formValue()?.adicion?.valorAdicional) || 0;
-    return this.valorVigente() + add;
+  /**
+   * Valor de la adición digitado, recortado al tope legal.
+   *
+   * Las proyecciones de abajo ("Nuevo Valor", resumen del modal) se calculan sobre
+   * este valor y no sobre el crudo: el contrato no puede llegar más allá del vigente
+   * más el 50 %, así que mostrar una cifra mayor proyectaría un contrato imposible.
+   * El campo, en cambio, conserva lo digitado y muestra el error del tope.
+   */
+  private readonly adicionTopeada = computed(() => {
+    const c = this.state.selectedContract();
+    const valor = Math.max(Number(this.formValue()?.adicion?.valorAdicional) || 0, 0);
+    // Se trunca a pesos enteros: el tope es la mitad del valor vigente y puede caer
+    // en media unidad, y ahí el número (que redondea) y las letras (que truncan)
+    // mostrarían cifras distintas para el mismo campo.
+    return Math.floor(c ? Math.min(valor, maxAdditionValue(c)) : valor);
   });
+
+  /** Días de prórroga digitados, recortados al tope legal (mismo criterio que `adicionTopeada`). */
+  private readonly prorrogaTopeada = computed(() => {
+    const c = this.state.selectedContract();
+    const dias = Math.max(Number(this.formValue()?.prorroga?.tiempoDias) || 0, 0);
+    return c ? Math.min(dias, maxExtensionDays(c)) : dias;
+  });
+
+  readonly nuevoValor = computed(() => this.valorVigente() + this.adicionTopeada());
 
   readonly nuevoValorEnLetras = computed(() => formatCopWords(this.nuevoValor()));
 
+  /**
+   * Valor de la adición en letras. **Desaparece al superar el tope**: el campo ya
+   * muestra el error con el máximo permitido, y repetir en letras una cifra que no
+   * se va a poder registrar solo la confirma.
+   */
   readonly valorAdicionalEnLetras = computed(() => {
-    const valor = Number(this.formValue()?.adicion?.valorAdicional);
-    return valor > 0 ? formatCopWords(valor) : '';
+    const c = this.state.selectedContract();
+    const valor = Number(this.formValue()?.adicion?.valorAdicional) || 0;
+    if (valor <= 0 || (c && valor > maxAdditionValue(c))) return '';
+    return formatCopWords(valor);
   });
 
   readonly nuevoPlazo = computed(() => {
     const c = this.state.selectedContract();
-    // Prórrogas históricas + la nueva, sobre el plazo inicial (mes = 30 días).
+    // Prórrogas históricas + la nueva (topeada), sobre el plazo inicial (mes = 30 días).
     const diasHistoricos = c?.novelties.reduce((s, n) => s + (n.diasProrroga ?? 0), 0) ?? 0;
-    const diasNuevos = Number(this.formValue()?.prorroga?.tiempoDias) || 0;
-    return addDaysToTerm(c?.initialTerm, diasHistoricos + diasNuevos);
+    return addDaysToTerm(c?.initialTerm, diasHistoricos + this.prorrogaTopeada());
   });
 
   /** El legado exige un Ordenador del Gasto asignado para tramitar esta novedad (§5.2). */
@@ -162,7 +194,7 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
   onClear(): void {
     this.form.reset({
       solicitud: { fechaSolicitud: todayIso(), fechaOficio: todayIso(), fechaActa: todayIso() },
-      adicion: { vigencia: this.vigencias[0], fechaAdicion: todayIso() },
+      adicion: { vigencia: this.vigencias()[0], fechaAdicion: todayIso() },
       prorroga: { fechaProrroga: todayIso() }
     });
   }

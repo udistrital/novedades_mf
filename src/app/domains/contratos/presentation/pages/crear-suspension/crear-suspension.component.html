@@ -6,15 +6,17 @@
     [responsible]="state.selectedContract()?.supervisor ?? ''"
     (back)="goBack()" />
 } @else if (pageState() === 'error') {
-  <app-novelty-error [noveltyName]="noveltyName" (retry)="onRetry()" (back)="goBack()" />
+  <app-novelty-error [noveltyName]="noveltyName" [error]="errorInfo()" (retry)="onRetry()" (back)="goBack()" />
 } @else {
 <app-novelty-page-layout
   title="Crear Acta de Novedad de Suspensión"
   [breadcrumbItems]="breadcrumb()"
-  [contract]="state.selectedContract()">
+  [contract]="state.selectedContract()"
+  [error]="state.contractError()">
 
   <form [formGroup]="form" (ngSubmit)="onSubmit($event)" class="flex flex-col gap-stack-lg">
 
+    <!-- Datos de la Solicitud -->
     <app-card title="Datos de la Solicitud" icon="folder_open">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
         <app-form-field label="Fecha de solicitud" for="fecha_solicitud">
@@ -24,41 +26,60 @@
           <input appFormInput id="fecha_expedicion" type="date" formControlName="fechaExpedicionActa">
         </app-form-field>
         <app-form-field label="Número oficio supervisor a ordenador" for="num_oficio_sup" [required]="true" [control]="form.controls['numOficioSupervisor']">
-          <input appFormInput id="num_oficio_sup" type="text" formControlName="numOficioSupervisor">
+          <input appFormInput id="num_oficio_sup" type="text" placeholder="Ej. 123" formControlName="numOficioSupervisor">
         </app-form-field>
         <app-form-field label="Fecha oficio supervisor a ordenador" for="fecha_oficio_sup">
           <input appFormInput id="fecha_oficio_sup" type="date" formControlName="fechaOficioSupervisor">
         </app-form-field>
         <app-form-field label="Número oficio ordenador a OC" for="num_oficio_ord" [required]="true" [control]="form.controls['numOficioOrdenador']">
-          <input appFormInput id="num_oficio_ord" type="text" formControlName="numOficioOrdenador">
+          <input appFormInput id="num_oficio_ord" type="text" placeholder="Ej. 124" formControlName="numOficioOrdenador">
         </app-form-field>
         <app-form-field label="Fecha oficio ordenador a OC" for="fecha_oficio_ord">
           <input appFormInput id="fecha_oficio_ord" type="date" formControlName="fechaOficioOrdenador">
         </app-form-field>
-        <app-form-field label="Fecha inicio suspensión" for="fecha_inicio" [required]="true" [control]="form.controls['fechaInicio']">
-          <input appFormInput id="fecha_inicio" type="date" [attr.min]="minFechaInicio()" formControlName="fechaInicio">
-        </app-form-field>
-        <app-form-field label="Fecha fin suspensión" for="fecha_fin" [required]="true" [control]="form.controls['fechaFin']">
-          <input appFormInput id="fecha_fin" type="date" [attr.min]="minFechaFin" formControlName="fechaFin">
-        </app-form-field>
-        <app-form-field label="Periodo suspensión (Días)" for="periodo_suspension">
-          <input appFormInput id="periodo_suspension" type="number" formControlName="periodoDias">
-        </app-form-field>
-        <app-form-field label="Fecha reinicio" for="fecha_reinicio">
-          <input appFormInput id="fecha_reinicio" type="date" formControlName="fechaReinicio">
-        </app-form-field>
-        <div class="md:col-span-2">
-          <app-form-field label="Motivo de suspensión" for="motivo" [required]="true" [control]="form.controls['motivo']">
-            <textarea appFormInput id="motivo" rows="4" maxlength="249" formControlName="motivo"></textarea>
-          </app-form-field>
+      </div>
+    </app-card>
+
+    <!-- Configuración de la Novedad -->
+    <app-card title="Configuración de la Novedad" icon="settings_applications">
+      <div class="flex flex-col gap-stack-lg">
+
+        <!-- Datos de la suspensión -->
+        <div class="border border-outline-variant/30 rounded-lg p-4 flex flex-col gap-stack-md">
+          <div class="flex items-center gap-3">
+            <mat-icon class="text-primary flex items-center justify-center">pause_circle</mat-icon>
+            <span class="font-title-md text-title-md text-on-surface">Datos de la suspensión</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+            <app-form-field label="Fecha inicio suspensión" for="fecha_inicio" [required]="true" [control]="form.controls['fechaInicio']">
+              <input appFormInput id="fecha_inicio" type="date" [attr.min]="minFechaInicio()" formControlName="fechaInicio">
+            </app-form-field>
+            <app-form-field label="Fecha fin suspensión" for="fecha_fin" [required]="true" [control]="form.controls['fechaFin']">
+              <input appFormInput id="fecha_fin" type="date" [attr.min]="minFechaFin" [attr.max]="maxFechaFin()" formControlName="fechaFin">
+            </app-form-field>
+            <app-form-field label="Periodo suspensión (Días)" for="periodo_suspension">
+              <input appFormInput id="periodo_suspension" type="number" formControlName="periodoDias">
+            </app-form-field>
+            <app-form-field label="Fecha reinicio" for="fecha_reinicio">
+              <input appFormInput id="fecha_reinicio" type="date" formControlName="fechaReinicio">
+            </app-form-field>
+            <div class="md:col-span-2">
+              <app-form-field label="Motivo de suspensión" for="motivo" [required]="true" [control]="form.controls['motivo']">
+                <textarea appFormInput id="motivo" rows="4" maxlength="249" placeholder="Redacte aquí el motivo de la suspensión..." formControlName="motivo"></textarea>
+              </app-form-field>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="mt-stack-md">
+        <!-- Cláusula Adicional -->
         <app-additional-clause-section [group]="clausula" />
-      </div>
 
-      <app-document-preview-control />
+        <app-document-preview-control
+          [(fontSize)]="tamanoLetra"
+          [loading]="previsualizando()"
+          [error]="previewError()"
+          (preview)="previsualizarActa()" />
+      </div>
     </app-card>
 
     <app-novelty-form-actions [submitting]="submitting()" (clear)="onClear()" />

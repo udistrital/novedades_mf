@@ -44,7 +44,7 @@ import { Assignee } from '../../../domain/models/assignee.model';
 export class ContractorAutocompleteComponent implements ControlValueAccessor, Validator {
   private readonly state = inject(ContractStateService);
 
-  readonly placeholder = input('C.C. o NIT');
+  readonly placeholder = input('Buscar por número de documento...');
   /** Restringe las opciones a personas naturales (el cesionario debe serlo, requerimientos §5.3). */
   readonly soloNaturales = input(false);
   readonly selected = output<Assignee>();

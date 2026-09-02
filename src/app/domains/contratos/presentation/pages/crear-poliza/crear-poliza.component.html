@@ -11,13 +11,15 @@
   <app-novelty-error
     noveltyName="Registro de Póliza"
     title="Error al Registrar Póliza"
+    [error]="errorInfo()"
     (retry)="onRetry()"
     (back)="goBack()" />
 } @else {
 <app-novelty-page-layout
   title="Registrar Póliza del Cesionario"
   [breadcrumbItems]="breadcrumb()"
-  [contract]="state.selectedContract()">
+  [contract]="state.selectedContract()"
+  [error]="state.contractError()">
 
   <form [formGroup]="form" (ngSubmit)="onSubmit($event)" class="flex flex-col gap-stack-lg">
 
@@ -44,7 +46,7 @@
             </select>
           </app-form-field>
           <app-form-field label="Número de Póliza" for="numero_poliza" [required]="true" [control]="form.controls.numeroPoliza">
-            <input appFormInput id="numero_poliza" type="text" placeholder="Ej. 21-44-101223344" formControlName="numeroPoliza">
+            <input appFormInput id="numero_poliza" type="text" placeholder="Número que asigna la aseguradora" formControlName="numeroPoliza">
           </app-form-field>
         </div>
       </div>

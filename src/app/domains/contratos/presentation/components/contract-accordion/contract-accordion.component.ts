@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Contract, NoveltySummary } from '../../../domain/models/contract.entity';
 import { ContractAction } from '../../../domain/models/contract-status.enum';
 import {
+  assignmentPendingPoliza,
   availableActions,
   canManageContract,
   contractStatusLabel,
@@ -14,6 +15,7 @@ import {
 } from '../../../domain/contract.rules';
 import { UserSessionService } from '../../../../../shared/auth/user-session.service';
 import { formatDocument } from '../../../../../shared/util/format.util';
+import { ActaViewerService } from '../../../application/acta-viewer.service';
 
 interface NoveltyMenuOption {
   action: ContractAction;
@@ -50,8 +52,19 @@ const MENU_OPTIONS: Record<ContractAction, NoveltyMenuOption> = {
 })
 export class ContractAccordionComponent {
   @Input({ required: true }) contract!: Contract;
+  /**
+   * Abre el detalle de entrada. Se usa cuando la búsqueda identifica un contrato
+   * único (número + vigencia); el usuario puede cerrarlo normalmente después.
+   */
+  @Input() expanded = false;
 
   private readonly userSession = inject(UserSessionService);
+  private readonly actaViewer = inject(ActaViewerService);
+
+  /** Id de la novedad cuya acta se está descargando (una a la vez). */
+  readonly abriendoActa = signal<string | null>(null);
+  /** Mensaje de error de la última descarga de acta; vacío si no hubo. */
+  readonly actaError = signal('');
 
   /** Solicitud de anulación de una novedad. */
   readonly annul = output<NoveltySummary>();
@@ -88,6 +101,16 @@ export class ContractAccordionComponent {
     return !canManageContract(session.roles, session.documento, this.contract);
   }
 
+  /**
+   * Cesión cerrada sin póliza: el contrato queda cedido pero no puede recibir más
+   * novedades hasta registrar la garantía del cesionario. Es el único bloqueo que
+   * el usuario puede levantar por sí mismo, así que la tarjeta lo dice y deja
+   * "Agregar Póliza" como única opción del menú.
+   */
+  get pendientePoliza(): boolean {
+    return !!assignmentPendingPoliza(this.contract);
+  }
+
   /** Una novedad "En trámite" bloquea cualquier acción nueva sobre el contrato. */
   get bloqueadoPorTramite(): boolean {
     return hasNoveltyInProgress(this.contract);
@@ -106,6 +129,25 @@ export class ContractAccordionComponent {
   onActivate(): void {
     this.closeMenu();
     this.activate.emit();
+  }
+
+  /**
+   * Descarga el acta (o la toma de caché) y la abre en otra pestaña.
+   *
+   * No se navega al endpoint: el mid devuelve el documento en base64 dentro de un
+   * envoltorio JSON, no el archivo.
+   */
+  verActa(novelty: NoveltySummary): void {
+    if (!novelty.documentId || this.abriendoActa()) return;
+    this.actaError.set('');
+    this.abriendoActa.set(novelty.id);
+    this.actaViewer.open(novelty.documentId).subscribe({
+      complete: () => this.abriendoActa.set(null),
+      error: () => {
+        this.abriendoActa.set(null);
+        this.actaError.set('No se pudo abrir el acta. Intenta de nuevo en unos momentos.');
+      }
+    });
   }
 
   toggleMenu(): void {

@@ -1,7 +1,8 @@
-import { Component, effect, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, computed, effect, inject } from '@angular/core';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { combineLatest, startWith } from 'rxjs';
+import { MatIconModule } from '@angular/material/icon';
 
 import { CreateNoveltyPage } from '../create-novelty-page.base';
 import { NoveltyPageLayoutComponent } from '../../components/novelty-page-layout/novelty-page-layout.component';
@@ -14,11 +15,12 @@ import { FormInputDirective } from '../../../../../shared/ui/form-input.directiv
 import { NoNegativeNumberDirective } from '../../../../../shared/ui/no-negative-number.directive';
 import { DocumentPreviewControlComponent } from '../../../../../shared/ui/document-preview-control.component';
 import { NoveltyFormActionsComponent } from '../../../../../shared/ui/novelty-form-actions.component';
-import { addDaysToDate, daysBetween, toDisplayDate, todayIso } from '../../../../../shared/util/format.util';
+import { addDaysToDate, periodDays, toDisplayDate, toIsoDate, todayIso } from '../../../../../shared/util/format.util';
 
 import { NoveltyType } from '../../../domain/models/novelty-type.enum';
+import { NoveltySummary } from '../../../domain/models/contract.entity';
 import { ReinicioDraft, NoveltyDraft } from '../../../domain/models/novelty-draft.model';
-import { getLatestNovelty } from '../../../domain/contract.rules';
+import { activeSuspension } from '../../../domain/contract.rules';
 
 /**
  * Página de creación de la novedad de Reinicio tras una suspensión.
@@ -32,6 +34,7 @@ import { getLatestNovelty } from '../../../domain/contract.rules';
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    MatIconModule,
     NoveltyPageLayoutComponent,
     ConfirmNoveltyModalComponent,
     NoveltyResultComponent,
@@ -61,6 +64,36 @@ export class CrearReinicioComponent extends CreateNoveltyPage {
     fechaReinicio: [{ value: '', disabled: true }]
   });
 
+  /**
+   * Tope de "Fecha fin suspensión": el fin registrado en la suspensión vigente.
+   * El reinicio puede adelantarse (terminar la suspensión antes de lo previsto),
+   * nunca extenderla más allá de lo ya aprobado.
+   */
+  readonly maxFinSuspension = computed(() => this.finSuspension());
+
+  /**
+   * Piso de "Fecha fin suspensión": un día después de su inicio. Misma regla que en la
+   * creación de la suspensión —el período mínimo es de un día—, que aquí faltaba: el
+   * campo solo tenía tope superior, así que adelantar el fin por debajo del inicio
+   * daba un período negativo y así viajaba a la novedad y al acta.
+   */
+  readonly minFinSuspension = computed(() => {
+    const inicio = this.inicioSuspension();
+    return inicio ? addDaysToDate(inicio, 1) : '';
+  });
+
+  /** La fecha de fin no puede ser posterior a la registrada en la suspensión. */
+  private readonly topeFinSuspension = (ctrl: AbstractControl): ValidationErrors | null => {
+    const max = this.maxFinSuspension();
+    return max && ctrl.value && ctrl.value > max ? { maxDate: { max } } : null;
+  };
+
+  /** … ni anterior al inicio de esa misma suspensión. */
+  private readonly pisoFinSuspension = (ctrl: AbstractControl): ValidationErrors | null => {
+    const min = this.minFinSuspension();
+    return min && ctrl.value && ctrl.value < min ? { minDate: { min } } : null;
+  };
+
   constructor() {
     super();
 
@@ -69,33 +102,54 @@ export class CrearReinicioComponent extends CreateNoveltyPage {
     const periodo = this.form.controls.periodoDias;
     const reinicio = this.form.controls.fechaReinicio;
 
+    fin.addValidators([this.topeFinSuspension, this.pisoFinSuspension]);
+
     combineLatest([
       inicio.valueChanges.pipe(startWith(inicio.value)),
       fin.valueChanges.pipe(startWith(fin.value))
     ]).pipe(takeUntilDestroyed()).subscribe(([i, f]) => {
-      periodo.setValue(daysBetween(i, f), { emitEvent: false });
+      // Un período inválido se deja en blanco en vez de mostrar un número negativo.
+      periodo.setValue(!!i && !!f && i >= f ? null : periodDays(i, f), { emitEvent: false });
       reinicio.setValue(f ? addDaysToDate(f, 1) : '', { emitEvent: false });
     });
 
-    // Fecha inicio de la suspensión: se toma de la última novedad del contrato (la suspensión
-    // vigente; a esta página solo se llega cuando esa es la última novedad). Se usa la fecha
-    // efectiva de la suspensión (cuándo empieza realmente), no la de expedición del acta —
-    // pueden diferir. Es un FormControl.setValue, no una escritura de signal: no requiere
-    // allowSignalWrites.
+    // Período de la suspensión vigente: se precarga tal como quedó registrado en la
+    // novedad (`FechaSuspension` / `FechaFinSuspension`), no con la fecha de hoy ni
+    // con la de expedición del acta, que pueden diferir del período real.
+    // (A esta página solo se llega cuando la última novedad es una suspensión.)
+    // Son FormControl.setValue, no escrituras de signal: no requiere allowSignalWrites.
     effect(() => {
-      const contract = this.state.selectedContract();
-      const latest = contract ? getLatestNovelty(contract) : undefined;
-      if (latest?.type === NoveltyType.SUSPENSION && !inicio.value) {
-        inicio.setValue(addDaysToDate(latest.effectiveDate ?? latest.expeditionDate, 0));
-      }
+      const suspension = this.suspensionVigente();
+      if (!suspension) return;
+      if (!inicio.value) inicio.setValue(this.inicioSuspension());
+      if (fin.pristine) fin.setValue(this.finSuspension());
+      fin.updateValueAndValidity({ emitEvent: false });
     });
+  }
+
+  /** Suspensión que este reinicio reanuda: la última novedad del contrato. */
+  private suspensionVigente(): NoveltySummary | undefined {
+    const contract = this.state.selectedContract();
+    return contract ? activeSuspension(contract) : undefined;
+  }
+
+  /** Inicio real de la suspensión; cae a la expedición del acta si el backend no lo trae. */
+  private inicioSuspension(): string {
+    const s = this.suspensionVigente();
+    return toIsoDate(s?.effectiveDate ?? s?.expeditionDate ?? '');
+  }
+
+  private finSuspension(): string {
+    return toIsoDate(this.suspensionVigente()?.effectiveEndDate ?? '') || todayIso();
   }
 
   onClear(): void {
     this.form.reset({
       fechaSolicitud: todayIso(),
       fechaExpedicionActa: todayIso(),
-      fechaFinSuspension: todayIso()
+      // Vuelve al período registrado en la suspensión, no a hoy.
+      fechaInicioSuspension: this.inicioSuspension(),
+      fechaFinSuspension: this.finSuspension()
     });
   }
 

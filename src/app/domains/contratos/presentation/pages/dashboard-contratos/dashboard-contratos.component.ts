@@ -1,5 +1,6 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { ContractStateService } from '../../../application/contract-state.service';
 import { NoveltyService } from '../../../application/novelty.service';
@@ -10,9 +11,9 @@ import { NoveltyResultComponent } from '../../components/novelty-result/novelty-
 import { NoveltyErrorComponent } from '../../components/novelty-error/novelty-error.component';
 import { ModalShellComponent } from '../../../../../shared/ui/modal-shell.component';
 import { Contract, NoveltySummary } from '../../../domain/models/contract.entity';
-import { availableVigencias } from '../../../domain/contract.rules';
 import { ContractFilters } from '../../../domain/repositories/contract.repository';
 import { formatExecutionDate } from '../../../../../shared/util/format.util';
+import { ApiErrorInfo, describeApiError } from '../../../../../shared/http/api-error';
 
 interface AnnulTarget {
   contract: Contract;
@@ -48,6 +49,7 @@ type SearchBy = 'number' | 'contractor';
 })
 export class DashboardContratosComponent {
   readonly state = inject(ContractStateService);
+  private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
   private readonly noveltyService = inject(NoveltyService);
 
@@ -56,7 +58,8 @@ export class DashboardContratosComponent {
     term: ['']
   });
 
-  readonly years = availableVigencias();
+  /** Vigencias del catálogo del backend (ver `ContractStateService.vigencias`). */
+  readonly years = this.state.vigencias;
 
   /** Criterio activo: se busca por número de contrato o por contratista, nunca por ambos. */
   readonly searchBy = signal<SearchBy>('number');
@@ -77,10 +80,24 @@ export class DashboardContratosComponent {
   readonly showAnnulConfirm = signal(false);
   readonly annulling = signal(false);
   readonly executedAt = signal('');
+  /**
+   * Error real de la última operación fallida (anulación o activación), traducido
+   * para el usuario. Uno solo: las dos vistas de error nunca se muestran a la vez.
+   */
+  readonly errorInfo = signal<ApiErrorInfo | null>(null);
 
   // Flujo de activación (reapertura administrativa de un contrato Finalizado)
   readonly activateTarget = signal<Contract | null>(null);
   readonly activating = signal(false);
+
+  /**
+   * Detalle desplegado de entrada: buscar por número + vigencia identifica un
+   * contrato único, así que no tiene sentido obligar a un clic extra para verlo.
+   */
+  readonly autoExpandirDetalle = computed(() => {
+    const { number, year } = this.state.filters();
+    return !!number && !!year && this.state.contracts().length === 1;
+  });
 
   constructor() {
     // Estos cambios de vista no navegan de ruta (siguen en el dashboard), así que el
@@ -89,6 +106,37 @@ export class DashboardContratosComponent {
       this.view();
       window.scrollTo(0, 0);
     });
+
+    // Al volver de una página de novedad, el listado en memoria está desactualizado
+    // (no incluye la novedad recién creada). Se repite la búsqueda para que vea el
+    // dato fresco.
+    this.restaurarUltimaBusqueda();
+  }
+
+  /**
+   * Repuebla el panel al entrar. Dos fuentes, en este orden:
+   *
+   * 1. El contrato que viene en la URL (`?contrato=…&vigencia=…`), que es como
+   *    vuelven las páginas de novedad: consulta ese contrato aunque no haya nada en
+   *    memoria —el caso que dejaba el panel en blanco tras recargar o entrar por
+   *    enlace directo—.
+   * 2. Los últimos filtros del usuario, para cualquier otra vuelta al panel.
+   */
+  private restaurarUltimaBusqueda(): void {
+    const contrato = this.route.snapshot.queryParamMap.get('contrato');
+    if (contrato) {
+      this.searchBy.set('number');
+      this.filterForm.setValue({ year: this.route.snapshot.queryParamMap.get('vigencia') ?? '', term: contrato });
+      this.applyFilters();
+      return;
+    }
+    const { number, contractor, year } = this.state.filters();
+    const term = number ?? contractor;
+    if (!term) return;
+    this.searchBy.set(number ? 'number' : 'contractor');
+    this.filterForm.setValue({ year: year ?? '', term });
+    this.hasSearched.set(true);
+    this.state.loadContracts();
   }
 
   /** Cambia el criterio de búsqueda y limpia el término anterior para no arrastrar valores. */
@@ -136,19 +184,23 @@ export class DashboardContratosComponent {
   // El parámetro `forceError` es el switch de pruebas del modal de anulación.
   confirmAnnul(forceError = false): void {
     const target = this.annulTarget();
-    if (!target) return;
+    // La guarda cubre el reintento desde la pantalla de error: sin ella, un doble
+    // clic dispararía dos anulaciones sobre la misma novedad.
+    if (!target || this.annulling()) return;
 
     this.annulling.set(true);
-    this.noveltyService.annul(target.contract.id, target.novelty.id, forceError).subscribe({
+    this.errorInfo.set(null);
+    this.noveltyService.annul(target.contract.id, target.novelty.id, target.novelty.type, forceError).subscribe({
       next: () => {
         this.annulling.set(false);
         this.showAnnulConfirm.set(false);
         this.executedAt.set(formatExecutionDate());
         this.view.set('annul-success');
       },
-      error: () => {
+      error: (err: unknown) => {
         this.annulling.set(false);
         this.showAnnulConfirm.set(false);
+        this.errorInfo.set(describeApiError(err));
         this.view.set('annul-error');
       }
     });
@@ -165,17 +217,19 @@ export class DashboardContratosComponent {
 
   confirmActivate(): void {
     const contract = this.activateTarget();
-    if (!contract) return;
+    if (!contract || this.activating()) return;
 
     this.activating.set(true);
+    this.errorInfo.set(null);
     this.noveltyService.activate(contract.id).subscribe({
       next: () => {
         this.activating.set(false);
         this.executedAt.set(formatExecutionDate());
         this.view.set('activate-success');
       },
-      error: () => {
+      error: (err: unknown) => {
         this.activating.set(false);
+        this.errorInfo.set(describeApiError(err));
         this.view.set('activate-error');
       }
     });

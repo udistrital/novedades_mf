@@ -23,15 +23,23 @@ import { NoNegativeNumberDirective } from '../../../../../shared/ui/no-negative-
         label="Agregar Cláusula Adicional"
         [active]="!!group().controls['activa'].value"
         (activeChange)="group().controls['activa'].setValue($event)">
-        <div class="w-full md:w-1/3">
-          <app-form-field
-            label="Posición de la cláusula"
-            for="clausula_posicion"
-            [required]="!!group().controls['activa'].value"
-            [control]="group().controls['posicion']">
-            <input appFormInput id="clausula_posicion" type="number" min="1" step="1" placeholder="Ej. 1" formControlName="posicion">
-          </app-form-field>
-        </div>
+        <!--
+          Posición de la cláusula: OCULTA de la vista (2026-08-24), no eliminada.
+          El control sigue en el FormGroup y viaja en el draft; solo se dejó de
+          pedir al usuario. Se reactiva poniendo MOSTRAR_POSICION en true.
+          (Sin comillas invertidas en este comentario: cerrarían el template.)
+        -->
+        @if (MOSTRAR_POSICION) {
+          <div class="w-full md:w-1/3">
+            <app-form-field
+              label="Posición de la cláusula"
+              for="clausula_posicion"
+              [required]="!!group().controls['activa'].value"
+              [control]="group().controls['posicion']">
+              <input appFormInput id="clausula_posicion" type="number" min="1" step="1" placeholder="Ej. 1" formControlName="posicion">
+            </app-form-field>
+          </div>
+        }
         <app-form-field
           label="Cláusula Adicional al Acta"
           for="clausula_texto"
@@ -47,10 +55,22 @@ export class AdditionalClauseSectionComponent implements OnInit {
   readonly group = input.required<FormGroup>();
   private readonly destroyRef = inject(DestroyRef);
 
+  /**
+   * Interruptor de la posición de la cláusula, hoy **apagado** por decisión de
+   * negocio: el campo no se le pide al usuario, pero el control, el draft y el
+   * payload siguen intactos. Ponerlo en `true` restituye el campo y su
+   * obligatoriedad, sin más cambios.
+   */
+  protected readonly MOSTRAR_POSICION = false;
+
   ngOnInit(): void {
     const { activa, posicion, texto } = this.group().controls;
     activa.valueChanges.pipe(startWith(activa.value), takeUntilDestroyed(this.destroyRef)).subscribe((isActive: boolean) => {
-      posicion.setValidators(isActive ? [Validators.required, Validators.min(1)] : [Validators.min(1)]);
+      // `posicion` solo es obligatoria si además se está pidiendo: exigir un campo
+      // que no se ve dejaría el formulario inválido sin nada que el usuario pueda
+      // corregir.
+      const exigirPosicion = isActive && this.MOSTRAR_POSICION;
+      posicion.setValidators(exigirPosicion ? [Validators.required, Validators.min(1)] : [Validators.min(1)]);
       texto.setValidators(isActive ? [Validators.required] : []);
       posicion.updateValueAndValidity({ emitEvent: false });
       texto.updateValueAndValidity({ emitEvent: false });

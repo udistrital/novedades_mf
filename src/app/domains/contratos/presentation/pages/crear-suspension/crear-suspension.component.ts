@@ -2,6 +2,7 @@ import { Component, computed, effect, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { combineLatest, startWith } from 'rxjs';
+import { MatIconModule } from '@angular/material/icon';
 
 import { CreateNoveltyPage } from '../create-novelty-page.base';
 import { NoveltyPageLayoutComponent } from '../../components/novelty-page-layout/novelty-page-layout.component';
@@ -15,15 +16,20 @@ import { FormInputDirective } from '../../../../../shared/ui/form-input.directiv
 import { NoNegativeNumberDirective } from '../../../../../shared/ui/no-negative-number.directive';
 import { DocumentPreviewControlComponent } from '../../../../../shared/ui/document-preview-control.component';
 import { NoveltyFormActionsComponent } from '../../../../../shared/ui/novelty-form-actions.component';
-import { addDaysToDate, daysBetween, toDisplayDate, todayIso } from '../../../../../shared/util/format.util';
+import { addDaysToDate, periodDays, toDisplayDate, todayIso } from '../../../../../shared/util/format.util';
 
 import { NoveltyType } from '../../../domain/models/novelty-type.enum';
 import { SuspensionDraft, NoveltyDraft } from '../../../domain/models/novelty-draft.model';
+import { contractEndDate } from '../../../domain/contract.rules';
 
-/** Agrega o quita `key` de los errores del control sin pisar los demás (required, min, etc.). */
-function setExtraError(control: AbstractControl, key: string, hasError: boolean): void {
+/**
+ * Agrega o quita `key` de los errores del control sin pisar los demás (required,
+ * min, etc.). `payload` viaja como valor del error para los mensajes que necesitan
+ * dato (p. ej. `maxDate` muestra la fecha tope).
+ */
+function setExtraError(control: AbstractControl, key: string, hasError: boolean, payload: unknown = true): void {
   const errors = { ...(control.errors ?? {}) };
-  if (hasError) errors[key] = true; else delete errors[key];
+  if (hasError) errors[key] = payload; else delete errors[key];
   control.setErrors(Object.keys(errors).length ? errors : null);
 }
 
@@ -39,6 +45,7 @@ function setExtraError(control: AbstractControl, key: string, hasError: boolean)
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    MatIconModule,
     NoveltyPageLayoutComponent,
     AdditionalClauseSectionComponent,
     ConfirmNoveltyModalComponent,
@@ -84,6 +91,16 @@ export class CrearSuspensionComponent extends CreateNoveltyPage {
     return startDate ? addDaysToDate(startDate, 1) : '';
   });
 
+  /**
+   * Máximo permitido para "Fecha fin suspensión": el último día vigente del
+   * contrato. Es además su valor por defecto — una suspensión no puede extenderse
+   * más allá del contrato que suspende.
+   */
+  readonly maxFechaFin = computed(() => {
+    const c = this.state.selectedContract();
+    return c ? contractEndDate(c) : '';
+  });
+
   get clausula(): FormGroup { return this.form.get('clausula') as FormGroup; }
 
   /** Mínimo permitido para "Fecha fin suspensión": un día después de la fecha de inicio elegida (período mínimo de 1 día). */
@@ -108,17 +125,27 @@ export class CrearSuspensionComponent extends CreateNoveltyPage {
       const fueraDeRango = !!i && !!f && i >= f;
       setExtraError(inicio, 'dateRange', fueraDeRango);
       setExtraError(fin, 'dateRange', fueraDeRango);
-      setExtraError(inicio, 'minDate', !!i && !!this.minFechaInicio() && i < this.minFechaInicio());
+      const minInicio = this.minFechaInicio();
+      setExtraError(inicio, 'minDate', !!i && !!minInicio && i < minInicio, { min: minInicio });
+      // La suspensión no puede terminar después del contrato que suspende.
+      const max = this.maxFechaFin();
+      setExtraError(fin, 'maxDate', !!f && !!max && f > max, { max });
 
-      periodo.setValue(fueraDeRango ? null : daysBetween(i, f), { emitEvent: false });
+      periodo.setValue(fueraDeRango ? null : periodDays(i, f), { emitEvent: false });
       reinicio.setValue(f ? addDaysToDate(f, 1) : '', { emitEvent: false });
     });
 
-    // Al cargar el contrato, fija el valor por defecto de "Fecha inicio suspensión"
-    // (solo un FormControl.setValue, no escribe signals: no requiere allowSignalWrites).
+    // Al cargar el contrato, fija los valores por defecto de las fechas: inicio =
+    // primer día posible, fin = último día vigente del contrato. Solo mientras el
+    // usuario no las haya tocado, para no pisarle lo que eligió.
+    // (Solo FormControl.setValue, no escribe signals: no requiere allowSignalWrites.)
     effect(() => {
       const min = this.minFechaInicio();
       if (min && !inicio.value) inicio.setValue(min);
+    });
+    effect(() => {
+      const max = this.maxFechaFin();
+      if (max && fin.pristine) fin.setValue(max);
     });
   }
 
@@ -130,7 +157,8 @@ export class CrearSuspensionComponent extends CreateNoveltyPage {
       fechaOficioSupervisor: todayIso(),
       fechaOficioOrdenador: todayIso(),
       fechaInicio: min,
-      fechaFin: todayIso()
+      // Vuelve al último día vigente del contrato, no a hoy.
+      fechaFin: this.maxFechaFin() || todayIso()
     });
   }
 
