@@ -5,6 +5,7 @@ import {
   availableActions,
   canAnnulNovelty,
   canManageContract,
+  getLatestNovelty,
   contractEndDate,
   contractStatusLabel,
   currentContractValue,
@@ -172,24 +173,45 @@ describe('contract.rules', () => {
     });
   });
 
+  /**
+   * De quién es "la última" dependen el estado inferido, la suspensión que reanuda un
+   * reinicio y el contratista vigente tras una cesión. Se prueba aquí directamente
+   * porque `canAnnulNovelty` ya no la deja observar: con varias novedades corta antes.
+   */
+  describe('getLatestNovelty', () => {
+    it('con la misma fecha de expedición, gana el id más alto (no el orden del arreglo)', () => {
+      // `contract.novelties` llega del mapper ordenado por id descendente (más reciente
+      // primero): si "última" se decidiera por fecha con empate, el desempate por orden
+      // de iteración terminaría eligiendo la más antigua.
+      const reciente = novelty({ id: '3', expeditionDate: '01/01/2024' });
+      const vieja = novelty({ id: '1', expeditionDate: '01/01/2024' });
+      expect(getLatestNovelty(contract({ novelties: [reciente, vieja] }))).toBe(reciente);
+    });
+
+    it('sin novedades no hay última', () => {
+      expect(getLatestNovelty(contract({ novelties: [] }))).toBeUndefined();
+    });
+  });
+
   describe('canAnnulNovelty (condiciones estrictas §5.1)', () => {
-    it('solo la última novedad es anulable', () => {
+    it('con una sola novedad, esa novedad es anulable', () => {
+      const unica = novelty({ id: '1' });
+      expect(canAnnulNovelty(contract({ novelties: [unica] }), unica)).toBeTrue();
+    });
+
+    it('con más de una novedad no se anula ninguna, ni siquiera la última', () => {
+      // Regla estricta de negocio (R5.1.5, confirmada el 2026-09-11): "única novedad"
+      // es literal. Antes esto devolvía `true` para la última.
       const vieja = novelty({ id: '1', expeditionDate: '01/01/2024' });
       const ultima = novelty({ id: '2', expeditionDate: '01/03/2024' });
       const c = contract({ novelties: [vieja, ultima] });
+      expect(canAnnulNovelty(c, ultima)).toBeFalse();
       expect(canAnnulNovelty(c, vieja)).toBeFalse();
-      expect(canAnnulNovelty(c, ultima)).toBeTrue();
     });
 
-    it('con la misma fecha de expedición, gana el id más alto (no el orden del arreglo)', () => {
-      // `contract.novelties` llega del mapper ya ordenado por id descendente (más
-      // reciente primero): si "última" se decidiera por fecha con empate, el
-      // desempate por orden de iteración terminaría eligiendo la más antigua.
-      const reciente = novelty({ id: '3', expeditionDate: '01/01/2024' });
-      const vieja = novelty({ id: '1', expeditionDate: '01/01/2024' });
-      const c = contract({ novelties: [reciente, vieja] });
-      expect(canAnnulNovelty(c, reciente)).toBeTrue();
-      expect(canAnnulNovelty(c, vieja)).toBeFalse();
+    it('sin novedades no hay nada que anular', () => {
+      const suelta = novelty({ id: '1' });
+      expect(canAnnulNovelty(contract({ novelties: [] }), suelta)).toBeFalse();
     });
 
     it('la cesión es anulable mientras está pendiente de póliza', () => {
@@ -197,12 +219,12 @@ describe('contract.rules', () => {
       expect(canAnnulNovelty(contract({ novelties: [cesion] }), cesion)).toBeTrue();
     });
 
-    it('con la póliza ya registrada, la cesión deja de ser anulable', () => {
-      // La anulación existe para revertir errores. Registrar la póliza cierra el
-      // trámite: quien cedió y luego aseguró no está corrigiendo nada.
+    it('sigue siendo anulable después de registrar la póliza', () => {
+      // Registrar la garantía no cierra la cesión: un cesionario equivocado se detecta
+      // a menudo después de asegurarla. La regla que lo impedía se retiró el 2026-09-11.
       const cesion = novelty({ id: '2', type: NoveltyType.ASSIGNMENT, numeroPoliza: 'Pol123' });
       const c = contract({ status: ContractStatus.EN_EJECUCION, novelties: [cesion] });
-      expect(canAnnulNovelty(c, cesion)).toBeFalse();
+      expect(canAnnulNovelty(c, cesion)).toBeTrue();
     });
 
     it('el tipo debe corresponder al estado: Suspensión anulable solo con contrato Suspendido', () => {

@@ -2,15 +2,16 @@
   <summary class="p-4 cursor-pointer hover:bg-surface-container-low transition-colors flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-lg">
     <div class="flex-1">
       <div class="flex items-center gap-2 mb-1">
-        <span class="text-title-md font-title-md font-bold text-primary">Contrato No. {{ contract.number }}</span>
+        <span class="text-body-md font-body-md font-bold text-primary">Contrato No. {{ contract.number }}</span>
+        <span class="text-label-sm font-label-sm text-on-surface-variant">· {{ vigencia }}</span>
       </div>
       <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">Contratista</span>
-      <p class="text-body-md font-body-md text-on-surface font-medium">{{ contract.contractorName }}</p>
+      <p class="text-body-sm font-body-sm text-on-surface font-medium">{{ contract.contractorName }}</p>
     </div>
     <div class="flex items-center gap-6 w-full sm:w-auto justify-between sm:justify-end">
       <div class="text-left sm:text-right">
         <span class="text-label-sm font-label-sm text-on-surface-variant block">Valor Total</span>
-        <span class="text-title-md font-title-md text-on-surface font-semibold">{{ contract.totalValue | currency:'COP':'symbol':'1.0-0' }}</span>
+        <span class="text-body-md font-body-md text-on-surface font-semibold">{{ contract.totalValue | currency:'COP':'symbol':'1.0-0' }}</span>
       </div>
       <div class="h-8 w-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant group-hover:bg-surface-variant transition-colors">
         <mat-icon class="transform group-open:rotate-180 transition-transform duration-200">expand_more</mat-icon>
@@ -19,31 +20,31 @@
   </summary>
   <div class="p-4 border-t border-outline-variant bg-surface">
     <!-- Contract Details -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 p-4 bg-surface-container-lowest rounded border border-outline-variant/50">
+    <div class="grid grid-cols-1 md:grid-cols-[30%_1fr] gap-4 mb-6 p-4 bg-surface-container-lowest rounded border border-outline-variant/50">
       <div>
         <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">Contratante</span>
-        <span class="text-body-md font-body-md text-on-surface">{{ contract.contractingEntity }}</span>
+        <span class="text-body-sm font-body-sm text-on-surface">{{ contract.contractingEntity }}</span>
       </div>
       <div class="md:row-span-2">
         <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">Objeto del Contrato</span>
-        <span class="text-body-md font-body-md text-on-surface">{{ contract.object }}</span>
+        <span class="text-body-sm font-body-sm text-on-surface">{{ contract.object }}</span>
       </div>
       <div>
         <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">NIT / CC Contratista</span>
-        <span class="text-body-md font-body-md text-on-surface">{{ contractorDocument }}</span>
+        <span class="text-body-sm font-body-sm text-on-surface">{{ contractorDocument }}</span>
       </div>
       <div>
         <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">Vigencia</span>
-        <span class="text-body-md font-body-md text-on-surface">{{ vigencia }}</span>
+        <span class="text-body-sm font-body-sm text-on-surface">{{ vigencia }}</span>
       </div>
       <div>
         <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">Estado del Contrato</span>
-        <span class="text-body-md font-body-md text-on-surface font-medium">{{ estado }}</span>
+        <span class="text-body-sm font-body-sm text-on-surface font-medium">{{ estado }}</span>
       </div>
       @if (valorVigente !== contract.totalValue) {
         <div>
           <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">Valor Vigente (con adiciones)</span>
-          <span class="text-body-md font-body-md text-on-surface font-semibold">{{ valorVigente | currency:'COP':'symbol':'1.0-0' }}</span>
+          <span class="text-body-sm font-body-sm text-on-surface font-semibold">{{ valorVigente | currency:'COP':'symbol':'1.0-0' }}</span>
         </div>
       }
     </div>

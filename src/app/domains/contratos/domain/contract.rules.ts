@@ -129,14 +129,24 @@ export function availableActions(contract: Contract): ContractAction[] {
 }
 
 /**
- * Condiciones estrictas de anulación (requerimientos §5.1): solo la última
- * novedad, y solo cuando su tipo corresponde al estado que produjo — anular
- * la Suspensión de un contrato Suspendido, la Cesión pendiente de póliza, etc.
- * (Interpretación #1 documentada en MIGRATION_PLAN: "coincide con el botón
- * habilitado" = la novedad que produjo el estado actual.)
+ * Condiciones estrictas de anulación (requerimientos §5.1): el contrato debe tener
+ * **una sola novedad**, ser esa la que se anula, y corresponder su tipo al estado
+ * que produjo — anular la Suspensión de un contrato Suspendido, la Terminación de
+ * un contrato Terminado, etc.
+ *
+ * Lo de "una sola" es literal: R5.1.5 habla de la *"única novedad"* y negocio lo
+ * confirmó así el **2026-09-11** (hasta entonces se leía como "la última", la
+ * interpretación #1 del MIGRATION_PLAN). Un contrato con dos o más novedades no
+ * admite ninguna anulación, ni siquiera sobre la última.
+ *
+ * Ampliarlo a "la última aunque haya otras" es sustituir la condición de abajo por
+ * `getLatestNovelty(contract) !== novelty`: el resto de la función ya lo soporta.
+ * Lo que falta resolver antes es la reversión del estado — el mid lo devuelve
+ * siempre a "En ejecución" sin mirar el historial, y con varias novedades el estado
+ * correcto es el que tenía *antes* de la que se anula ([ADR-019](../../../../docs/adr/ADR-019-anulacion-solo-con-una-novedad.md)).
  */
 export function canAnnulNovelty(contract: Contract, novelty: NoveltySummary): boolean {
-  if (getLatestNovelty(contract) !== novelty) return false;
+  if (contract.novelties.length !== 1 || getLatestNovelty(contract) !== novelty) return false;
   switch (effectiveStatus(contract)) {
     case ContractStatus.SUSPENDIDO:
       return novelty.type === NoveltyType.SUSPENSION;
@@ -146,12 +156,16 @@ export function canAnnulNovelty(contract: Contract, novelty: NoveltySummary): bo
     case ContractStatus.FINALIZADO:
       return novelty.type === NoveltyType.EARLY_TERMINATION;
     case ContractStatus.EN_EJECUCION:
-      // En ejecución la última novedad puede ser una adición/prórroga o un reinicio.
-      // La **cesión no**: si el contrato volvió a "En ejecución" es porque su póliza
-      // ya se registró, y una cesión con garantía vigente es un trámite terminado, no
-      // un error que revertir. Solo es anulable mientras está pendiente de póliza.
-      return [NoveltyType.ADDITION_EXTENSION, NoveltyType.EXTENSION, NoveltyType.RESTART]
-        .includes(novelty.type);
+      // En ejecución la última novedad puede ser una adición/prórroga, un reinicio o
+      // una cesión cuya póliza ya se registró. Registrar la garantía **no** cierra la
+      // cesión: un error en el cesionario se detecta a menudo después de asegurarla, y
+      // dejarla sin anular obligaba a corregirlo por fuera del aplicativo.
+      return [
+        NoveltyType.ADDITION_EXTENSION,
+        NoveltyType.EXTENSION,
+        NoveltyType.RESTART,
+        NoveltyType.ASSIGNMENT
+      ].includes(novelty.type);
     default:
       return false;
   }
