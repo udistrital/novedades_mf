@@ -123,10 +123,8 @@ export abstract class CreateNoveltyPage {
   /**
    * Confirmación definitiva: envía el draft al caso de uso de creación y
    * transiciona la vista a éxito o error según el resultado.
-   *
-   * @param forceError Switch de pruebas del modal para simular una falla.
    */
-  onConfirm(forceError = false): void {
+  onConfirm(): void {
     const draft = this.buildDraft();
     const contract = this.state.selectedContract();
     this.submitting.set(true);
@@ -142,7 +140,7 @@ export abstract class CreateNoveltyPage {
       switchMap(doc =>
         // El PDF recién generado viaja a la cascada para archivarse en el gestor
         // documental: es lo que hace que "Ver acta" funcione después.
-        this.noveltyService.create(this.contractId, draft, doc?.base64 ?? '', forceError).pipe(map(() => doc))
+        this.noveltyService.create(this.contractId, draft, doc?.base64 ?? '').pipe(map(() => doc))
       )
     ).subscribe({
       next: doc => {

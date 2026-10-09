@@ -1,4 +1,4 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ModalShellComponent } from '../../../../../shared/ui/modal-shell.component';
 
@@ -18,10 +18,6 @@ export class ConfirmAnnulModalComponent {
   readonly estado = input.required<string>();
   readonly submitting = input(false);
 
-  // TEST SWITCH — borrar esta línea y el bloque en el HTML para quitarlo.
-  readonly forceError = signal(false);
-
-  /** Emite `true` si se debe simular una petición fallida (switch de pruebas). */
-  readonly confirm = output<boolean>();
+  readonly confirm = output<void>();
   readonly dismiss = output<void>();
 }

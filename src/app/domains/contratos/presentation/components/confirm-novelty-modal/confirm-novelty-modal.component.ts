@@ -1,4 +1,4 @@
-import { Component, computed, input, output, signal } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ModalShellComponent } from '../../../../../shared/ui/modal-shell.component';
 import { SOPORTE_IRIS_URL } from '../../../../../shared/soporte';
@@ -32,16 +32,6 @@ export class ConfirmNoveltyModalComponent {
 
   readonly soporteUrl = SOPORTE_IRIS_URL;
 
-  // TEST SWITCH — borrar esta línea y el bloque en el HTML para quitarlo.
-  readonly forceError = signal(false);
-
-  // TEST SWITCH — borrar esta línea, `effectiveBlocked` y el bloque en el HTML para quitarlo.
-  readonly ignoreBlocked = signal(false);
-
-  /** `blocked` real ya aplicado el switch de pruebas que lo ignora. */
-  readonly effectiveBlocked = computed(() => this.blocked() && !this.ignoreBlocked());
-
-  /** Emite `true` si se debe simular una petición fallida (switch de pruebas). */
-  readonly confirm = output<boolean>();
+  readonly confirm = output<void>();
   readonly dismiss = output<void>();
 }

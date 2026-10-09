@@ -181,8 +181,7 @@ export class DashboardContratosComponent {
     this.showAnnulConfirm.set(false);
   }
 
-  // El parámetro `forceError` es el switch de pruebas del modal de anulación.
-  confirmAnnul(forceError = false): void {
+  confirmAnnul(): void {
     const target = this.annulTarget();
     // La guarda cubre el reintento desde la pantalla de error: sin ella, un doble
     // clic dispararía dos anulaciones sobre la misma novedad.
@@ -190,7 +189,7 @@ export class DashboardContratosComponent {
 
     this.annulling.set(true);
     this.errorInfo.set(null);
-    this.noveltyService.annul(target.contract.id, target.novelty.id, target.novelty.type, forceError).subscribe({
+    this.noveltyService.annul(target.contract.id, target.novelty.id, target.novelty.type).subscribe({
       next: () => {
         this.annulling.set(false);
         this.showAnnulConfirm.set(false);

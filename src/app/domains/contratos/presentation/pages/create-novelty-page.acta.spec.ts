@@ -66,7 +66,7 @@ describe('CreateNoveltyPage — el acta va antes de la novedad', () => {
     pagina.onConfirm();
 
     expect(actaGenerator.generar).toHaveBeenCalledBefore(noveltyService.create);
-    expect(noveltyService.create).toHaveBeenCalledWith('653_2025', jasmine.anything(), 'JVBERi0x', false);
+    expect(noveltyService.create).toHaveBeenCalledWith('653_2025', jasmine.anything(), 'JVBERi0x');
     expect(pagina.pageState()).toBe('success');
   });
 
