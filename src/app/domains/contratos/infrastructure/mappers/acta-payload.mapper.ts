@@ -6,29 +6,34 @@ import { activeSuspension, contractEndDate, currentContractValue, currentTermDay
 import { addDaysToDate, addDaysToTerm, formatTerm, numberToWords, periodDays, toIsoDate } from '../../../../shared/util/format.util';
 
 /**
- * Payloads de `actas_novedad_mid`, el servicio que genera el PDF del acta.
+ * Payload del acta para `POST novedad/generaracta` de `novedades_mid`, que genera
+ * el PDF. El cuerpo es `{ tipo_acta, datos }`: `TIPO_ACTA` da el primero y
+ * `toActaPayload` arma el segundo. Junto con `http-acta-mid.service.ts`, es lo
+ * único que conoce el contrato del generador (ver `IActaGenerator`); nada de aquí
+ * se filtra al dominio ni a la presentación.
  *
- * Es un servicio **temporal**: cuando se reemplace, este archivo y
- * `http-acta-mid.service.ts` son lo único que hay que reescribir (ver
- * `IActaGenerator`). Nada de aquí se filtra al dominio ni a la presentación.
- *
- * Convenciones del servicio (§2 de `docs_integracion_agente_actas_mid.md`):
- * fechas en ISO `yyyy-mm-dd`, valores como número, plazos **ya en letras**, y
- * los campos opcionales ausentes se imprimen como `________`. Todo lo que el
- * servicio calcula por su cuenta (fecha de reinicio de una suspensión, nuevo
- * valor total, saldo del cesionario) NO se envía.
+ * El servicio es sin estado: no consulta nada, así que todo lo que el acta
+ * imprime viaja aquí. Convenciones:
+ * - Tipos JSON **estrictos** (Go): textos y documentos como string, enteros sin
+ *   decimales, fechas `yyyy-mm-dd` exactas. Un solo tipo equivocado invalida todo
+ *   `datos` con un 422 `estructura inválida`, que es un bug de este archivo y no
+ *   un dato del usuario.
+ * - Plazos **ya en letras**. Los opcionales que no se conocen se omiten (el acta
+ *   imprime `________`); un campo con el nombre mal escrito se ignora en silencio.
+ * - Lo que el servicio calcula por su cuenta (fecha de reinicio de una suspensión,
+ *   nuevo valor total, saldo del cesionario) NO se envía.
  */
 
-/** Ruta del acta de cada tipo de novedad; `undefined` = ese tipo no tiene acta. */
-export const ACTA_ENDPOINT: Readonly<Partial<Record<NoveltyType, string>>> = {
-  [NoveltyType.SUSPENSION]: 'v1/actas/suspension',
-  [NoveltyType.RESTART]: 'v1/actas/reinicio',
-  [NoveltyType.ADDITION_EXTENSION]: 'v1/actas/adicion-prorroga',
-  [NoveltyType.ASSIGNMENT]: 'v1/actas/cesion',
-  [NoveltyType.EARLY_TERMINATION]: 'v1/actas/terminacion-liquidacion'
+/** `tipo_acta` de cada tipo de novedad; `undefined` = ese tipo no tiene acta. */
+export const TIPO_ACTA: Readonly<Partial<Record<NoveltyType, string>>> = {
+  [NoveltyType.SUSPENSION]: 'suspension',
+  [NoveltyType.RESTART]: 'reinicio',
+  [NoveltyType.ADDITION_EXTENSION]: 'adicion_prorroga',
+  [NoveltyType.ASSIGNMENT]: 'cesion',
+  [NoveltyType.EARLY_TERMINATION]: 'terminacion_liquidacion'
 };
 
-/** Respuesta de los cinco endpoints (§4): el PDF viaja en base64, sin prefijo `data:`. */
+/** Respuesta del generador: el PDF viaja en base64, sin prefijo `data:`. */
 export interface ActaMidResponse {
   success?: boolean;
   filename?: string;
@@ -40,8 +45,8 @@ export interface ActaMidResponse {
  * Body del acta correspondiente al tipo de la novedad.
  *
  * `opciones` aporta lo que el acta imprime pero no sale ni del contrato ni de la
- * solicitud: el cuadro de firmas y el tamaño de letra. Son opcionales en los cinco
- * endpoints; los que no se conozcan se omiten y el servicio pone `________`
+ * solicitud: el cuadro de firmas y el tamaño de letra. Son opcionales en las cinco
+ * actas; los que no se conozcan se omiten y el servicio pone `________`
  * (o su tamaño por defecto, 10 puntos).
  */
 export function toActaPayload(
@@ -232,7 +237,9 @@ function camposComunes(o: ActaOptions): Record<string, unknown> {
   return {
     ...(o.elaboro ? { elaboro: o.elaboro } : {}),
     ...(o.jefeJuridica ? { jefe_juridica_nombre: o.jefeJuridica } : {}),
-    ...(o.tamanoLetra ? { tamano_letra: o.tamanoLetra } : {})
+    // El servicio exige un entero y el control de la vista acepta decimales (10.5):
+    // sin redondear, un decimal invalidaría el acta entera.
+    ...(o.tamanoLetra ? { tamano_letra: Math.round(o.tamanoLetra) } : {})
   };
 }
 

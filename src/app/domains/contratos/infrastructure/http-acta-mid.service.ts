@@ -8,22 +8,26 @@ import { ActaOptions, IActaGenerator } from '../domain/repositories/acta-generat
 import { Contract } from '../domain/models/contract.entity';
 import { NoveltyDraft } from '../domain/models/novelty-draft.model';
 import { NoveltyDocument } from '../domain/models/novelty-document.model';
-import { ACTA_ENDPOINT, ActaMidResponse, toActaPayload } from './mappers/acta-payload.mapper';
+import { ActaMidResponse, TIPO_ACTA, toActaPayload } from './mappers/acta-payload.mapper';
 
 /**
- * Implementación de `IActaGenerator` contra **`actas_novedad_mid`**.
+ * Implementación de `IActaGenerator` contra `POST novedad/generaracta` de
+ * **`novedades_mid`**: un solo endpoint para las cinco actas, con el cuerpo
+ * `{ tipo_acta, datos }`.
  *
- * Es un middleware sin estado: recibe todos los datos en el POST y devuelve el
- * PDF en base64. No consulta ÁGORA, no persiste nada y no valida token (por eso
- * su URL queda fuera de la allowlist del interceptor de auth).
+ * El endpoint es sin estado: recibe todos los datos en el POST y devuelve el PDF
+ * en base64. No consulta ÁGORA, no persiste nada y no valida token.
  *
- * ⚠️ **Servicio temporal.** Va a reemplazarse por otro generador de actas. El
- * acoplamiento está contenido a propósito: esta clase y `acta-payload.mapper.ts`
- * son los dos únicos archivos que conocen su contrato. Para cambiarlo, escribir
- * otra implementación del puerto y cambiar el binding en `app.config.ts`.
+ * Aún no está desplegado: corre local, así que la base es `ACTAS_MID_SERVICE`,
+ * que queda fuera de la allowlist del interceptor de auth. Cuando se despliegue, la
+ * base pasa a ser `NOVEDADES_MID_SERVICE` (la ruta relativa es la misma) y el
+ * interceptor adjunta el token que exige el gateway.
  *
- * El PDF **no se envía al backend**: hoy solo se descarga para el usuario, y el
- * gestor documental sigue recibiendo `file: ''` (ver `toGestorDocumentalPayload`).
+ * El acoplamiento está contenido a propósito: esta clase y `acta-payload.mapper.ts`
+ * son los dos únicos archivos que conocen el contrato del generador.
+ *
+ * El PDF que devuelve se archiva en el gestor documental: viaja en base64 en el
+ * `file` del `POST gestor_documental` de la cascada (ver `toGestorDocumentalPayload`).
  */
 @Injectable({ providedIn: 'root' })
 export class HttpActaMidService implements IActaGenerator {
@@ -31,19 +35,20 @@ export class HttpActaMidService implements IActaGenerator {
   private readonly base = environment.ACTAS_MID_SERVICE;
 
   generarActa(contract: Contract, draft: NoveltyDraft, opciones?: ActaOptions): Observable<NoveltyDocument> {
-    const ruta = ACTA_ENDPOINT[draft.type];
-    if (!ruta) {
+    const tipo_acta = TIPO_ACTA[draft.type];
+    if (!tipo_acta) {
       return throwError(() => new Error(`No hay plantilla de acta para una novedad de ${draft.type}.`));
     }
 
-    return this.http.post<ActaMidResponse>(`${this.base}${ruta}`, toActaPayload(contract, draft, opciones)).pipe(
+    const body = { tipo_acta, datos: toActaPayload(contract, draft, opciones) };
+    return this.http.post<ActaMidResponse>(`${this.base}${RUTA_GENERAR_ACTA}`, body).pipe(
       switchMap(res =>
         res?.file_base64
           ? of(toNoveltyDocument(res, contract))
           : throwError(() => new Error('El servicio de actas respondió sin el documento.'))
       ),
-      // La generación corre después de que la novedad ya quedó registrada: sin tope
-      // de tiempo, un servicio colgado dejaría al usuario esperando en el modal.
+      // El acta se genera antes de registrar la novedad y la bloquea: sin tope de
+      // tiempo, un servicio colgado dejaría al usuario esperando en el modal.
       timeout({
         each: TIMEOUT_ACTA_MS,
         with: () => throwError(() => new Error('El servicio de actas no respondió a tiempo.'))
@@ -52,6 +57,7 @@ export class HttpActaMidService implements IActaGenerator {
   }
 }
 
+const RUTA_GENERAR_ACTA = 'novedad/generaracta';
 const TIMEOUT_ACTA_MS = 30_000;
 
 function toNoveltyDocument(res: ActaMidResponse, contract: Contract): NoveltyDocument {

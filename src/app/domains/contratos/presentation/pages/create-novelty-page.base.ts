@@ -1,6 +1,6 @@
 import { Directive, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
@@ -15,6 +15,12 @@ import { formatExecutionDate } from '../../../../shared/util/format.util';
 import { ApiErrorInfo, describeApiError } from '../../../../shared/http/api-error';
 
 export type NoveltyPageState = 'form' | 'success' | 'error';
+
+/**
+ * Rechaza decimales en un conteo de días (`15.5`). Un `<input type="number">` los
+ * acepta, y ni la novedad ni su acta registran fracciones de día.
+ */
+export const SOLO_ENTEROS = Validators.pattern(/^\d+$/);
 
 /**
  * Lógica común a las páginas de creación de novedad: carga del contrato,

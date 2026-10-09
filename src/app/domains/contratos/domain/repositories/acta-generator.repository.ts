@@ -7,11 +7,12 @@ import { NoveltyDocument } from '../models/novelty-document.model';
  * Puerto de generación del acta de una novedad: recibe el contrato y la solicitud
  * y devuelve el documento ya armado.
  *
- * Es una abstracción deliberada, no especulativa: el servicio que la implementa
- * hoy (`actas_novedad_mid`) es **temporal** y va a reemplazarse. El dominio y la
- * aplicación solo conocen esta firma, así que el reemplazo se limita a escribir
- * otra implementación en `infrastructure/` y cambiar el binding de `app.config.ts`
- * — sin tocar formularios, casos de uso ni reglas.
+ * Es una abstracción deliberada, no especulativa: el generador ya cambió una vez
+ * (de un servicio temporal aparte a `POST novedad/generaracta` de `novedades_mid`)
+ * y el cambio no salió de `infrastructure/`. El dominio y la aplicación solo
+ * conocen esta firma, así que cambiar de generador se limita a reescribir su
+ * implementación (o escribir otra y cambiar el binding de `app.config.ts`) — sin
+ * tocar formularios, casos de uso ni reglas.
  *
  * Se declara como clase abstracta porque Angular la usa además como token de DI
  * (mismo patrón que `IContractRepository`).

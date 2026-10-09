@@ -1,4 +1,4 @@
-import { ACTA_ENDPOINT, toActaPayload } from './acta-payload.mapper';
+import { TIPO_ACTA, toActaPayload } from './acta-payload.mapper';
 import { NoveltyType } from '../../domain/models/novelty-type.enum';
 import { Contract, NoveltySummary } from '../../domain/models/contract.entity';
 import { NoveltyStatus } from '../../domain/models/novelty-type.enum';
@@ -49,11 +49,16 @@ const solicitud = {
 
 const sinClausula = { activa: false, posicion: null, texto: '' };
 
-describe('ACTA_ENDPOINT', () => {
-  it('cubre los cinco tipos de novedad que generan acta', () => {
-    expect(Object.keys(ACTA_ENDPOINT).length).toBe(5);
-    expect(ACTA_ENDPOINT[NoveltyType.SUSPENSION]).toBe('v1/actas/suspension');
-    expect(ACTA_ENDPOINT[NoveltyType.EARLY_TERMINATION]).toBe('v1/actas/terminacion-liquidacion');
+describe('TIPO_ACTA', () => {
+  it('cubre los cinco tipos de novedad que generan acta, con guion bajo', () => {
+    // Cualquier otro valor (p. ej. el guion de las rutas viejas) responde 422.
+    expect(TIPO_ACTA).toEqual({
+      [NoveltyType.SUSPENSION]: 'suspension',
+      [NoveltyType.RESTART]: 'reinicio',
+      [NoveltyType.ADDITION_EXTENSION]: 'adicion_prorroga',
+      [NoveltyType.ASSIGNMENT]: 'cesion',
+      [NoveltyType.EARLY_TERMINATION]: 'terminacion_liquidacion'
+    });
   });
 });
 
@@ -295,7 +300,7 @@ describe('toActaPayload — rol de las personas', () => {
 
 /**
  * Campos que el acta imprime pero no salen del contrato ni de la solicitud: el
- * cuadro de firmas y el tamaño de letra. Son opcionales en los cinco endpoints,
+ * cuadro de firmas y el tamaño de letra. Son opcionales en las cinco actas,
  * así que lo que no se conoce se OMITE — mandarlo vacío sustituiría el marcador
  * `________` del servicio por una cadena en blanco.
  */
@@ -320,6 +325,10 @@ describe('toActaPayload — opciones del documento', () => {
     expect(p['elaboro']).toBe('Laura Niño');
     expect(p['jefe_juridica_nombre']).toBe('Ana Torres');
     expect(p['tamano_letra']).toBe(14);
+  });
+
+  it('redondea el tamaño de letra: el servicio exige un entero', () => {
+    expect(toActaPayload(contrato(), draft, { tamanoLetra: 10.6 })['tamano_letra']).toBe(11);
   });
 
   it('omite lo que no se conoce en vez de mandarlo vacío', () => {

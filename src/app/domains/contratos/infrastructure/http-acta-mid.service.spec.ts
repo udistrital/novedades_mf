@@ -10,10 +10,10 @@ import { NoveltyDocument } from '../domain/models/novelty-document.model';
 import { describeApiError } from '../../../shared/http/api-error';
 
 /**
- * El servicio de actas es **temporal** y su contrato vive en dos archivos: este y
- * `acta-payload.mapper.ts`. Lo que se fija aquí es lo que rompería al reemplazarlo:
- * que cada tipo de novedad vaya a su propia ruta, y que sus errores lleguen a la
- * pantalla como algo legible en vez de "Http failure response for…".
+ * El contrato del generador de actas vive en dos archivos: este y
+ * `acta-payload.mapper.ts`. Lo que se fija aquí es lo que rompería al cambiarlo:
+ * que las cinco actas vayan al único endpoint con su `tipo_acta`, y que sus errores
+ * lleguen a la pantalla como algo legible en vez de "Http failure response for…".
  */
 describe('HttpActaMidService', () => {
   let service: HttpActaMidService;
@@ -101,18 +101,20 @@ describe('HttpActaMidService', () => {
 
   afterEach(() => mock.verify());
 
-  it('cada tipo de novedad va a su propia ruta', () => {
-    const rutas: [NoveltyType, string][] = [
-      [NoveltyType.SUSPENSION, 'v1/actas/suspension'],
-      [NoveltyType.RESTART, 'v1/actas/reinicio'],
-      [NoveltyType.ADDITION_EXTENSION, 'v1/actas/adicion-prorroga'],
-      [NoveltyType.ASSIGNMENT, 'v1/actas/cesion'],
-      [NoveltyType.EARLY_TERMINATION, 'v1/actas/terminacion-liquidacion']
+  it('las cinco actas van al mismo endpoint, con su tipo_acta y los datos envueltos', () => {
+    const tipos: [NoveltyType, string][] = [
+      [NoveltyType.SUSPENSION, 'suspension'],
+      [NoveltyType.RESTART, 'reinicio'],
+      [NoveltyType.ADDITION_EXTENSION, 'adicion_prorroga'],
+      [NoveltyType.ASSIGNMENT, 'cesion'],
+      [NoveltyType.EARLY_TERMINATION, 'terminacion_liquidacion']
     ];
-    for (const [tipo, ruta] of rutas) {
+    for (const [tipo, tipoActa] of tipos) {
       generar(tipo);
-      const req = mock.expectOne(r => r.url.endsWith(ruta));
+      const req = mock.expectOne(r => r.url.endsWith('/novedad/generaracta'));
       expect(req.request.method).toBe('POST');
+      expect(req.request.body.tipo_acta).toBe(tipoActa);
+      expect(req.request.body.datos.contrato.numero_contrato).toBe('653');
       req.flush({ success: true, filename: 'acta.pdf', file_base64: 'JVBERi0x' });
     }
   });
@@ -132,18 +134,22 @@ describe('HttpActaMidService', () => {
     expect(String(r.error)).toContain('sin el documento');
   });
 
-  it('el 422 de FastAPI llega a la pantalla como el motivo real', () => {
+  it('el 422 del generador llega a la pantalla como el motivo real', () => {
     const r = generar(NoveltyType.EARLY_TERMINATION);
     mock.expectOne(() => true).flush(
-      { detail: [{ loc: ['body'], msg: 'Value error, el balance no cuadra: desembolsado + saldos = 35000000', type: 'value_error' }] },
+      {
+        success: false,
+        error: 'datos del acta inválidos',
+        detail: [{ campo: 'datos.saldo_universidad', mensaje: 'el balance no cuadra con el valor del contrato' }]
+      },
       { status: 422, statusText: 'Unprocessable Entity' }
     );
 
     // El error viaja crudo; `describeApiError` es quien lo traduce para la vista.
     const info = describeApiError(r.error);
     expect(info.code).toBe('422-DATOS');
-    expect(info.detail).toBe('el balance no cuadra: desembolsado + saldos = 35000000');
-    expect(info.origen).toContain('v1/actas/terminacion-liquidacion');
+    expect(info.detail).toBe('saldo_universidad: el balance no cuadra con el valor del contrato');
+    expect(info.origen).toContain('novedad/generaracta');
   });
 
   it('un tipo sin plantilla no llega a pedir nada al servicio', () => {

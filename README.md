@@ -25,7 +25,7 @@ La configuración por ambiente vive en `src/environments/`:
 | `NOVEDADES_SERVICE` | API `novedades_crud` — persistencia de novedades (fase de escrituras) |
 | `CORE_AMAZON_SERVICE` | API `core_amazon_crud` — catálogo de entidades aseguradoras |
 | `FINANCIERA_JBPM_SERVICE` | API `financiera_jbpm` — CDP y CRP vigentes que imprime el acta |
-| `ACTAS_MID_SERVICE` | `actas_novedad_mid` — generación del PDF del acta (**servicio temporal**) |
+| `ACTAS_MID_SERVICE` | `novedades_mid` local (`POST novedad/generaracta`) — generación del PDF del acta; apunta a `localhost:8081` hasta que el endpoint se despliegue |
 | `TOKEN` | Configuración OAuth2 de WSO2 (client id, redirect, scopes, logout) |
 
 | Ambiente | Archivo | Compilación |

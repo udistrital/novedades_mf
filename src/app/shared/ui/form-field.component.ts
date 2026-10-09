@@ -58,6 +58,7 @@ export class FormFieldComponent {
     if (!errors) return '';
     if (errors['required']) return 'Este campo es obligatorio.';
     if (errors['min']) return `El valor no puede ser menor a ${errors['min'].min}.`;
+    if (errors['pattern']) return 'Debe ser un número entero, sin decimales.';
     if (errors['maxlength']) return `Máximo ${errors['maxlength'].requiredLength} caracteres.`;
     if (errors['dateRange']) return 'La fecha de inicio debe ser anterior a la fecha de fin (mínimo 1 día de diferencia).';
     if (errors['minDate']) return `La fecha no puede ser anterior al ${toDisplayDate(errors['minDate'].min)}.`;

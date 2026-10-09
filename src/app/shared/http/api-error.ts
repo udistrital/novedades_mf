@@ -106,7 +106,7 @@ function porEstado(err: HttpErrorResponse, delServicio: string): ApiErrorInfo {
  *
  * Se recorta el host institucional y el prefijo `/apioas/`, que son iguales para
  * todas las APIs y solo alargan el reporte; el nombre del servicio ya viene en la
- * ruta. Un host sin punto (`localhost:8080`) sí se conserva, porque ahí la ruta
+ * ruta. Un host sin punto (`localhost:8081`) sí se conserva, porque ahí la ruta
  * sola no dice de qué servicio se trata.
  */
 export function endpointLegible(url: string | null | undefined): string {
@@ -143,18 +143,27 @@ function mensajeDelCuerpo(body: unknown): string {
   if (typeof body === 'string') return body.trim().startsWith('<') ? '' : body.trim();
   if (!body || typeof body !== 'object') return '';
   const b = body as Record<string, unknown>;
-  // FastAPI (servicio de actas) valida con Pydantic y devuelve el detalle en un
-  // arreglo `detail: [{loc, msg, type}]`, con el motivo real en `msg`.
-  if (Array.isArray(b['detail'])) return mensajesDePydantic(b['detail']);
+  // El generador de actas (`novedades_mid`) responde sus 422 con un arreglo
+  // `detail: [{campo, mensaje}]`; su `error` es un genérico ("datos del acta inválidos").
+  if (Array.isArray(b['detail'])) return mensajesDeValidacion(b['detail']);
   const candidato = b['Message'] ?? b['message'] ?? b['Error'] ?? b['error'] ?? b['Body'] ?? b['detail'];
   return typeof candidato === 'string' ? candidato.trim() : '';
 }
 
-function mensajesDePydantic(detalles: unknown[]): string {
+/**
+ * Une los `{campo, mensaje}` del generador de actas en un solo texto. Muchos
+ * mensajes solo se entienden junto a su campo ("es obligatorio"), así que se
+ * antepone la ruta sin el prefijo `datos.`, que es igual en todos. `campo: "datos"`
+ * a secas (JSON con un tipo equivocado) no aporta nada y se omite.
+ */
+function mensajesDeValidacion(detalles: unknown[]): string {
   return detalles
-    .map(d => (d && typeof d === 'object' ? String((d as { msg?: unknown }).msg ?? '') : String(d)))
-    // Pydantic prefija los errores de validador con "Value error, ": ruido para el usuario.
-    .map(msg => msg.replace(/^Value error,\s*/i, '').trim())
+    .map(d => {
+      const { campo, mensaje } = (d ?? {}) as { campo?: unknown; mensaje?: unknown };
+      const texto = String(mensaje ?? '').trim();
+      const ruta = String(campo ?? '').replace(/^datos\.?/, '');
+      return texto && ruta ? `${ruta}: ${texto}` : texto;
+    })
     .filter(Boolean)
     .join(' · ');
 }
