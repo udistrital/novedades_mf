@@ -14,6 +14,26 @@ Microcliente para la gestión, registro, actualización y consulta de novedades 
 * [TypeScript 5.5](https://www.typescriptlang.org/)
 * [RxJS 7.8](https://rxjs.dev/)
 
+### Arquitectura
+
+El punto de entrada es `src/main.single-spa.ts`, que exporta el ciclo de vida de single-spa (`bootstrap`, `mount`, `unmount`). La compilación usa `@angular-builders/custom-webpack` y `single-spa-angular` para generar un único bundle UMD, `dist/novedades-mf/main.js`, que el cliente contenedor monta en la ruta `/novedades`.
+
+El código sigue un diseño por capas (presentación, aplicación, dominio e infraestructura) dentro de un solo dominio, `src/app/domains/contratos/`. El detalle está en [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), y cada decisión de arquitectura, en [docs/adr/](docs/adr/).
+
+### Módulos y Rutas
+
+| Ruta | Pantalla |
+| --- | --- |
+| `/novedades` | Panel de contratos: búsqueda, estado del contrato, novedades registradas y anulación |
+| `/novedades/contratos/:contractId/novedades/adicion-prorroga` | Adición y prórroga |
+| `/novedades/contratos/:contractId/novedades/suspension` | Suspensión |
+| `/novedades/contratos/:contractId/novedades/reinicio` | Reinicio |
+| `/novedades/contratos/:contractId/novedades/cesion` | Cesión |
+| `/novedades/contratos/:contractId/novedades/terminacion` | Terminación anticipada |
+| `/novedades/contratos/:contractId/novedades/poliza` | Póliza del cesionario tras una cesión |
+
+`:contractId` es `{numero}_{vigencia}`. Las rutas de novedad exigen un rol autorizado y que el estado del contrato admita esa novedad; si no, vuelven al panel.
+
 ### Variables de Entorno
 
 La configuración por ambiente vive en `src/environments/`:
@@ -28,11 +48,13 @@ La configuración por ambiente vive en `src/environments/`:
 | `ACTAS_MID_SERVICE` | `novedades_mid` local (`POST novedad/generaracta`) — generación del PDF del acta; apunta a `localhost:8081` hasta que el endpoint se despliegue |
 | `TOKEN` | Configuración OAuth2 de WSO2 (client id, redirect, scopes, logout) |
 
-| Ambiente | Archivo | Compilación |
-| --- | --- | --- |
-| Producción | `src/environments/environment.ts` | `npm run build` |
-| Local | `src/environments/environment.development.ts` | `npm start` |
-| Pruebas | `src/environments/environment.test.ts` | `npm run start:test` |
+| Ambiente | Archivo | Servidor local | Compilación |
+| --- | --- | --- | --- |
+| Producción | `src/environments/environment.ts` | — | `npm run build` |
+| Local | `src/environments/environment.development.ts` | `npm start` | `npm run watch` |
+| Pruebas | `src/environments/environment.test.ts` | `npm run start:test` | `npx ng build --configuration test` |
+
+Cada compilación genera `dist/novedades-mf/main.js` con la URL pública (`deployUrl`) de su ambiente, definida en `angular.json`.
 
 ## Ejecución del Proyecto
 
@@ -131,30 +153,29 @@ Con estos pasos, se tendrán las partes mínimas necesarias para ejecutar el pro
 
 ## Ejecución Dockerfile
 
-```bash
-# Does not apply
-```
+No aplica: el microcliente se publica como un archivo estático que carga el cliente contenedor.
 
 ## Ejecución docker-compose
 
-```bash
-# Does not apply
-```
+No aplica.
 
 ## Ejecución Pruebas
 
 Pruebas unitarias (Karma + Jasmine) y análisis estático:
 
 ```bash
-npm test
+npm test                                              # abre Chrome y queda observando cambios
+npm test -- --watch=false --browsers=ChromeHeadless   # una sola corrida, sin ventana
 npm run lint
 ```
 
 ## Estado CI
 
-```bash
-# Pendiente de configuración del pipeline
-```
+Pendiente: el repositorio todavía no tiene pipeline de integración continua.
+
+## Modelo de Datos
+
+No aplica: el microcliente no persiste datos. Consume las APIs de la sección [Variables de Entorno](#variables-de-entorno), cuyos modelos de datos están documentados en sus propios repositorios.
 
 ## Licencia
 
