@@ -16,7 +16,7 @@ const SESION_VACIA: UserSession = { roles: [], documento: '', email: '' };
  * Sesión del usuario autenticado: decodifica en cliente el payload del JWT
  * emitido por el flujo OAuth2 del shell (claims `role`, `documento`, `email`),
  * igual que hacía el cliente legado. No valida la firma: la autorización real
- * la hace el gateway; estos claims solo controlan la UI (requerimientos §4).
+ * la hace el gateway; estos claims solo controlan la UI.
  */
 @Injectable({ providedIn: 'root' })
 export class UserSessionService {

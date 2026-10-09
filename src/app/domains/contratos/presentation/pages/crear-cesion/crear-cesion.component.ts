@@ -4,7 +4,7 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { startWith } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 
-import { CreateNoveltyPage } from '../create-novelty-page.base';
+import { CreateNoveltyPage, SOLO_ENTEROS } from '../create-novelty-page.base';
 import { NoveltyPageLayoutComponent } from '../../components/novelty-page-layout/novelty-page-layout.component';
 import { AdditionalClauseSectionComponent } from '../../components/additional-clause-section/additional-clause-section.component';
 import { AssigneeInfoCardComponent } from '../../components/assignee-info-card/assignee-info-card.component';
@@ -86,7 +86,7 @@ export class CrearCesionComponent extends CreateNoveltyPage {
     fechaTerminacionCedente: [{ value: '', disabled: true }],
     valorDesembolsado: [null as number | null, [Validators.required, Validators.min(1)]],
     valorFavorCedente: [null as number | null, [Validators.required, Validators.min(1)]],
-    diasFaltantes: [null as number | null, Validators.min(1)],
+    diasFaltantes: [null as number | null, [Validators.min(1), SOLO_ENTEROS]],
     cedulaCesionario: ['', Validators.required],
     considerando: this.fb.group({
       activo: [false],
@@ -138,7 +138,7 @@ export class CrearCesionComponent extends CreateNoveltyPage {
     return max && ctrl.value && ctrl.value > max ? { maxDate: { max } } : null;
   };
 
-  /** Los valores de la cesión no pueden superar el valor vigente del contrato (§5.3). */
+  /** Los valores de la cesión no pueden superar el valor vigente del contrato. */
   private readonly topeValorContrato = (ctrl: AbstractControl): ValidationErrors | null => {
     const c = this.state.selectedContract();
     const v = Number(ctrl.value);

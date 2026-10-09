@@ -12,7 +12,7 @@ import { availableActions, canManageContract } from '../../domains/contratos/dom
  * entrar, y devuelve al panel si falla cualquiera:
  *
  * 1. **Rol**: un usuario cuyo único rol es SUPERVISOR solo puede tramitar novedades
- *    de contratos que supervisa (coincidencia de documento, requerimientos §4).
+ *    de contratos que supervisa (coincidencia de documento).
  * 2. **Estado del contrato**: la novedad que la URL pretende crear tiene que estar
  *    entre las que ese contrato admite hoy (`availableActions`).
  *

@@ -11,7 +11,7 @@
  *
  * `NOVEDAD ANULADA` (id 10) no tiene miembro propio: es un estado transitorio
  * que el backend atraviesa solo durante la reversión de una anulación
- * (`estado 10 → estado 4`, ver `PATCH /novedad/:id` en API_ENDPOINTS_mid.md) —
+ * (`estado 10 → estado 4`, en el `PATCH /novedad/:id` del mid) —
  * no se persiste como estado "actual" de un contrato en ningún flujo normal.
  */
 export enum ContractStatus {
@@ -32,7 +32,7 @@ export enum ContractStatus {
 
 /**
  * Acciones que el estado del contrato puede habilitar sobre él
- * (mapa estado → acciones de requerimientos §5.1).
+ * (mapa estado → acciones de los requerimientos del legado).
  */
 export enum ContractAction {
   ADICION_PRORROGA = 'adicion-prorroga',

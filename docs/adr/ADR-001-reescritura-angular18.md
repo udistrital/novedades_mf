@@ -4,7 +4,7 @@
 
 ## Contexto
 
-El sistema origen (`novedades_cliente`) es AngularJS 1.7.9 con Grunt/Bower, ES5, sin bundler ni transpilador, dentro del cliente monolítico Argo. AngularJS está en fin de vida. El levantamiento de requerimientos (`referencias/requerimientos_novedades_original.md` §12.1) concluye que no existe ruta de actualización incremental.
+El sistema origen (`novedades_cliente`) es AngularJS 1.7.9 con Grunt/Bower, ES5, sin bundler ni transpilador, dentro del cliente monolítico Argo. AngularJS está en fin de vida. El levantamiento de requerimientos, hecho leyendo el código del legado, concluye que no existe ruta de actualización incremental.
 
 ## Problema
 
@@ -23,5 +23,5 @@ Reescribir el módulo de novedades como aplicación Angular 18 nueva, migrando *
 ## Consecuencias
 
 - (+) Stack soportado, TypeScript estricto, tooling moderno, base testeable.
-- (−) La paridad funcional debe medirse y completarse explícitamente → existe [`MIGRATION_PLAN.md`](../../info/MIGRATION_PLAN.md) con la brecha requerimiento a requerimiento.
+- (−) La paridad funcional debe medirse y completarse explícitamente → se midió contra el levantamiento del legado, requerimiento por requerimiento.
 - La compatibilidad con Angular 18 es una restricción del proyecto: no actualizar el framework sin decisión explícita.

@@ -1,6 +1,6 @@
 # ADR-010 — `deployUrl` por ambiente con la URL pública real
 
-**Fecha**: 2026-07-07 (migración H1 del compliance) · **Estado**: Aceptada
+**Fecha**: 2026-07-07 (hallazgo de la auditoría de lineamientos) · **Estado**: Aceptada
 
 ## Contexto
 
@@ -17,7 +17,7 @@ Cómo garantizar que las 6 rutas lazy carguen en cada ambiente desplegado.
 
 ## Decisión
 
-Opción 2: `production` → `https://novedades.portaloas.udistrital.edu.co/`, `test` → `https://pruebasnovedades.portaloas.udistrital.edu.co/`, `development` → `http://localhost:4209/`. Dominios verificados contra los environments del cliente legado (`referencias/environment_prod.js`, `environment_test.js`).
+Opción 2: `production` → `https://novedades.portaloas.udistrital.edu.co/`, `test` → `https://pruebasnovedades.portaloas.udistrital.edu.co/`, `development` → `http://localhost:4209/`. Dominios verificados contra los archivos de environment de producción y pruebas del cliente legado (`novedades_cliente`).
 
 ## Consecuencias
 

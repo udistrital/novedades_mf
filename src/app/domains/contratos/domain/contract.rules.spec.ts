@@ -133,7 +133,7 @@ describe('contract.rules', () => {
     });
   });
 
-  describe('availableActions (mapa estado → acciones §5.1)', () => {
+  describe('availableActions (mapa estado → acciones)', () => {
     it('En ejecución habilita las 4 novedades', () => {
       expect(availableActions(contract({ status: ContractStatus.EN_EJECUCION }))).toEqual([
         ContractAction.ADICION_PRORROGA,
@@ -163,7 +163,7 @@ describe('contract.rules', () => {
       }
     });
 
-    it('una novedad En trámite bloquea todas las acciones (§5.1)', () => {
+    it('una novedad En trámite bloquea todas las acciones', () => {
       const c = contract({
         status: ContractStatus.EN_EJECUCION,
         novelties: [novelty({ status: NoveltyStatus.IN_PROCESS })]
@@ -193,14 +193,14 @@ describe('contract.rules', () => {
     });
   });
 
-  describe('canAnnulNovelty (condiciones estrictas §5.1)', () => {
+  describe('canAnnulNovelty (condiciones estrictas)', () => {
     it('con una sola novedad, esa novedad es anulable', () => {
       const unica = novelty({ id: '1' });
       expect(canAnnulNovelty(contract({ novelties: [unica] }), unica)).toBeTrue();
     });
 
     it('con más de una novedad no se anula ninguna, ni siquiera la última', () => {
-      // Regla estricta de negocio (R5.1.5, confirmada el 2026-09-11): "única novedad"
+      // Regla estricta de negocio (ADR-019, confirmada el 2026-09-11): "única novedad"
       // es literal. Antes esto devolvía `true` para la última.
       const vieja = novelty({ id: '1', expeditionDate: '01/01/2024' });
       const ultima = novelty({ id: '2', expeditionDate: '01/03/2024' });
@@ -237,7 +237,7 @@ describe('contract.rules', () => {
     });
   });
 
-  describe('acumulados (§5.1/§5.2)', () => {
+  describe('acumulados', () => {
     const c = contract({
       totalValue: 100_000_000,
       initialTerm: 'DIEZ ( 10 ) MESES',
@@ -336,7 +336,7 @@ describe('contract.rules', () => {
     });
   });
 
-  describe('currentContractorId (§5.5)', () => {
+  describe('currentContractorId', () => {
     it('devuelve el id del último cesionario cuando hubo cesiones', () => {
       const c = contract({
         novelties: [
@@ -352,7 +352,7 @@ describe('contract.rules', () => {
     });
   });
 
-  describe('canManageContract (regla de rol §4)', () => {
+  describe('canManageContract (regla de rol)', () => {
     const c = contract({ supervisorDocument: '52045004' });
 
     it('un SUPERVISOR (único rol) solo gestiona el contrato que supervisa', () => {

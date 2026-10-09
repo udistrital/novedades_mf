@@ -1,10 +1,10 @@
 # ADR-013 — No replicar la normalización de fechas del legado (mediodía / día 31)
 
-**Fecha**: 2026-07-07 · **Estado**: Aceptada (cierra la decisión pendiente MIG-013)
+**Fecha**: 2026-07-07 · **Estado**: Aceptada (cierra la decisión pendiente sobre la normalización de fechas del legado)
 
 ## Contexto
 
-El cliente legado normalizaba todas las fechas a mediodía y corregía automáticamente el día 31 (lo pasaba al día 1 del mes siguiente). El levantamiento de requerimientos (§5.2/§5.9) las registra como reglas recurrentes, pero su análisis concluyó que son **mitigaciones técnicas de bugs de `Date` en JavaScript** (desfases por zona horaria/DST al operar con medianoche), no reglas de negocio.
+El cliente legado normalizaba todas las fechas a mediodía y corregía automáticamente el día 31 (lo pasaba al día 1 del mes siguiente). El levantamiento de requerimientos del legado las registra como reglas recurrentes, pero su análisis concluyó que son **mitigaciones técnicas de bugs de `Date` en JavaScript** (desfases por zona horaria/DST al operar con medianoche), no reglas de negocio.
 
 ## Problema
 

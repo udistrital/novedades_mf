@@ -176,7 +176,7 @@ export function formatTerm(totalDays: number | null | undefined): string {
  * No es `daysBetween`, que cuenta días de calendario: esta es la cuenta del negocio,
  * la que el backend guarda en `periodosuspension` y la que se imprime como plazo en
  * las actas. Confirmada con las dos trazas del contrato 653/2025
- * (`docs/endpoints_registrados.md`): 10/02→05/03 = 26 y 08/02→26/03 = 49.
+ * (ADR-015): 10/02→05/03 = 26 y 08/02→26/03 = 49.
  *
  * Se aplica **también a las suspensiones**: se evaluó contarlas en días de calendario
  * (darían 24 donde el legado registra 26) y negocio decidió el **2026-08-29** mantener

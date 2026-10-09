@@ -13,7 +13,7 @@ El proyecto guía institucional (`solicitudes_sabaticos_mf`) usa NgModules + `pl
 ## Alternativas consideradas
 
 1. **NgModules + zone.js** (paridad con la guía): compatible pero arrastra boilerplate y doble mecanismo de reactividad.
-2. **Standalone + zoneless + signals**: menos código, reactividad explícita, compatible con single-spa-angular (verificado: el auditoría de lineamientos lo clasificó como equivalencia válida — `referencias/COMPLIANCE_REPORT.md` §4).
+2. **Standalone + zoneless + signals**: menos código, reactividad explícita, compatible con single-spa-angular (la auditoría contra los lineamientos OAS del 2026-07-07 lo clasificó como equivalencia válida).
 
 ## Decisión
 
@@ -22,5 +22,5 @@ Todo el MF es standalone; el estado reactivo son signals; la app corre zoneless.
 ## Consecuencias
 
 - (+) Sin NgModules ni suscripciones de estado; templates 100 % control flow nuevo.
-- (−) Divergencia estilística con el proyecto guía (aceptada y documentada como equivalencia); los desarrolladores que vengan de la guía deben leer [CODING_STANDARDS.md](../CODING_STANDARDS.md).
+- (−) Divergencia estilística con el proyecto guía (aceptada y documentada como equivalencia); quien venga de la guía debe saber que aquí la inyección es con `inject()`, los inputs y outputs con `input()`/`output()`/`model()`, el control flow con `@if`/`@for` y el estado en signals ([ADR-006](ADR-006-estado-con-signals.md)).
 - Regla derivada: nunca depender de zone (no `detectChanges()` como parche; si la vista no reacciona, el estado no era un signal).

@@ -54,7 +54,7 @@ export function isContractSuspended(contract: Contract): boolean {
  * Cesión cuya póliza todavía no se ha registrado, si el contrato está en esa
  * situación: es la última novedad y llegó sin número de póliza.
  *
- * Hasta que se registre, el contrato no puede recibir más novedades (§5.1): la
+ * Hasta que se registre, el contrato no puede recibir más novedades: la
  * garantía del cesionario es condición para seguir ejecutándolo.
  */
 export function assignmentPendingPoliza(contract: Contract): NoveltySummary | undefined {
@@ -64,8 +64,8 @@ export function assignmentPendingPoliza(contract: Contract): NoveltySummary | un
 
 /**
  * Estado efectivo del contrato: el registrado en el backend si existe, y si
- * no, el inferido de las novedades (complemento documentado en MIG-002: el
- * backend de pruebas no siempre tiene registros en `contrato_estado`).
+ * no, el inferido de las novedades (complemento necesario porque el backend de
+ * pruebas no siempre tiene registros en `contrato_estado`).
  *
  * "Cesión pendiente de póliza" va **antes** que el estado del backend, y no como
  * respaldo: ese estado no existe en el catálogo `estado_contrato` y la cesión no
@@ -101,11 +101,11 @@ export function hasNoveltyInProgress(contract: Contract): boolean {
 }
 
 /**
- * Mapa estado → acciones habilitadas (requerimientos §5.1):
+ * Mapa estado → acciones habilitadas (requerimientos del legado):
  * En ejecución → las 4 novedades; Suspendido → Reinicio; Cesión pendiente de
  * póliza → Agregar póliza; Finalizado → Activar contrato; Cancelado / Inicio /
  * Terminado / Anulado / Liquidado → solo informativo. Una novedad "en curso"
- * bloquea todo (§5.1).
+ * bloquea todo.
  */
 export function availableActions(contract: Contract): ContractAction[] {
   if (hasNoveltyInProgress(contract)) return [];
@@ -129,14 +129,14 @@ export function availableActions(contract: Contract): ContractAction[] {
 }
 
 /**
- * Condiciones estrictas de anulación (requerimientos §5.1): el contrato debe tener
+ * Condiciones estrictas de anulación (requerimientos del legado): el contrato debe tener
  * **una sola novedad**, ser esa la que se anula, y corresponder su tipo al estado
  * que produjo — anular la Suspensión de un contrato Suspendido, la Terminación de
  * un contrato Terminado, etc.
  *
- * Lo de "una sola" es literal: R5.1.5 habla de la *"única novedad"* y negocio lo
- * confirmó así el **2026-09-11** (hasta entonces se leía como "la última", la
- * interpretación #1 del MIGRATION_PLAN). Un contrato con dos o más novedades no
+ * Lo de "una sola" es literal: el requerimiento del legado habla de la *"única
+ * novedad"* y negocio lo confirmó así el **2026-09-11** (hasta entonces se leía
+ * como "la última"). Un contrato con dos o más novedades no
  * admite ninguna anulación, ni siquiera sobre la última.
  *
  * Ampliarlo a "la última aunque haya otras" es sustituir la condición de abajo por
@@ -171,7 +171,7 @@ export function canAnnulNovelty(contract: Contract, novelty: NoveltySummary): bo
   }
 }
 
-// --- Valor y plazo vigentes (acumulan novedades históricas, requerimientos §5.1/§5.2) ---
+// --- Valor y plazo vigentes (acumulan novedades históricas) ---
 
 /** Valor vigente del contrato: valor base + todas las adiciones históricas. */
 export function currentContractValue(contract: Contract): number {
@@ -249,7 +249,7 @@ export function terminationImbalance(
   return currentContractValue(contract) - repartido;
 }
 
-// --- Topes normativos (requerimientos §5.2; TD-006: parametrizar en backend a futuro) ---
+// --- Topes normativos (constantes sustituibles: deberían venir parametrizadas del backend) ---
 
 /** Tope legal de adición: 50 % del valor vigente del contrato. */
 export const TOPE_ADICION = 0.5;
@@ -266,7 +266,7 @@ export function maxExtensionDays(contract: Contract): number {
   return Math.floor(currentTermDays(contract) * TOPE_PRORROGA);
 }
 
-// --- Contratista vigente tras cesión (requerimientos §5.5) ---
+// --- Contratista vigente tras cesión ---
 
 /**
  * Id (en `informacion_proveedor`) del contratista vigente: el del último
@@ -279,7 +279,7 @@ export function currentContractorId(contract: Contract): string | undefined {
   return cesiones.reduce((a, b) => (Number(b.id) >= Number(a.id) ? b : a)).cesionarioId;
 }
 
-// --- Control de acceso por rol (requerimientos §4) ---
+// --- Control de acceso por rol ---
 
 export const ROL_SUPERVISOR = 'SUPERVISOR';
 

@@ -30,7 +30,7 @@ graph TD
     end
     subgraph infrastructure["infrastructure/ — detalle técnico"]
         HTTP[HttpContractService]
-        ACTA["HttpActaMidService (temporal)"]
+        ACTA["HttpActaMidService"]
         MAP["mappers + DTOs (capa anticorrupción)"]
     end
     presentation --> application
@@ -41,7 +41,7 @@ graph TD
     HTTP --> MAP
 ```
 
-Hay **dos puertos**: `IContractRepository` (datos y escrituras) e `IActaGenerator` (generación del acta en PDF, [ADR-016](adr/ADR-016-generacion-de-actas-desacoplada.md)). Ambos bindings viven en `app.config.ts`; el de actas es el punto único a cambiar cuando se reemplace el middleware temporal.
+Hay **dos puertos**: `IContractRepository` (datos y escrituras) e `IActaGenerator` (generación del acta en PDF con `POST novedad/generaracta` de `novedades_mid`, [ADR-016](adr/ADR-016-generacion-de-actas-desacoplada.md), [ADR-020](adr/ADR-020-acta-generada-en-novedades-mid.md)). Ambos bindings viven en `app.config.ts`; cambiar de generador se limita a la implementación de ese puerto.
 
 **Regla de dependencia**: las flechas solo apuntan hacia adentro (presentación → aplicación → dominio ← infraestructura). La infraestructura conoce al dominio para implementarlo; el dominio no conoce a nadie.
 
@@ -78,8 +78,8 @@ sequenceDiagram
 
 Claves del flujo:
 - El **interceptor** (`shared/http/auth.interceptor.ts`) agrega `Authorization: Bearer` leyendo el token que el shell dejó en `localStorage` — solo hacia las APIs de la allowlist ([ADR-009](adr/ADR-009-autenticacion-delegada.md)).
-- Los **mappers** absorben todas las rarezas del backend legado (campos alternativos, `[{}]` como "sin filas", envoltorio `{Code, Body}`) para que el dominio quede limpio; ver `infrastructure/mappers/contract.mapper.ts` y [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md#cómo-consumir-un-endpoint-nuevo).
-- Las **escrituras** son reales desde [ADR-015](adr/ADR-015-cascada-completa-con-replica.md): `createNovelty` ejecuta la cascada completa del legado (acta → validación de estado → novedad → réplica → compensación si la réplica falla → registro del estado). El detalle del orden y de las excepciones por tipo está en ese ADR; el estado de avance, en [MIGRATION.md](MIGRATION.md).
+- Los **mappers** absorben todas las rarezas del backend legado (campos alternativos, `[{}]` como "sin filas", envoltorio `{Code, Body}`) para que el dominio quede limpio; ver `infrastructure/mappers/contract.mapper.ts`, y para agregar un endpoint, [Organización para crecer](#organización-para-crecer).
+- Las **escrituras** son reales desde [ADR-015](adr/ADR-015-cascada-completa-con-replica.md): `createNovelty` ejecuta la cascada completa del legado (acta → validación de estado → novedad → réplica → compensación si la réplica falla → registro del estado). El detalle del orden, de las excepciones por tipo y de las escrituras verificadas está en ese ADR.
 
 ## Flujo de creación de una novedad
 
@@ -149,5 +149,6 @@ Piezas de la integración (todas en `main.single-spa.ts`, `angular.json`, `extra
 ## Organización para crecer
 
 - **Nuevo dominio de negocio** → carpeta hermana `domains/<nombre>/` con las mismas 4 capas; su repositorio se registra en `app.config.ts`.
-- **Nueva novedad** → nueva página que extiende `CreateNoveltyPage` + nuevo miembro de la unión `NoveltyDraft` + ruta lazy. Receta paso a paso en [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md#cómo-estructurar-un-feature-nuevo).
+- **Nueva novedad** → nueva página que extiende `CreateNoveltyPage` + nuevo miembro de la unión `NoveltyDraft` + ruta lazy en `app.routes.ts`, **antes** del comodín `**`. La opción del menú sale de `availableActions` (`domain/contract.rules.ts`), la misma función que consulta el guard, y la página se arma como la existente más parecida.
+- **Nuevo endpoint** → URL base en los tres archivos de `environments/` con su nombre institucional `*_SERVICE` (y en la allowlist de `auth.interceptor.ts` si lleva token) → DTO laxo en `infrastructure/dtos/external-api.dto.ts` → mapper puro en `infrastructure/mappers/` → método en el puerto y en `HttpContractService`. Si es una **escritura**, además tiene que estar verificada y sumarse a la lista de [ADR-015](adr/ADR-015-cascada-completa-con-replica.md#escrituras-verificadas); si no, va comentada.
 - **Nuevo átomo visual** → `shared/ui/` solo si es agnóstico del dominio; si habla de contratos/novedades, vive en `presentation/components/`.

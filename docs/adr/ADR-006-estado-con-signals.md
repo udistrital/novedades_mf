@@ -24,4 +24,4 @@ Opción 3, ejemplar canónico `ContractStateService`: el signal de estado es pri
 
 - (+) Unidireccional, sin gestión de suscripciones de estado, legible para revisores sin experiencia NgRx.
 - (−) Sin devtools de time-travel ni efectos declarativos; si el estado creciera en complejidad (múltiples dominios interdependientes), reevaluar con un ADR nuevo.
-- Anti-patrón derivado prohibido: `BehaviorSubject` como store de vista ([CODING_STANDARDS.md](../CODING_STANDARDS.md#anti-patrones-rechazo-directo-en-revisión)).
+- Anti-patrón derivado prohibido: `BehaviorSubject` como store de vista, y `effect` para derivar estado (para eso está `computed`).

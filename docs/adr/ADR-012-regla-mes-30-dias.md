@@ -1,10 +1,10 @@
 # ADR-012 — Preservar la regla "mes = 30 días" del legado
 
-**Fecha**: 2026-06-30 (implementación en `format.util.ts`) · **Estado**: Aceptada (condicionada a validación de negocio — TD-010)
+**Fecha**: 2026-06-30 (implementación en `format.util.ts`) · **Estado**: Aceptada (negocio la confirmó el 2026-08-29, también para las suspensiones; solo un pronunciamiento de jurídica la cambiaría)
 
 ## Contexto
 
-Todo el cálculo de plazos del sistema legado usa aritmética de meses fijos de 30 días (convertir "NUEVE ( 9 ) MESES" a 270 días, sumar días de prórroga, reexpresar en "MESES Y DÍAS"). El levantamiento de requerimientos (§5.9, §12.11) marca explícitamente que debe **decidirse** si se preserva o se corrige a calendario real, y esa decisión pertenece a jurídica/negocio, no al equipo técnico.
+Todo el cálculo de plazos del sistema legado usa aritmética de meses fijos de 30 días (convertir "NUEVE ( 9 ) MESES" a 270 días, sumar días de prórroga, reexpresar en "MESES Y DÍAS"). El levantamiento de requerimientos del legado marca explícitamente que debe **decidirse** si se preserva o se corrige a calendario real, y esa decisión pertenece a jurídica/negocio, no al equipo técnico.
 
 ## Problema
 
@@ -17,7 +17,7 @@ Qué aritmética de plazos implementar mientras el negocio no se pronuncia.
 
 ## Decisión
 
-Opción 2: `DIAS_POR_MES = 30` en `shared/util/format.util.ts` (`addDaysToTerm`), documentada como regla contable del negocio. La eventual corrección es la deuda TD-010 del [MIGRATION_PLAN](../../info/MIGRATION_PLAN.md#4-deuda-técnica-no-implementar-en-esta-migración).
+Opción 2: `DIAS_POR_MES = 30` en `shared/util/format.util.ts` (`addDaysToTerm`), documentada como regla contable del negocio. La eventual corrección queda como deuda técnica, a la espera de un pronunciamiento de jurídica.
 
 ## Consecuencias
 

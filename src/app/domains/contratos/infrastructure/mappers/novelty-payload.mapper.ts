@@ -11,7 +11,7 @@ import { EstadoContratoDto, NovedadPoscontractualDto, NovedadPostcontractualArgo
  * Los nombres de campo NO están documentados en el backend (viven en las
  * funciones `Construir*` de models/*.go): los de los cinco tipos están
  * **confirmados contra trazas reales del cliente legado** sobre el contrato
- * 653/2025 (ver `docs/endpoints_registrados.md`).
+ * 653/2025 (ADR-015).
  *
  * Si el backend rechaza un payload, ESTE es el único archivo a corregir.
  */
@@ -30,7 +30,7 @@ export const ESTADO_CONTRATO_ID = {
   'NOVEDAD ANULADA': 10
 } as const;
 
-/** Discriminadores de POST {mid}novedad/ (API_ENDPOINTS_mid.md). */
+/** Discriminadores de POST {mid}novedad/. */
 type TipoNovedadMid = 'NP_SUS' | 'NP_CES' | 'NP_REI' | 'NP_TER' | 'NP_ADI' | 'NP_PRO' | 'NP_ADPRO';
 
 /** `IdTipoDocumento` del acta de novedad en el gestor documental. */
@@ -90,7 +90,7 @@ export const NOVEDAD_BACKEND: Readonly<Partial<Record<NoveltyType, NovedadBacken
     replicaTipoNovedad: 219,
     // La traza de cesión no llama `validarCambioEstado` ni `contrato_estado`: el
     // estado "Cesión pendiente de póliza" no está en el catálogo y el legado no
-    // lo registra (ambigüedad §2 del informe de endpoints legados).
+    // lo registra.
     estadoDestinoId: null
   },
   [NoveltyType.ADDITION_EXTENSION]: {

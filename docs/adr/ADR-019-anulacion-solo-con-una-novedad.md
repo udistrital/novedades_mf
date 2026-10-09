@@ -1,12 +1,12 @@
 # ADR-019 — La anulación exige que el contrato tenga una sola novedad
 
-**Fecha**: 2026-09-11 · **Estado**: Aceptada (resuelve la ambigüedad #1 del [MIGRATION_PLAN](../../info/MIGRATION_PLAN.md), abierta desde MIG-009)
+**Fecha**: 2026-09-11 · **Estado**: Aceptada (resuelve una ambigüedad abierta desde que se implementó la anulación estricta)
 
 ## Contexto
 
-El requerimiento R5.1.5 del sistema legado condiciona la anulación a que la novedad sea la **"única novedad"** del contrato y que *"coincida con el botón habilitado"*.
+El requerimiento de anulación del sistema legado condiciona la anulación a que la novedad sea la **"única novedad"** del contrato y que *"coincida con el botón habilitado"*.
 
-La segunda condición se entendió sin discusión: el tipo de la novedad debe corresponder al estado que produjo (se anula la Suspensión de un contrato Suspendido, la Terminación de un contrato Terminado). La primera no: *"única"* admitía dos lecturas y el equipo eligió la permisiva —**"la última"**— dejándola registrada como la interpretación #1 de las ambigüedades del plan de migración, con la nota explícita de *"confirmar si «única» es literal"*.
+La segunda condición se entendió sin discusión: el tipo de la novedad debe corresponder al estado que produjo (se anula la Suspensión de un contrato Suspendido, la Terminación de un contrato Terminado). La primera no: *"única"* admitía dos lecturas y el equipo eligió la permisiva —**"la última"**— y la dejó registrada como ambigüedad abierta, con la nota explícita de *"confirmar si «única» es literal"*.
 
 El **2026-09-11** negocio confirmó que **es literal**.
 
@@ -22,7 +22,7 @@ El razonamiento de negocio es el mismo que sostiene toda la función: **la anula
 
 ## Consecuencias
 
-- (+) La regla queda alineada al texto del requerimiento, sin interpretación de por medio: desaparece la ambigüedad #1.
+- (+) La regla queda alineada al texto del requerimiento, sin interpretación de por medio: desaparece la ambigüedad.
 - (+) Se elimina una clase entera de estados inconsistentes. El `PATCH` de anulación del mid (`AnularNovedadYRevertirEstado`) devuelve el contrato **siempre** a "En ejecución" sin mirar el historial; con una sola novedad eso es correcto salvo en el reinicio —que el cliente ya corrige con `estadoTrasAnulacion`—, pero con varias el estado correcto es el que el contrato tenía *antes* de la novedad anulada, y nadie lo está calculando.
 - (−) Un error detectado tarde ya no se corrige desde el aplicativo: si al contrato le entró otra novedad después, la corrección sale del sistema. Es el costo aceptado de la regla.
 - El botón "Anular" del acordeón se apaga solo: lee `novelty.canAnnul`, que el mapper calcula con esta misma función. No hay una segunda validación que mantener.
@@ -46,4 +46,4 @@ Lo que **sí habría que resolver antes** de dar ese paso:
 2. **El valor restituido en el mid.** `AnularNovedadYRevertirEstado` restituye el valor del contrato para los tipos 8, 1 y 2 y vuelve a replicar los meses del período restituido. Con varias novedades hay que verificar contra qué base lo restituye, porque el cliente ya no puede asumir que es el valor de suscripción.
 3. **Confirmación de negocio**, que es la que cierra la decisión: esta ADR la reversa cuando exista.
 
-Mientras tanto, la puerta se deja señalizada en el código y en las [reglas del dominio](../../info/DOMAIN.md) para que quien la abra sepa qué encontrará detrás.
+Mientras tanto, la puerta se deja señalizada en el código (`canAnnulNovelty`, `domain/contract.rules.ts`) para que quien la abra sepa qué encontrará detrás.

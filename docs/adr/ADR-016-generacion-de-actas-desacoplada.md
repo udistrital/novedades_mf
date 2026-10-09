@@ -2,6 +2,11 @@
 
 **Fecha**: 2026-08-03 · **Estado**: Aceptada
 
+> **Servicio reemplazado por [ADR-020](ADR-020-acta-generada-en-novedades-mid.md) (2026-10-09)**: el
+> generador ya no es `actas_novedad_mid` sino `POST novedad/generaracta` de `novedades_mid`, con otro
+> formato de errores y otra URL local. El puerto `IActaGenerator` y el mapeo de payloads de este ADR
+> siguen vigentes; lo que aquí se dice del FastAPI queda como registro.
+
 ## Contexto
 
 Hasta ahora el PDF del acta no existía: los payloads viajaban con `file: ''` y
@@ -11,7 +16,7 @@ Hasta ahora el PDF del acta no existía: los payloads viajaban con `file: ''` y
 Ya hay un servicio que lo genera: **`actas_novedad_mid`**, un middleware sin estado
 (FastAPI) con un endpoint por tipo de acta. Recibe **todos** los datos en el POST —no
 consulta ÁGORA, no persiste nada, no valida token— y devuelve el PDF en base64 dentro de
-un JSON (`docs_integracion_agente_actas_mid.md`).
+un JSON.
 
 Dos condiciones explícitas del equipo:
 
@@ -93,8 +98,11 @@ imprimir cifras que el usuario no aprobó. Si no cuadran contra el valor vigente
 - (+) El reemplazo del servicio queda acotado a dos archivos y un binding.
 - (+) `describeApiError` ahora entiende el `detail: [{loc, msg}]` de FastAPI (sin su prefijo
   interno `"Value error, "`), así que los 422 del acta llegan al usuario como frases reales.
-- (−) El PDF **no** queda archivado: si el usuario pierde el archivo descargado, no hay
-  dónde recuperarlo hasta que se decida subirlo al gestor documental.
+- (−) ~~El PDF **no** queda archivado: si el usuario pierde el archivo descargado, no hay
+  dónde recuperarlo hasta que se decida subirlo al gestor documental.~~ — **corregido el
+  27–28 de agosto** gracias a [ADR-018](ADR-018-acta-antes-de-la-novedad.md): el PDF viaja en
+  base64 en el `file` de `gestor_documental` en los cinco tipos. Las novedades anteriores
+  quedaron sin documento; recuperarlas exigiría una carga de datos, aún sin decidir.
 - (−) ~~`rol` y `resolucion` de las personas no se envían~~ — **corregido el 2026-08-24**: la
   premisa era falsa, el backend sí expone ambos y no se estaban leyendo. Con `rol`
   (`ordenadores.RolOrdenador`, `contrato_general.Supervisor.Cargo`) y `resolucion`

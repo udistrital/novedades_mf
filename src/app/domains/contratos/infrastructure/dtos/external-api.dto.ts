@@ -1,6 +1,6 @@
 /**
  * Respuestas de las APIs institucionales legadas (administrativa_amazon_api y
- * novedades_mid). El esquema no está documentado campo a campo (ver backend/*.md),
+ * novedades_mid). El esquema no está documentado campo a campo,
  * por eso los campos son opcionales/laxos y el mapper lee con alternativas.
  * Cualquier ajuste de nombre de campo tras validar contra el servicio real se
  * hace aquí y en contract.mapper.ts, en ningún otro lado.

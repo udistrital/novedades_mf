@@ -22,5 +22,5 @@ Qué parte del ciclo de autenticación implementa este MF.
 ## Consecuencias
 
 - (+) Sesión única gobernada por el shell; defensa en profundidad contra fuga del token.
-- (−) El MF aún no interpreta el contenido del token (rol/documento): el control de acceso por rol es la tarea MIG-010 del [MIGRATION_PLAN](../../info/MIGRATION_PLAN.md).
-- API nueva ⇒ agregarla a la allowlist o no llevará token (recordatorio en [DEVELOPMENT_GUIDE.md](../DEVELOPMENT_GUIDE.md#cómo-consumir-un-endpoint-nuevo)).
+- (−) Al adoptarse, el MF no interpretaba el contenido del token (rol/documento). Hoy sí: `shared/auth/` lee rol y documento, y `canManageContract` + `contractAccessGuard` aplican el control por rol.
+- API nueva ⇒ agregarla a la allowlist o no llevará token (ver [Organización para crecer](../ARCHITECTURE.md#organización-para-crecer)).

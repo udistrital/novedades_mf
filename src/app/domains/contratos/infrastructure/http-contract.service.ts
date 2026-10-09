@@ -65,7 +65,7 @@ import {
  * novedades_mid, novedades_crud y core_amazon_crud).
  *
  * Escrituras: replican la coreografía completa del cliente legado, confirmada
- * contra trazas reales del contrato 653/2025 (`docs/endpoints_registrados.md`):
+ * contra trazas reales del contrato 653/2025 (ADR-015):
  *
  *   subir acta → [validar cambio de estado] → crear novedad → replicar
  *   → (si la réplica falla) compensar desactivando la novedad
@@ -76,7 +76,7 @@ import {
  * reinicio es un PUT y no un POST: ver `replicar`.
  *
  * ⚠️ Solo se escribe contra los endpoints verificados en el ambiente de pruebas
- * (ver `docs/endpoints_registrados.md`). Cualquier otro POST/PUT/DELETE queda
+ * (lista "Escrituras verificadas" de ADR-015). Cualquier otro POST/PUT/DELETE queda
  * comentado a propósito: apuntan a datos reales en todos los ambientes.
  */
 @Injectable({ providedIn: 'root' })
@@ -316,7 +316,7 @@ export class HttpContractService implements IContractRepository {
    * - Cuatro tipos hacen `POST {mid}replica`: crean el registro en Ágora/Titan.
    * - **Reinicio** hace `PUT {mid}replica/{id}`: no crea nada, actualiza la
    *   suspensión que reanuda (de ahí el `TipoNovedad: 216` de suspensión y el
-   *   cuerpo reducido a las dos fechas).
+   *   cuerpo con el registro completo de Ágora y las fechas nuevas).
    *
    * El id del PUT es el del registro de la suspensión **en Ágora**, no el de la
    * novedad en `novedades_crud`: el mid hace `PUT novedad_postcontractual/{id}`
@@ -398,9 +398,10 @@ export class HttpContractService implements IContractRepository {
    * Anula la novedad vía PATCH del mid: el backend marca `Activo=false` y
    * revierte el estado del contrato en cascada (AnularNovedadYRevertirEstado).
    *
-   * Es la única escritura activa sin traza en `endpoints_registrados.md`
-   * (excepción documentada en [ADR-015]); de ahí que la respuesta se juzgue con
-   * `anulacionRechazada`, que contempla las dos formas posibles.
+   * Es la única escritura sin traza capturada: entró por ejecución funcional y luego
+   * se verificó leyendo el código del mid, que responde siempre con `utils_oas`
+   * (ADR-015). `anulacionRechazada` contempla además la forma `Alert`, como red
+   * ante un cambio de envoltorio.
    */
   annulNovelty(contractId: string, noveltyId: string, type: NoveltyType): Observable<void> {
     return this.http
@@ -736,7 +737,7 @@ export class HttpContractService implements IContractRepository {
   /**
    * Completa una fila de contrato con el contratista, sus novedades y su estado
    * real; si el historial registra cesiones, el contratista vigente pasa a ser
-   * el último cesionario (requerimientos §5.5).
+   * el último cesionario.
    */
   private toDomain(row: ContratoGeneralDto): Observable<Contract> {
     const suscrito = row.ContratoSuscrito?.[0];
@@ -897,12 +898,13 @@ type RespuestaAnulacion = ApiResponseDto & AlertResponse<unknown>;
  * Se comprueban **las dos formas** posibles y basta que una niegue. Antes solo se
  * miraba `Success !== false`, así que un `Alert` de error (donde `Success` llega
  * `undefined`) pasaba por éxito: el usuario veía "novedad anulada" sin que se
- * hubiera anulado — el mismo fallo silencioso que tiene hoy el registro de póliza.
+ * hubiera anulado — el mismo fallo silencioso que tenía entonces el registro de póliza.
  *
  * Una respuesta que no diga nada (vacía, o con una forma que no es ninguna de las
  * dos) se acepta a propósito: el camino feliz está probado en funcionamiento y no
- * se rompe por una forma no documentada. Cuando exista la traza (P0-6 del plan de
- * trabajo), esto se reduce a la comprobación de la forma real.
+ * se rompe por una forma no documentada. Leer el código del mid (2026-08-29) confirmó
+ * que responde siempre con `utils_oas`; la rama de `Alert` se conserva como red ante
+ * un cambio de envoltorio (ADR-015).
  */
 export function anulacionRechazada(res: RespuestaAnulacion | null | undefined): boolean {
   if (!res) return false;
@@ -1043,7 +1045,7 @@ const SIN_CDP_RP: CdpRp = { cdp: '', rp: '' };
  *
  * La unidad ejecutora va a cuatro dígitos (1 → "0001"). El `12` final es fijo: el
  * cliente legado lo escribe así en las tres actas que consultan este servicio y su
- * significado no está documentado en ninguna parte (`info/backend/endpoints_legacy.md`).
+ * significado no está documentado en ninguna parte.
  */
 export function rutaCdpRp(numero: string, vigencia: string, unidadEjecutora?: number): string {
   const unidad = String(unidadEjecutora ?? 1).padStart(4, '0');

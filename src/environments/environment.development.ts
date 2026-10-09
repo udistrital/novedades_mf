@@ -1,7 +1,6 @@
 /**
  * Ambiente: DESARROLLO (local).
- * Nombres de variables institucionales (no cambiar). URLs tal cual el legado;
- * inventario completo por servicio en backend/endpoints_legacy.md §0.
+ * Nombres de variables institucionales (no cambiar). URLs tal cual el legado.
  */
 export const environment = {
     production: false,
@@ -10,8 +9,10 @@ export const environment = {
     NOVEDADES_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/novedades_crud/v1/',
     CORE_AMAZON_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/core_amazon_crud/v1/',
     FINANCIERA_JBPM_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/financiera_jbpm/v1/',
-    // despliegue institucional: corre local. Reemplazar la URL cuando exista.
-    ACTAS_MID_SERVICE: 'http://localhost:8080/',
+    // Generador de actas: `novedad/generaracta` de novedades_mid, que aún no está
+    // desplegado y corre local (rama feature/actas). Cuando se despliegue, la llamada
+    // pasa a NOVEDADES_MID_SERVICE y esta variable se elimina.
+    ACTAS_MID_SERVICE: 'http://localhost:8081/v1/',
     TOKEN: {
         AUTORIZATION_URL: 'https://autenticacion.portaloas.udistrital.edu.co/oauth2/authorize',
         URL_USER_INFO: 'https://autenticacion.portaloas.udistrital.edu.co/oauth2/userinfo',

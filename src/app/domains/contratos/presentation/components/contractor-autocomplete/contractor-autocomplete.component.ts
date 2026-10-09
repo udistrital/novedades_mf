@@ -45,7 +45,7 @@ export class ContractorAutocompleteComponent implements ControlValueAccessor, Va
   private readonly state = inject(ContractStateService);
 
   readonly placeholder = input('Buscar por número de documento...');
-  /** Restringe las opciones a personas naturales (el cesionario debe serlo, requerimientos §5.3). */
+  /** Restringe las opciones a personas naturales (el cesionario debe serlo). */
   readonly soloNaturales = input(false);
   readonly selected = output<Assignee>();
 

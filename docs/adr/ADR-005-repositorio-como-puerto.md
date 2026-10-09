@@ -23,5 +23,5 @@ Cómo desacoplar dominio y vistas de ese backend hostil, y cómo alternar mock �
 ## Consecuencias
 
 - (+) Swap real/mock de una línea; dominio limpio; el cambio de esquema del backend toca solo DTO+mapper.
-- (−) Toda operación nueva se implementa **dos veces** (real y mock) — obligación registrada en [AI_GUIDE.md](../AI_GUIDE.md).
+- (−) ~~Toda operación nueva se implementa **dos veces** (real y mock)~~ — dejó de aplicar el 2026-07-23, al eliminarse `MockContractService`: hoy cada operación tiene una sola implementación.
 - Convención para dominios futuros: mismo patrón, un puerto por agregado raíz.

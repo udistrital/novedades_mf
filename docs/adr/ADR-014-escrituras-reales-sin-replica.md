@@ -2,13 +2,13 @@
 
 **Fecha**: 2026-07-07 · **Estado**: ⚠️ **Reemplazada** por [ADR-015](ADR-015-cascada-completa-con-replica.md) (2026-08-01) — a su vez reemplazó a [ADR-011](ADR-011-escrituras-simuladas.md)
 
-> Las trazas reales del cliente legado ([`endpoints_registrados.md`](../endpoints_registrados.md)) mostraron que la réplica y su compensación sí forman parte del flujo, y que `validarCambioEstado` en modo objeto ya aplica el cambio de estado. ADR-015 documenta la cascada completa que hoy implementa el código.
+> Las trazas reales del cliente legado mostraron que la réplica y su compensación sí forman parte del flujo, y que `validarCambioEstado` en modo objeto ya aplica el cambio de estado. ADR-015 documenta la cascada completa que hoy implementa el código.
 
 ## Contexto
 
-El cliente legado orquestaba **todo** el flujo de guardado de cada novedad: `POST validarCambioEstado` → `POST novedad` → `POST replica` (escritura en Ágora/Titan) → `POST contrato_estado`, con compensación manual si la réplica fallaba (`PUT novedades_poscontractuales/{id}` con `Activo:false`). El inventario de endpoints marca ese patrón como "candidato a resolverse con una transacción/saga en la nueva arquitectura" (deuda TD-007), y el MIGRATION_PLAN (MIG-001) prohíbe reimplementar la compensación en el cliente sin confirmación de backend.
+El cliente legado orquestaba **todo** el flujo de guardado de cada novedad: `POST validarCambioEstado` → `POST novedad` → `POST replica` (escritura en Ágora/Titan) → `POST contrato_estado`, con compensación manual si la réplica fallaba (`PUT novedades_poscontractuales/{id}` con `Activo:false`). Ese patrón es candidato a resolverse con una transacción o saga del lado del backend, y la decisión de entonces fue no reimplementar la compensación en el cliente sin confirmación de backend.
 
-Además, los **nombres de campo exactos** del `POST novedad/` por tipo (`NP_SUS`…`NP_ADPRO`) no están documentados: viven en las funciones `Construir*` de `models/*.go` del repo backend `novedades_mid` (gap #1 de `info/backend/API_ENDPOINTS_mid.md`).
+Además, los **nombres de campo exactos** del `POST novedad/` por tipo (`NP_SUS`…`NP_ADPRO`) no están documentados: viven en las funciones `Construir*` de `models/*.go` del repo backend `novedades_mid`.
 
 ## Problema
 
@@ -16,7 +16,7 @@ Conectar las escrituras con fidelidad al flujo del legado sin heredar su anti-pa
 
 ## Alternativas consideradas
 
-1. Replicar la coreografía completa del legado (incluida réplica + compensación): reimplementa en el cliente la transaccionalidad que TD-007 exige mover al backend.
+1. Replicar la coreografía completa del legado (incluida réplica + compensación): reimplementa en el cliente una transaccionalidad que debería vivir en el backend.
 2. Una única llamada `POST novedad/` y nada más: los estados del contrato jamás cambiarían (el mid actual NO orquesta el cambio de estado).
 3. **Cascada mínima documentada, sin réplica**: validar transición → crear novedad → registrar estado, dejando réplica/compensación al backend.
 
@@ -29,7 +29,7 @@ El envoltorio `Alert {Type, Code, Body}` se valida explícitamente (`esAlertaExi
 ## Consecuencias
 
 - (+) Los `console.warn`/`TODO(escrituras)` desaparecen; los caminos de éxito/error de la UI operan contra respuestas reales. ADR-011 pasa a **Reemplazada**.
-- (−) **Payload por tipo es aproximación documentada**: si el backend rechaza el body, el único archivo a corregir es `novelty-payload.mapper.ts` (regla registrada ahí y en AI_GUIDE).
-- (−) Sin réplica hacia Ágora/Titan ni compensación: hasta que backend resuelva TD-007, una novedad creada aquí **no** se replica en Titan/preliquidación. Riesgo documentado y aceptado por fase.
+- (−) **Payload por tipo es aproximación documentada**: si el backend rechaza el body, el único archivo a corregir es `novelty-payload.mapper.ts` (regla registrada en ese archivo).
+- (−) Sin réplica hacia Ágora/Titan ni compensación: hasta que el backend resuelva la transaccionalidad, una novedad creada aquí **no** se replica en Titan/preliquidación. Riesgo documentado y aceptado por fase.
 - (−) Si el paso (3) falla después de crear la novedad, el estado del contrato queda sin avanzar (misma ventana que tenía el legado); no se compensa en cliente por decisión del plan.
 - Los switches de prueba `forceError` de los modales **se conservan**: siguen siendo la única forma de ejercitar los caminos de error de la UI sin depender del backend (retiro fácil documentado en el propio código).

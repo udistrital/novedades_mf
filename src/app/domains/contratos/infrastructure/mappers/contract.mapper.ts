@@ -14,7 +14,7 @@ import {
   PolizaDto
 } from '../dtos/external-api.dto';
 
-/** Códigos de TipoNovedad de novedades_mid (ver backend/API_ENDPOINTS_mid.md). */
+/** Códigos de TipoNovedad de novedades_mid. */
 const TIPO_NOVEDAD: Record<number, NoveltyType> = {
   1: NoveltyType.SUSPENSION,
   2: NoveltyType.ASSIGNMENT,
@@ -191,8 +191,8 @@ function toNoveltySummary(item: NovedadMidDto): NoveltySummary {
  * Convierte las novedades del mid; la anulabilidad definitiva se resuelve en `toContract`.
  *
  * No hace falta descartar las novedades desactivadas por la compensación: el mid ya
- * consulta el CRUD con `activo:true` (`GET /v1/novedad/:id/:vigencia`, ver
- * `info/backend/API_ENDPOINTS_mid.md`), así que una novedad cuya réplica falló no llega
+ * consulta el CRUD con `activo:true` (`GET /v1/novedad/:id/:vigencia`, leído en el
+ * código del mid), así que una novedad cuya réplica falló no llega
  * hasta aquí. Filtrarlo otra vez en el cliente sería código inalcanzable.
  */
 export function toNoveltySummaries(items: NovedadMidDto[]): NoveltySummary[] {

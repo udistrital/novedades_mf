@@ -20,8 +20,7 @@ import {
 } from '../../domain/models/novelty-draft.model';
 
 /**
- * Contrato 653/2025, el mismo de las trazas reales registradas en
- * `docs/endpoints_registrados.md`.
+ * Contrato 653/2025, el mismo de las trazas reales del cliente legado (ADR-015).
  */
 function contrato(): Contract {
   return {

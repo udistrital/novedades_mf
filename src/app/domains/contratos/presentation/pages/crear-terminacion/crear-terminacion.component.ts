@@ -128,7 +128,7 @@ export class CrearTerminacionComponent extends CreateNoveltyPage {
     return restante === 0 ? null : { balanceLiquidacion: { restante } };
   };
 
-  /** Cada valor está topado al valor vigente del contrato (§5.6). */
+  /** Cada valor está topado al valor vigente del contrato. */
   private readonly topeValorContrato = (ctrl: AbstractControl): ValidationErrors | null => {
     const c = this.state.selectedContract();
     const v = Number(ctrl.value);

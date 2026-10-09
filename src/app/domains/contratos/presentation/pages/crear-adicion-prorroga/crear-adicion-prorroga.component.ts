@@ -3,7 +3,7 @@ import { CurrencyPipe } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 
-import { CreateNoveltyPage } from '../create-novelty-page.base';
+import { CreateNoveltyPage, SOLO_ENTEROS } from '../create-novelty-page.base';
 import { NoveltyPageLayoutComponent } from '../../components/novelty-page-layout/novelty-page-layout.component';
 import { AdditionalClauseSectionComponent } from '../../components/additional-clause-section/additional-clause-section.component';
 import { ConfirmNoveltyModalComponent, NoveltySummaryItem } from '../../components/confirm-novelty-modal/confirm-novelty-modal.component';
@@ -31,7 +31,7 @@ import {
  * del contrato y extiende su plazo (ambas secciones son obligatorias por
  * requerimiento actualizado — la novedad siempre se tramita completa).
  *
- * Topes normativos (requerimientos §5.2): la adición no puede superar el 50 %
+ * Topes normativos: la adición no puede superar el 50 %
  * del valor vigente (base + adiciones previas) ni la prórroga el 50 % del
  * plazo vigente en días (mes = 30 días). Nuevo valor y nuevo plazo parten de
  * los acumulados históricos, no del dato base del contrato.
@@ -84,7 +84,9 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
       fechaAdicion: [todayIso()]
     }),
     prorroga: this.fb.group({
-      tiempoDias: [null as number | null, [Validators.required, Validators.min(1)]],
+      // Días enteros: el acta y la novedad registran días completos, y el generador
+      // rechaza el acta entera si recibe un decimal.
+      tiempoDias: [null as number | null, [Validators.required, Validators.min(1), SOLO_ENTEROS]],
       fechaProrroga: [todayIso()]
     }),
     clausula: this.fb.group({
@@ -96,7 +98,7 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
 
   private readonly formValue = toSignal(this.form.valueChanges, { initialValue: this.form.getRawValue() });
 
-  /** Valor vigente del contrato: base + adiciones históricas (MIG-004). */
+  /** Valor vigente del contrato: base + adiciones históricas. */
   readonly valorVigente = computed(() => {
     const c = this.state.selectedContract();
     return c ? currentContractValue(c) : 0;
@@ -149,7 +151,7 @@ export class CrearAdicionProrrogaComponent extends CreateNoveltyPage {
     return addDaysToTerm(c?.initialTerm, diasHistoricos + this.prorrogaTopeada());
   });
 
-  /** El legado exige un Ordenador del Gasto asignado para tramitar esta novedad (§5.2). */
+  /** El legado exige un Ordenador del Gasto asignado para tramitar esta novedad. */
   readonly sinOrdenadorGasto = computed(() => !this.state.selectedContract()?.spendingManager?.trim());
 
   get solicitud(): FormGroup { return this.form.get('solicitud') as FormGroup; }

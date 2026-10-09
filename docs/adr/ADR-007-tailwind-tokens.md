@@ -23,5 +23,5 @@ Opción 3. Además: **Preflight de Tailwind desactivado** — su reset global si
 ## Consecuencias
 
 - (+) Aislamiento real de estilos frente al shell; un solo vocabulario visual (tokens); átomos con API de signals.
-- (−) El theme Material sigue siendo la paleta `azure-blue` (no institucional): brecha registrada y excluida por decisión del equipo (H3 del [COMPLIANCE_REPORT](../../info/referencias/COMPLIANCE_REPORT.md)). Desde ADR-017 ya no se importa el archivo precompilado, sino los mixins de esa misma paleta acotados al host.
-- Reglas permanentes: no reactivar Preflight; ningún selector global sin anclar a `novedades-mf`; no introducir componentes Material de superficie ([CODING_STANDARDS.md](../CODING_STANDARDS.md#angular-material)).
+- (−) El theme Material sigue siendo la paleta `azure-blue` (no institucional): brecha registrada en la auditoría de lineamientos del 2026-07-07 y excluida por decisión del equipo. Desde ADR-017 ya no se importa el archivo precompilado, sino los mixins de esa misma paleta acotados al host.
+- Reglas permanentes: no reactivar Preflight; ningún selector global sin anclar a `novedades-mf`; no introducir componentes Material de superficie (botones, cards, tablas, diálogos): sus equivalentes son átomos Tailwind en `shared/ui/`.
