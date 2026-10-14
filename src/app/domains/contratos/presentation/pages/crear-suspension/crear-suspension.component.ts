@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { combineLatest, startWith } from 'rxjs';
+import { startWith } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 
 import { CreateNoveltyPage } from '../create-novelty-page.base';
@@ -13,6 +13,7 @@ import { NoveltyErrorComponent } from '../../components/novelty-error/novelty-er
 import { CardComponent } from '../../../../../shared/ui/card.component';
 import { FormFieldComponent } from '../../../../../shared/ui/form-field.component';
 import { FormInputDirective } from '../../../../../shared/ui/form-input.directive';
+import { DateInputComponent } from '../../../../../shared/ui/date-input.component';
 import { NoNegativeNumberDirective } from '../../../../../shared/ui/no-negative-number.directive';
 import { DocumentPreviewControlComponent } from '../../../../../shared/ui/document-preview-control.component';
 import { NoveltyFormActionsComponent } from '../../../../../shared/ui/novelty-form-actions.component';
@@ -54,6 +55,7 @@ function setExtraError(control: AbstractControl, key: string, hasError: boolean,
     CardComponent,
     FormFieldComponent,
     FormInputDirective,
+    DateInputComponent,
     NoNegativeNumberDirective,
     DocumentPreviewControlComponent,
     NoveltyFormActionsComponent
@@ -117,10 +119,13 @@ export class CrearSuspensionComponent extends CreateNoveltyPage {
     const periodo = this.form.controls.periodoDias;
     const reinicio = this.form.controls.fechaReinicio;
 
-    combineLatest([
-      inicio.valueChanges.pipe(startWith(inicio.value)),
-      fin.valueChanges.pipe(startWith(fin.value))
-    ]).pipe(takeUntilDestroyed()).subscribe(([i, f]) => {
+    // Se escucha el formulario y no cada fecha: `form.reset()` reinicia los controles en
+    // orden de declaración y avisa uno a uno, así que derivar desde la fecha dejaba período
+    // y reinicio recalculados y enseguida borrados por el propio reset. El formulario
+    // avisa una sola vez, cuando ya terminó.
+    this.form.valueChanges.pipe(startWith(null), takeUntilDestroyed()).subscribe(() => {
+      const i = inicio.value;
+      const f = fin.value;
       // >= en vez de > : el mismo día también es inválido, el período mínimo es de 1 día.
       const fueraDeRango = !!i && !!f && i >= f;
       setExtraError(inicio, 'dateRange', fueraDeRango);

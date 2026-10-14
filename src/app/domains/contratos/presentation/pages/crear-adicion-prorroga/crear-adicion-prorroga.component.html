@@ -22,18 +22,18 @@
         <app-form-field label="Número solicitud de necesidad" for="num_solicitud" [required]="true" [control]="solicitud.controls['numSolicitud']">
           <input appFormInput id="num_solicitud" type="text" placeholder="Ej. 123" formControlName="numSolicitud">
         </app-form-field>
-        <app-form-field label="Fecha solicitud de necesidad" for="fecha_solicitud">
-          <input appFormInput id="fecha_solicitud" type="date" formControlName="fechaSolicitud">
+        <app-form-field label="Fecha solicitud de necesidad" for="fecha_solicitud" [control]="solicitud.controls['fechaSolicitud']">
+          <app-date-input inputId="fecha_solicitud" formControlName="fechaSolicitud" />
         </app-form-field>
         <app-form-field label="Número oficio" for="num_oficio" [required]="true" [control]="solicitud.controls['numOficio']">
           <input appFormInput id="num_oficio" type="text" placeholder="Ej. 123" formControlName="numOficio">
         </app-form-field>
-        <app-form-field label="Fecha oficio" for="fecha_oficio">
-          <input appFormInput id="fecha_oficio" type="date" formControlName="fechaOficio">
+        <app-form-field label="Fecha oficio" for="fecha_oficio" [control]="solicitud.controls['fechaOficio']">
+          <app-date-input inputId="fecha_oficio" formControlName="fechaOficio" />
         </app-form-field>
         <div class="md:col-span-2">
-          <app-form-field label="Fecha expedición del acta" for="fecha_acta">
-            <input appFormInput id="fecha_acta" type="date" formControlName="fechaActa">
+          <app-form-field label="Fecha expedición del acta" for="fecha_acta" [control]="solicitud.controls['fechaActa']">
+            <app-date-input inputId="fecha_acta" formControlName="fechaActa" />
           </app-form-field>
         </div>
       </div>
@@ -58,14 +58,14 @@
               </app-form-field>
               <div class="flex flex-col gap-1">
                 <app-money-field label="Valor Adicional" for="valor_adicional" [required]="true" [control]="adicion.controls['valorAdicional']">
-                  <input appFormInput class="!pl-7" id="valor_adicional" type="number" min="1" placeholder="Ej. 1000000" formControlName="valorAdicional">
+                  <input appFormInput class="!pl-7" id="valor_adicional" appMoneyInput placeholder="Ej. 1.000.000" formControlName="valorAdicional">
                 </app-money-field>
                 @if (valorAdicionalEnLetras()) {
                   <span class="text-on-surface-variant text-xs italic px-1">{{ valorAdicionalEnLetras() }}</span>
                 }
               </div>
-              <app-form-field label="Fecha de la Adición" for="fecha_adicion">
-                <input appFormInput id="fecha_adicion" type="date" formControlName="fechaAdicion">
+              <app-form-field label="Fecha de la Adición" for="fecha_adicion" [control]="adicion.controls['fechaAdicion']">
+                <app-date-input inputId="fecha_adicion" formControlName="fechaAdicion" />
               </app-form-field>
               <div class="md:col-span-2">
                 <app-form-field label="Nuevo Valor del Contrato">
@@ -87,8 +87,8 @@
               <app-form-field label="Tiempo de prórroga (Días)" for="tiempo_prorroga" [required]="true" [control]="prorroga.controls['tiempoDias']">
                 <input appFormInput id="tiempo_prorroga" type="number" min="1" placeholder="Ej. 30" formControlName="tiempoDias">
               </app-form-field>
-              <app-form-field label="Fecha de la Prórroga" for="fecha_prorroga">
-                <input appFormInput id="fecha_prorroga" type="date" formControlName="fechaProrroga">
+              <app-form-field label="Fecha de la Prórroga" for="fecha_prorroga" [control]="prorroga.controls['fechaProrroga']">
+                <app-date-input inputId="fecha_prorroga" formControlName="fechaProrroga" />
               </app-form-field>
               <app-form-field label="Nuevo Plazo del Contrato">
                 <div class="block w-full rounded-md border border-outline-variant bg-surface-container-low text-on-surface-variant italic text-sm px-3 py-2 min-h-[40px]">

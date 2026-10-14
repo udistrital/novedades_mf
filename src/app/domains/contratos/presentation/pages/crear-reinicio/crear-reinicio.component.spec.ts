@@ -75,6 +75,15 @@ describe('CrearReinicioComponent — fin de la suspensión', () => {
     expect(fechaReinicio.value).toBe('2025-02-21');
   });
 
+  it('Limpiar vuelve al período registrado y lo deriva de nuevo', () => {
+    conFin('2025-02-20');
+    pagina.onClear();
+    const { periodoDias, fechaReinicio } = pagina.form.controls;
+
+    expect(periodoDias.value).toBe(26);
+    expect(fechaReinicio.value).toBe('2025-03-06');
+  });
+
   it('sigue rechazando un fin posterior al registrado en la suspensión', () => {
     expect(conFin('2025-03-20').fechaFinSuspension.errors?.['maxDate']).toEqual({ max: '2025-03-05' });
   });

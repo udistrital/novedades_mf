@@ -12,8 +12,10 @@ import { NoveltyErrorComponent } from '../../components/novelty-error/novelty-er
 import { CardComponent } from '../../../../../shared/ui/card.component';
 import { FormFieldComponent } from '../../../../../shared/ui/form-field.component';
 import { FormInputDirective } from '../../../../../shared/ui/form-input.directive';
+import { DateInputComponent } from '../../../../../shared/ui/date-input.component';
 import { NoNegativeNumberDirective } from '../../../../../shared/ui/no-negative-number.directive';
 import { MoneyFieldComponent } from '../../../../../shared/ui/money-field.component';
+import { MoneyInputDirective } from '../../../../../shared/ui/money-input.directive';
 import { DocumentPreviewControlComponent } from '../../../../../shared/ui/document-preview-control.component';
 import { NoveltyFormActionsComponent } from '../../../../../shared/ui/novelty-form-actions.component';
 import { addDaysToTerm, formatCop, formatCopWords, todayIso } from '../../../../../shared/util/format.util';
@@ -50,8 +52,10 @@ import {
     CardComponent,
     FormFieldComponent,
     FormInputDirective,
+    DateInputComponent,
     NoNegativeNumberDirective,
     MoneyFieldComponent,
+    MoneyInputDirective,
     DocumentPreviewControlComponent,
     NoveltyFormActionsComponent
   ],

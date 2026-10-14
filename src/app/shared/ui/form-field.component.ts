@@ -56,6 +56,8 @@ export class FormFieldComponent {
   errorMessage(): string {
     const errors = this.control()?.errors;
     if (!errors) return '';
+    // Antes que `required`: una fecha a medio escribir también deja el control vacío.
+    if (errors['fecha']) return 'Fecha incompleta o inexistente (dd/mm/aaaa).';
     if (errors['required']) return 'Este campo es obligatorio.';
     if (errors['min']) return `El valor no puede ser menor a ${errors['min'].min}.`;
     if (errors['pattern']) return 'Debe ser un número entero, sin decimales.';

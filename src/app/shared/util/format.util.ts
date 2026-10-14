@@ -13,6 +13,18 @@ export function toDisplayDate(iso: string | null | undefined): string {
   return `${d}/${m}/${y}`;
 }
 
+/**
+ * Lee una fecha escrita por el usuario en dd/mm/yyyy (día y mes de 1 o 2 dígitos) y la
+ * devuelve en yyyy-mm-dd; '' si está incompleta o no existe (31/02). Inverso de `toDisplayDate`.
+ */
+export function parseDisplayDate(text: string | null | undefined): string {
+  const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(text ?? '');
+  if (!m) return '';
+  const iso = `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+  // `toIsoDate` desborda una fecha inexistente (31/02 → 03/03): si no vuelve igual, no existe.
+  return toIsoDate(iso) === iso ? iso : '';
+}
+
 /** Parsea una fecha en dd/mm/yyyy (contratos) o yyyy-mm-dd (formularios) a Date local. */
 function parseAnyDate(date: string): Date {
   if (date.includes('/')) {

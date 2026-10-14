@@ -19,11 +19,11 @@
     <!-- Datos de la Solicitud -->
     <app-card title="Datos de la Solicitud" icon="folder_open">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
-        <app-form-field label="Fecha de solicitud" for="fecha_solicitud">
-          <input appFormInput id="fecha_solicitud" type="date" formControlName="fechaSolicitud">
+        <app-form-field label="Fecha de solicitud" for="fecha_solicitud" [control]="form.controls['fechaSolicitud']">
+          <app-date-input inputId="fecha_solicitud" formControlName="fechaSolicitud" />
         </app-form-field>
-        <app-form-field label="Fecha de expedición del acta" for="fecha_expedicion">
-          <input appFormInput id="fecha_expedicion" type="date" formControlName="fechaExpedicionActa">
+        <app-form-field label="Fecha de expedición del acta" for="fecha_expedicion" [control]="form.controls['fechaExpedicionActa']">
+          <app-date-input inputId="fecha_expedicion" formControlName="fechaExpedicionActa" />
         </app-form-field>
       </div>
     </app-card>
@@ -40,16 +40,16 @@
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
             <app-form-field label="Fecha inicio suspensión" for="fecha_inicio">
-              <input appFormInput id="fecha_inicio" type="date" formControlName="fechaInicioSuspension">
+              <app-date-input inputId="fecha_inicio" formControlName="fechaInicioSuspension" />
             </app-form-field>
             <app-form-field label="Fecha fin suspensión" for="fecha_fin" [required]="true" [control]="form.controls['fechaFinSuspension']">
-              <input appFormInput id="fecha_fin" type="date" [attr.min]="minFinSuspension()" [attr.max]="maxFinSuspension()" formControlName="fechaFinSuspension">
+              <app-date-input inputId="fecha_fin" [min]="minFinSuspension()" [max]="maxFinSuspension()" formControlName="fechaFinSuspension" />
             </app-form-field>
             <app-form-field label="Periodo suspensión (Días)" for="periodo_suspension">
               <input appFormInput id="periodo_suspension" type="number" formControlName="periodoDias">
             </app-form-field>
             <app-form-field label="Fecha reinicio" for="fecha_reinicio">
-              <input appFormInput id="fecha_reinicio" type="date" formControlName="fechaReinicio">
+              <app-date-input inputId="fecha_reinicio" formControlName="fechaReinicio" />
             </app-form-field>
           </div>
         </div>

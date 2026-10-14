@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { combineLatest, startWith } from 'rxjs';
+import { startWith } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 
 import { CreateNoveltyPage } from '../create-novelty-page.base';
@@ -12,6 +12,7 @@ import { NoveltyErrorComponent } from '../../components/novelty-error/novelty-er
 import { CardComponent } from '../../../../../shared/ui/card.component';
 import { FormFieldComponent } from '../../../../../shared/ui/form-field.component';
 import { FormInputDirective } from '../../../../../shared/ui/form-input.directive';
+import { DateInputComponent } from '../../../../../shared/ui/date-input.component';
 import { NoNegativeNumberDirective } from '../../../../../shared/ui/no-negative-number.directive';
 import { DocumentPreviewControlComponent } from '../../../../../shared/ui/document-preview-control.component';
 import { NoveltyFormActionsComponent } from '../../../../../shared/ui/novelty-form-actions.component';
@@ -42,6 +43,7 @@ import { activeSuspension } from '../../../domain/contract.rules';
     CardComponent,
     FormFieldComponent,
     FormInputDirective,
+    DateInputComponent,
     NoNegativeNumberDirective,
     DocumentPreviewControlComponent,
     NoveltyFormActionsComponent
@@ -104,10 +106,11 @@ export class CrearReinicioComponent extends CreateNoveltyPage {
 
     fin.addValidators([this.topeFinSuspension, this.pisoFinSuspension]);
 
-    combineLatest([
-      inicio.valueChanges.pipe(startWith(inicio.value)),
-      fin.valueChanges.pipe(startWith(fin.value))
-    ]).pipe(takeUntilDestroyed()).subscribe(([i, f]) => {
+    // Desde el formulario y no desde cada fecha, para que "Limpiar" no deje período y
+    // reinicio en blanco (misma razón que en `crear-suspension`).
+    this.form.valueChanges.pipe(startWith(null), takeUntilDestroyed()).subscribe(() => {
+      const i = inicio.value;
+      const f = fin.value;
       // Un período inválido se deja en blanco en vez de mostrar un número negativo.
       periodo.setValue(!!i && !!f && i >= f ? null : periodDays(i, f), { emitEvent: false });
       reinicio.setValue(f ? addDaysToDate(f, 1) : '', { emitEvent: false });

@@ -1,4 +1,4 @@
-import { addDaysToDate, addDaysToTerm, daysBetween, formatCopWords, numberToWords, periodDays, termToDays } from './format.util';
+import { addDaysToDate, addDaysToTerm, daysBetween, formatCopWords, numberToWords, parseDisplayDate, periodDays, termToDays, toDisplayDate } from './format.util';
 
 describe('format.util', () => {
   describe('numberToWords', () => {
@@ -91,6 +91,25 @@ describe('format.util', () => {
     it('calcula días entre fechas a través de un año bisiesto', () => {
       expect(daysBetween('2024-02-28', '2024-03-01')).toBe(2);
       expect(daysBetween('2023-02-28', '2023-03-01')).toBe(1);
+    });
+  });
+
+  describe('parseDisplayDate (lo que el usuario escribe en dd/mm/aaaa)', () => {
+    it('lee día antes que mes, también con un solo dígito', () => {
+      expect(parseDisplayDate('13/10/2026')).toBe('2026-10-13');
+      expect(parseDisplayDate('1/2/2026')).toBe('2026-02-01');
+    });
+
+    it('rechaza fechas incompletas o inexistentes', () => {
+      expect(parseDisplayDate('13/10/202')).toBe('');
+      expect(parseDisplayDate('10/13/2026')).toBe(''); // orden mm/dd: no hay mes 13
+      expect(parseDisplayDate('29/02/2026')).toBe('');
+      expect(parseDisplayDate('00/01/2026')).toBe('');
+      expect(parseDisplayDate('')).toBe('');
+    });
+
+    it('es el inverso de toDisplayDate', () => {
+      expect(parseDisplayDate(toDisplayDate('2024-02-29'))).toBe('2024-02-29');
     });
   });
 

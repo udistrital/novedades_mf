@@ -7,6 +7,7 @@ import { ContractStateService } from '../../../application/contract-state.servic
 import { NoveltyService } from '../../../application/novelty.service';
 import { ActaGeneratorService } from '../../../application/acta-generator.service';
 import { Contract } from '../../../domain/models/contract.entity';
+import { addDaysToDate, periodDays } from '../../../../../shared/util/format.util';
 
 /**
  * El período de la suspensión: el fin nunca puede quedar antes del inicio (ni el
@@ -62,6 +63,16 @@ describe('CrearSuspensionComponent — período de la suspensión', () => {
     // Regla del negocio: mes = 30 días y ambos extremos incluidos.
     expect(periodoDias.value).toBe(26);
     expect(fechaReinicio.value).toBe('2025-03-06');
+  });
+
+  it('Limpiar vuelve a derivar período y reinicio de las fechas por defecto', () => {
+    fechas('2025-03-10', '2025-03-20');
+    pagina.onClear();
+    const { fechaInicio, fechaFin, periodoDias, fechaReinicio } = pagina.form.controls;
+
+    expect(fechaInicio.value).toBe('2025-02-08');
+    expect(periodoDias.value).toBe(periodDays(fechaInicio.value, fechaFin.value));
+    expect(fechaReinicio.value).toBe(addDaysToDate(fechaFin.value, 1));
   });
 
   it('vuelve a ser válido al corregir el fin, sin dejar el error pegado', () => {

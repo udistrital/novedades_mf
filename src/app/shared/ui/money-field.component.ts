@@ -4,7 +4,8 @@ import { FormFieldComponent } from './form-field.component';
 
 /**
  * Campo monetario: label flotante + prefijo "$". El input se proyecta y debe
- * llevar la clase `!pl-7` para dejar espacio al símbolo.
+ * llevar la clase `!pl-7` para dejar espacio al símbolo y la directiva
+ * `appMoneyInput` (puntos de miles al escribir, número limpio en el control).
  */
 @Component({
   selector: 'app-money-field',

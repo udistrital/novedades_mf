@@ -15,8 +15,10 @@ import { NoveltyErrorComponent } from '../../components/novelty-error/novelty-er
 import { CardComponent } from '../../../../../shared/ui/card.component';
 import { FormFieldComponent } from '../../../../../shared/ui/form-field.component';
 import { FormInputDirective } from '../../../../../shared/ui/form-input.directive';
+import { DateInputComponent } from '../../../../../shared/ui/date-input.component';
 import { NoNegativeNumberDirective } from '../../../../../shared/ui/no-negative-number.directive';
 import { MoneyFieldComponent } from '../../../../../shared/ui/money-field.component';
+import { MoneyInputDirective } from '../../../../../shared/ui/money-input.directive';
 import { ToggleSectionComponent } from '../../../../../shared/ui/toggle-section.component';
 import { DocumentPreviewControlComponent } from '../../../../../shared/ui/document-preview-control.component';
 import { NoveltyFormActionsComponent } from '../../../../../shared/ui/novelty-form-actions.component';
@@ -51,8 +53,10 @@ import { contractEndDate, currentContractValue } from '../../../domain/contract.
     CardComponent,
     FormFieldComponent,
     FormInputDirective,
+    DateInputComponent,
     NoNegativeNumberDirective,
     MoneyFieldComponent,
+    MoneyInputDirective,
     ToggleSectionComponent,
     DocumentPreviewControlComponent,
     NoveltyFormActionsComponent
@@ -168,7 +172,10 @@ export class CrearCesionComponent extends CreateNoveltyPage {
     // Fecha de terminación del cedente: siempre un día antes de la fecha de cesión.
     const sesion = this.form.controls.fechaSesion;
     const terminacionCedente = this.form.controls.fechaTerminacionCedente;
-    sesion.valueChanges.pipe(startWith(sesion.value), takeUntilDestroyed()).subscribe(v => {
+    // Desde el formulario y no desde la fecha de cesión, para que "Limpiar" no la deje
+    // en blanco (misma razón que en `crear-suspension`).
+    this.form.valueChanges.pipe(startWith(null), takeUntilDestroyed()).subscribe(() => {
+      const v = sesion.value;
       terminacionCedente.setValue(v ? addDaysToDate(v, -1) : '', { emitEvent: false });
     });
 
