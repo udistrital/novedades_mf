@@ -174,6 +174,6 @@ export class CrearPolizaComponent {
 
   /** Igual que en las páginas de novedad: el panel vuelve a consultar este contrato. */
   goBack(): void {
-    this.router.navigate(['/'], { queryParams: volverAlContrato(this.contractId) });
+    void this.router.navigate(['/'], { queryParams: volverAlContrato(this.contractId) });
   }
 }

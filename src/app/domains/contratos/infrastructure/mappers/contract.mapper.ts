@@ -149,8 +149,8 @@ function toNoveltySummary(item: NovedadMidDto): NoveltySummary {
   // Los días se leen según el tipo: los candidatos genéricos (`Dias`) son comunes a
   // prórroga y suspensión, y sin discriminar una suspensión inflaría el plazo vigente.
   const esProrroga = type === NoveltyType.EXTENSION || type === NoveltyType.ADDITION_EXTENSION;
-  const diasProrroga = esProrroga ? Number(readCandidate(raw, ['TiempoProrroga'])) : NaN;
-  const diasSuspension = type === NoveltyType.SUSPENSION ? Number(readCandidate(raw, ['PeriodoSuspension'])) : NaN;
+  const diasProrroga = esProrroga ? Number(readCandidate(raw, ['TiempoProrroga'])) : Number.NaN;
+  const diasSuspension = type === NoveltyType.SUSPENSION ? Number(readCandidate(raw, ['PeriodoSuspension'])) : Number.NaN;
   const cesionarioId = readCandidate(raw, ['Cesionario']);
   // El mid resuelve la póliza de la cesión y la devuelve en `Poliza` (es el
   // `NumeroPolizaId` del CRUD): con eso basta para saber si el trámite quedó a medias.

@@ -27,8 +27,9 @@ export function availableVigencias(): string[] {
  */
 export function getLatestNovelty(contract: Contract): NoveltySummary | undefined {
   if (!contract.novelties.length) return undefined;
-  return contract.novelties.reduce((latest, current) =>
-    Number(current.id) >= Number(latest.id) ? current : latest
+  return contract.novelties.reduce(
+    (latest, current) => (Number(current.id) >= Number(latest.id) ? current : latest),
+    contract.novelties[0],
   );
 }
 
@@ -276,7 +277,7 @@ export function maxExtensionDays(contract: Contract): number {
 export function currentContractorId(contract: Contract): string | undefined {
   const cesiones = contract.novelties.filter(n => n.type === NoveltyType.ASSIGNMENT && n.cesionarioId);
   if (!cesiones.length) return undefined;
-  return cesiones.reduce((a, b) => (Number(b.id) >= Number(a.id) ? b : a)).cesionarioId;
+  return cesiones.reduce((a, b) => (Number(b.id) >= Number(a.id) ? b : a), cesiones[0]).cesionarioId;
 }
 
 // --- Control de acceso por rol ---

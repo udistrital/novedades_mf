@@ -203,7 +203,7 @@ export abstract class CreateNoveltyPage {
    * vacío y el panel aparecía en blanco.
    */
   goBack(): void {
-    this.router.navigate(['/'], { queryParams: volverAlContrato(this.contractId) });
+    void this.router.navigate(['/'], { queryParams: volverAlContrato(this.contractId) });
   }
 }
 
