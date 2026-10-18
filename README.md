@@ -50,9 +50,9 @@ La configuración por ambiente vive en `src/environments/`:
 
 | Ambiente | Archivo | Servidor local | Compilación |
 | --- | --- | --- | --- |
-| Producción | `src/environments/environment.ts` | — | `npm run build` |
+| Producción | `src/environments/environment.ts` | — | `npm run build:prod` |
 | Local | `src/environments/environment.development.ts` | `npm start` | `npm run watch` |
-| Pruebas | `src/environments/environment.test.ts` | `npm run start:test` | `npx ng build --configuration test` |
+| Pruebas | `src/environments/environment.test.ts` | `npm run start:test` | `npm run build:test` |
 
 Cada compilación genera `dist/novedades-mf/main.js` con la URL pública (`deployUrl`) de su ambiente, definida en `angular.json`.
 
