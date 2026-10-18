@@ -6,6 +6,8 @@
     "start": "ng serve --configuration development --port 4209",
     "start:test": "ng serve --configuration test --port 4209",
     "build": "ng build",
+    "build:test": "ng build --progress --configuration=test",
+    "build:prod": "ng build --progress --configuration=production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "build:single-spa:novedades-mf": "ng build novedades-mf --configuration production",
