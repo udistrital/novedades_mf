@@ -54,7 +54,7 @@ function maskDate(raw: string): string {
   `
 })
 export class DateInputComponent implements ControlValueAccessor, Validator {
-  /** `id` del input visible, para el `for` del label de `app-form-field`. */
+  /** `id` del input visible, para el `for` de su `<label appFormLabel>`. */
   readonly inputId = input.required<string>();
   /** Topes del calendario en yyyy-mm-dd. Como en el input nativo, no validan lo escrito: eso lo hace cada página. */
   readonly min = input('');

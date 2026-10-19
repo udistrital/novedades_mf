@@ -102,14 +102,7 @@ export abstract class CreateNoveltyPage {
   onSubmit(event: Event): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      const formEl = event.target as HTMLElement;
-      // Prioriza inputs nativos; si el primer inválido es un componente propio (p. ej. el
-      // autocomplete de contratista), Angular pone `ng-invalid` en su host, no en un input/select/textarea.
-      const firstInvalid =
-        formEl.querySelector<HTMLElement>('input.ng-invalid, select.ng-invalid, textarea.ng-invalid') ??
-        formEl.querySelector<HTMLElement>('.ng-invalid');
-      firstInvalid?.focus({ preventScroll: true });
-      firstInvalid?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      focusFirstInvalid(event.target as HTMLElement);
       return;
     }
     this.summary.set(this.buildSummary());
@@ -215,4 +208,18 @@ export abstract class CreateNoveltyPage {
 export function volverAlContrato(contractId: string): Record<string, string> {
   const [numero, vigencia] = contractId.split('_');
   return numero ? { contrato: numero, vigencia: vigencia ?? '' } : {};
+}
+
+/**
+ * Lleva el foco al primer control inválido del formulario, en el orden en que se ve.
+ * En un átomo con input propio (`app-date-input`, el autocomplete de contratista)
+ * Angular pone `ng-invalid` en el host, que no recibe foco: se enfoca su input.
+ */
+export function focusFirstInvalid(formEl: HTMLElement): void {
+  const invalid = formEl.querySelector<HTMLElement>('[formcontrolname].ng-invalid');
+  const target = invalid?.matches('input, select, textarea')
+    ? invalid
+    : invalid?.querySelector<HTMLElement>('input, select, textarea');
+  target?.focus({ preventScroll: true });
+  (target ?? invalid)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }

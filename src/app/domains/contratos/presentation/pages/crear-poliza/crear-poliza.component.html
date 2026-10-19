@@ -37,7 +37,8 @@
         }
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
-          <app-form-field label="Entidad Aseguradora" for="entidad_aseguradora" [required]="true" [control]="form.controls.entidadAseguradoraId">
+          <app-form-field [control]="form.controls.entidadAseguradoraId">
+            <label appFormLabel for="entidad_aseguradora" [required]="true">Entidad Aseguradora</label>
             <select appFormInput class="!bg-surface-container-lowest" id="entidad_aseguradora" formControlName="entidadAseguradoraId">
               <option [ngValue]="null" disabled>Selecciona una aseguradora…</option>
               @for (a of aseguradoras(); track a.id) {
@@ -45,7 +46,8 @@
               }
             </select>
           </app-form-field>
-          <app-form-field label="Número de Póliza" for="numero_poliza" [required]="true" [control]="form.controls.numeroPoliza">
+          <app-form-field [control]="form.controls.numeroPoliza">
+            <label appFormLabel for="numero_poliza" [required]="true">Número de Póliza</label>
             <input appFormInput id="numero_poliza" type="text" placeholder="Número que asigna la aseguradora" formControlName="numeroPoliza">
           </app-form-field>
         </div>

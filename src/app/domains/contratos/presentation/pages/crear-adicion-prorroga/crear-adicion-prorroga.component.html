@@ -19,20 +19,25 @@
     <!-- Datos de la Solicitud -->
     <app-card title="Datos de la Solicitud" icon="folder_open">
       <div formGroupName="solicitud" class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
-        <app-form-field label="Número solicitud de necesidad" for="num_solicitud" [required]="true" [control]="solicitud.controls['numSolicitud']">
+        <app-form-field [control]="solicitud.controls['numSolicitud']">
+          <label appFormLabel for="num_solicitud" [required]="true">Número solicitud de necesidad</label>
           <input appFormInput id="num_solicitud" type="text" placeholder="Ej. 123" formControlName="numSolicitud">
         </app-form-field>
-        <app-form-field label="Fecha solicitud de necesidad" for="fecha_solicitud" [control]="solicitud.controls['fechaSolicitud']">
+        <app-form-field [control]="solicitud.controls['fechaSolicitud']">
+          <label appFormLabel for="fecha_solicitud">Fecha solicitud de necesidad</label>
           <app-date-input inputId="fecha_solicitud" formControlName="fechaSolicitud" />
         </app-form-field>
-        <app-form-field label="Número oficio" for="num_oficio" [required]="true" [control]="solicitud.controls['numOficio']">
+        <app-form-field [control]="solicitud.controls['numOficio']">
+          <label appFormLabel for="num_oficio" [required]="true">Número oficio</label>
           <input appFormInput id="num_oficio" type="text" placeholder="Ej. 123" formControlName="numOficio">
         </app-form-field>
-        <app-form-field label="Fecha oficio" for="fecha_oficio" [control]="solicitud.controls['fechaOficio']">
+        <app-form-field [control]="solicitud.controls['fechaOficio']">
+          <label appFormLabel for="fecha_oficio">Fecha oficio</label>
           <app-date-input inputId="fecha_oficio" formControlName="fechaOficio" />
         </app-form-field>
         <div class="md:col-span-2">
-          <app-form-field label="Fecha expedición del acta" for="fecha_acta" [control]="solicitud.controls['fechaActa']">
+          <app-form-field [control]="solicitud.controls['fechaActa']">
+            <label appFormLabel for="fecha_acta">Fecha expedición del acta</label>
             <app-date-input inputId="fecha_acta" formControlName="fechaActa" />
           </app-form-field>
         </div>
@@ -48,27 +53,32 @@
           <div class="flex flex-col gap-stack-md">
             <h3 class="font-title-md text-title-md text-on-surface">Adición Presupuestal</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
-              <app-form-field label="Número de CDP" for="num_cdp" [control]="adicion.controls['numCdp']">
+              <app-form-field [control]="adicion.controls['numCdp']">
+                <label appFormLabel for="num_cdp">Número de CDP</label>
                 <input appFormInput id="num_cdp" type="text" placeholder="Ej. 1233" formControlName="numCdp">
               </app-form-field>
-              <app-form-field label="Vigencia" for="vigencia_cdp">
+              <app-form-field>
+                <label appFormLabel for="vigencia_cdp">Vigencia</label>
                 <select appFormInput class="!bg-surface-container-lowest" id="vigencia_cdp" formControlName="vigencia">
                   @for (y of vigencias(); track y) { <option [value]="y">{{ y }}</option> }
                 </select>
               </app-form-field>
               <div class="flex flex-col gap-1">
-                <app-money-field label="Valor Adicional" for="valor_adicional" [required]="true" [control]="adicion.controls['valorAdicional']">
+                <app-money-field [control]="adicion.controls['valorAdicional']">
+                  <label appFormLabel for="valor_adicional" [required]="true">Valor Adicional</label>
                   <input appFormInput class="!pl-7" id="valor_adicional" appMoneyInput placeholder="Ej. 1.000.000" formControlName="valorAdicional">
                 </app-money-field>
                 @if (valorAdicionalEnLetras()) {
                   <span class="text-on-surface-variant text-xs italic px-1">{{ valorAdicionalEnLetras() }}</span>
                 }
               </div>
-              <app-form-field label="Fecha de la Adición" for="fecha_adicion" [control]="adicion.controls['fechaAdicion']">
+              <app-form-field [control]="adicion.controls['fechaAdicion']">
+                <label appFormLabel for="fecha_adicion">Fecha de la Adición</label>
                 <app-date-input inputId="fecha_adicion" formControlName="fechaAdicion" />
               </app-form-field>
               <div class="md:col-span-2">
-                <app-form-field label="Nuevo Valor del Contrato">
+                <app-form-field>
+                  <span appFormLabel>Nuevo Valor del Contrato</span>
                   <div class="block w-full rounded-md border border-outline-variant bg-surface-container-low p-3">
                     <div class="text-primary font-bold text-title-md">{{ nuevoValor() | currency:'COP':'symbol':'1.0-0' }}</div>
                     <div class="text-on-surface-variant text-xs italic mt-1">{{ nuevoValorEnLetras() }}</div>
@@ -84,13 +94,16 @@
           <div class="flex flex-col gap-stack-md">
             <h3 class="font-title-md text-title-md text-on-surface">Prórroga de Tiempo</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-stack-md">
-              <app-form-field label="Tiempo de prórroga (Días)" for="tiempo_prorroga" [required]="true" [control]="prorroga.controls['tiempoDias']">
+              <app-form-field [control]="prorroga.controls['tiempoDias']">
+                <label appFormLabel for="tiempo_prorroga" [required]="true">Tiempo de prórroga (Días)</label>
                 <input appFormInput id="tiempo_prorroga" type="number" min="1" placeholder="Ej. 30" formControlName="tiempoDias">
               </app-form-field>
-              <app-form-field label="Fecha de la Prórroga" for="fecha_prorroga" [control]="prorroga.controls['fechaProrroga']">
+              <app-form-field [control]="prorroga.controls['fechaProrroga']">
+                <label appFormLabel for="fecha_prorroga">Fecha de la Prórroga</label>
                 <app-date-input inputId="fecha_prorroga" formControlName="fechaProrroga" />
               </app-form-field>
-              <app-form-field label="Nuevo Plazo del Contrato">
+              <app-form-field>
+                <span appFormLabel>Nuevo Plazo del Contrato</span>
                 <div class="block w-full rounded-md border border-outline-variant bg-surface-container-low text-on-surface-variant italic text-sm px-3 py-2 min-h-[40px]">
                   {{ nuevoPlazo() }}
                 </div>

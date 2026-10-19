@@ -12,6 +12,7 @@ import { NoveltyResultComponent } from '../../components/novelty-result/novelty-
 import { NoveltyErrorComponent } from '../../components/novelty-error/novelty-error.component';
 import { CardComponent } from '../../../../../shared/ui/card.component';
 import { FormFieldComponent } from '../../../../../shared/ui/form-field.component';
+import { FormLabelComponent } from '../../../../../shared/ui/form-label.component';
 import { FormInputDirective } from '../../../../../shared/ui/form-input.directive';
 import { DateInputComponent } from '../../../../../shared/ui/date-input.component';
 import { NoNegativeNumberDirective } from '../../../../../shared/ui/no-negative-number.directive';
@@ -43,6 +44,7 @@ import { currentContractValue, maxEarlyTerminationDate, terminationImbalance } f
     NoveltyErrorComponent,
     CardComponent,
     FormFieldComponent,
+    FormLabelComponent,
     FormInputDirective,
     DateInputComponent,
     NoNegativeNumberDirective,

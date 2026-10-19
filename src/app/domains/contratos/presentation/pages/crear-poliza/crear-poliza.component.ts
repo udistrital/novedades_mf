@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ContractStateService } from '../../../application/contract-state.service';
 import { IContractRepository } from '../../../domain/repositories/contract.repository';
 import { NoveltyType } from '../../../domain/models/novelty-type.enum';
-import { volverAlContrato } from '../create-novelty-page.base';
+import { focusFirstInvalid, volverAlContrato } from '../create-novelty-page.base';
 import { getLatestNovelty } from '../../../domain/contract.rules';
 import { Poliza } from '../../../domain/models/poliza.model';
 
@@ -17,6 +17,7 @@ import { NoveltyResultComponent } from '../../components/novelty-result/novelty-
 import { NoveltyErrorComponent } from '../../components/novelty-error/novelty-error.component';
 import { CardComponent } from '../../../../../shared/ui/card.component';
 import { FormFieldComponent } from '../../../../../shared/ui/form-field.component';
+import { FormLabelComponent } from '../../../../../shared/ui/form-label.component';
 import { FormInputDirective } from '../../../../../shared/ui/form-input.directive';
 import { NoveltyFormActionsComponent } from '../../../../../shared/ui/novelty-form-actions.component';
 import { BreadcrumbItem } from '../../../../../shared/ui/breadcrumb.component';
@@ -46,6 +47,7 @@ type PageState = 'form' | 'success' | 'error';
     NoveltyErrorComponent,
     CardComponent,
     FormFieldComponent,
+    FormLabelComponent,
     FormInputDirective,
     NoveltyFormActionsComponent
   ],
@@ -118,12 +120,7 @@ export class CrearPolizaComponent {
   onSubmit(event: Event): void {
     if (this.form.invalid || !this.poliza()) {
       this.form.markAllAsTouched();
-      const formEl = event.target as HTMLElement;
-      const firstInvalid =
-        formEl.querySelector<HTMLElement>('input.ng-invalid, select.ng-invalid, textarea.ng-invalid') ??
-        formEl.querySelector<HTMLElement>('.ng-invalid');
-      firstInvalid?.focus({ preventScroll: true });
-      firstInvalid?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      focusFirstInvalid(event.target as HTMLElement);
       return;
     }
     const v = this.form.getRawValue();

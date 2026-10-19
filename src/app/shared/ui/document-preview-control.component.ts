@@ -2,6 +2,7 @@ import { Component, computed, input, model, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { FormFieldComponent } from './form-field.component';
+import { FormLabelComponent } from './form-label.component';
 import { FormInputDirective } from './form-input.directive';
 import { NoNegativeNumberDirective } from './no-negative-number.directive';
 
@@ -9,12 +10,13 @@ import { NoNegativeNumberDirective } from './no-negative-number.directive';
 @Component({
   selector: 'app-document-preview-control',
   standalone: true,
-  imports: [FormsModule, MatIconModule, FormFieldComponent, FormInputDirective, NoNegativeNumberDirective],
+  imports: [FormsModule, MatIconModule, FormFieldComponent, FormLabelComponent, FormInputDirective, NoNegativeNumberDirective],
   template: `
     <div class="mt-stack-md flex flex-col items-end gap-1">
       <div class="flex justify-end items-center">
         <div class="mr-4 w-48">
-          <app-form-field label="Tamaño de fuente documento" for="font_size_preview">
+          <app-form-field>
+            <label appFormLabel for="font_size_preview">Tamaño de fuente documento</label>
             <input
               appFormInput
               id="font_size_preview"

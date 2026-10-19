@@ -4,6 +4,7 @@ import { startWith } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ToggleSectionComponent } from '../../../../../shared/ui/toggle-section.component';
 import { FormFieldComponent } from '../../../../../shared/ui/form-field.component';
+import { FormLabelComponent } from '../../../../../shared/ui/form-label.component';
 import { FormInputDirective } from '../../../../../shared/ui/form-input.directive';
 import { NoNegativeNumberDirective } from '../../../../../shared/ui/no-negative-number.directive';
 
@@ -16,7 +17,7 @@ import { NoNegativeNumberDirective } from '../../../../../shared/ui/no-negative-
 @Component({
   selector: 'app-additional-clause-section',
   standalone: true,
-  imports: [ReactiveFormsModule, ToggleSectionComponent, FormFieldComponent, FormInputDirective, NoNegativeNumberDirective],
+  imports: [ReactiveFormsModule, ToggleSectionComponent, FormFieldComponent, FormLabelComponent, FormInputDirective, NoNegativeNumberDirective],
   template: `
     <div class="border-t border-outline-variant/30 pt-stack-md" [formGroup]="group()">
       <app-toggle-section
@@ -31,20 +32,14 @@ import { NoNegativeNumberDirective } from '../../../../../shared/ui/no-negative-
         -->
         @if (MOSTRAR_POSICION) {
           <div class="w-full md:w-1/3">
-            <app-form-field
-              label="Posición de la cláusula"
-              for="clausula_posicion"
-              [required]="!!group().controls['activa'].value"
-              [control]="group().controls['posicion']">
+            <app-form-field [control]="group().controls['posicion']">
+              <label appFormLabel for="clausula_posicion" [required]="!!group().controls['activa'].value">Posición de la cláusula</label>
               <input appFormInput id="clausula_posicion" type="number" min="1" step="1" placeholder="Ej. 1" formControlName="posicion">
             </app-form-field>
           </div>
         }
-        <app-form-field
-          label="Cláusula Adicional al Acta"
-          for="clausula_texto"
-          [required]="!!group().controls['activa'].value"
-          [control]="group().controls['texto']">
+        <app-form-field [control]="group().controls['texto']">
+          <label appFormLabel for="clausula_texto" [required]="!!group().controls['activa'].value">Cláusula Adicional al Acta</label>
           <textarea appFormInput id="clausula_texto" rows="4" placeholder="Redacte aquí el texto de la cláusula adicional..." formControlName="texto"></textarea>
         </app-form-field>
       </app-toggle-section>

@@ -19,10 +19,12 @@
     <!-- Datos de la Solicitud -->
     <app-card title="Datos de la Solicitud" icon="folder_open">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
-        <app-form-field label="Fecha de solicitud" for="fecha_solicitud" [control]="form.controls['fechaSolicitud']">
+        <app-form-field [control]="form.controls['fechaSolicitud']">
+          <label appFormLabel for="fecha_solicitud">Fecha de solicitud</label>
           <app-date-input inputId="fecha_solicitud" formControlName="fechaSolicitud" />
         </app-form-field>
-        <app-form-field label="Fecha de expedición del acta" for="fecha_expedicion" [control]="form.controls['fechaExpedicionActa']">
+        <app-form-field [control]="form.controls['fechaExpedicionActa']">
+          <label appFormLabel for="fecha_expedicion">Fecha de expedición del acta</label>
           <app-date-input inputId="fecha_expedicion" formControlName="fechaExpedicionActa" />
         </app-form-field>
       </div>
@@ -39,16 +41,20 @@
             <span class="font-title-md text-title-md text-on-surface">Datos del reinicio</span>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
-            <app-form-field label="Fecha inicio suspensión" for="fecha_inicio">
+            <app-form-field>
+              <label appFormLabel for="fecha_inicio">Fecha inicio suspensión</label>
               <app-date-input inputId="fecha_inicio" formControlName="fechaInicioSuspension" />
             </app-form-field>
-            <app-form-field label="Fecha fin suspensión" for="fecha_fin" [required]="true" [control]="form.controls['fechaFinSuspension']">
+            <app-form-field [control]="form.controls['fechaFinSuspension']">
+              <label appFormLabel for="fecha_fin" [required]="true">Fecha fin suspensión</label>
               <app-date-input inputId="fecha_fin" [min]="minFinSuspension()" [max]="maxFinSuspension()" formControlName="fechaFinSuspension" />
             </app-form-field>
-            <app-form-field label="Periodo suspensión (Días)" for="periodo_suspension">
+            <app-form-field>
+              <label appFormLabel for="periodo_suspension">Periodo suspensión (Días)</label>
               <input appFormInput id="periodo_suspension" type="number" formControlName="periodoDias">
             </app-form-field>
-            <app-form-field label="Fecha reinicio" for="fecha_reinicio">
+            <app-form-field>
+              <label appFormLabel for="fecha_reinicio">Fecha reinicio</label>
               <app-date-input inputId="fecha_reinicio" formControlName="fechaReinicio" />
             </app-form-field>
           </div>

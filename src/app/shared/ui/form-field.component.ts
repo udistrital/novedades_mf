@@ -2,17 +2,16 @@ import { Component, input } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { toDisplayDate } from '../util/format.util';
 
-/** Campo de formulario con label flotante. El control (input/select/textarea) se proyecta. */
+/**
+ * Campo de formulario con label flotante. Se proyectan, en este orden, el label
+ * (`<label appFormLabel for="id">`, ver `FormLabelComponent`) y el control
+ * (input/select/textarea con ese `id`).
+ */
 @Component({
   selector: 'app-form-field',
   standalone: true,
   template: `
     <div class="relative">
-      <label
-        [attr.for]="for()"
-        class="absolute -top-2 left-2 inline-block bg-surface-container-lowest px-1 font-label-sm text-label-sm text-on-surface-variant z-10">
-        {{ label() }}@if (required()) {<span class="text-error"> *</span>}
-      </label>
       <ng-content />
       @if (mostrarError()) {
         <p class="text-error text-xs mt-1">{{ errorMessage() }}</p>
@@ -21,9 +20,6 @@ import { toDisplayDate } from '../util/format.util';
   `
 })
 export class FormFieldComponent {
-  readonly label = input.required<string>();
-  readonly for = input<string>();
-  readonly required = input(false);
   /** Control asociado, para mostrar su mensaje de error cuando corresponda (ver `mostrarError`). */
   readonly control = input<AbstractControl | null>(null);
 
