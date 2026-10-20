@@ -110,7 +110,7 @@ Rutas lazy (`loadComponent`) definidas en `app.routes.ts`:
 /**                                              → redirige al dashboard
 ```
 
-`:contractId` es el id compuesto `${numero}_${vigencia}` (el backend no tiene id único de contrato). Qué opciones se ofrecen por contrato lo decide `contract-accordion` con el mapa estado→acciones de `domain/contract.rules.ts` (`availableActions`, alimentado por el estado real de `contrato_estado` con fallback inferido). `contractAccessGuard` (`shared/auth/`) redirige al dashboard a los usuarios cuyo único rol es SUPERVISOR sobre contratos que no supervisan. La página `poliza` no extiende `CreateNoveltyPage` (no crea una novedad: completa el registro de póliza de la última cesión vía PUT).
+`:contractId` es el id compuesto `${numero}_${vigencia}` (el backend no tiene id único de contrato). Qué opciones se ofrecen por contrato lo decide `contract-accordion` con el mapa estado→acciones de `domain/contract.rules.ts` (`availableActions`, alimentado por el estado real de `contrato_estado` con fallback inferido). `contractAccessGuard` (`shared/auth/`) redirige al dashboard si falla cualquiera de dos comprobaciones: el rol (un usuario cuyo único rol es SUPERVISOR solo entra a los contratos que supervisa, `canManageContract`) y el estado del contrato (la acción del último segmento de la URL tiene que estar en `availableActions`, la misma función que arma el menú, así que menú y URL no pueden divergir). La página `poliza` no extiende `CreateNoveltyPage` (no crea una novedad: completa el registro de póliza de la última cesión vía PUT).
 
 ## Integración single-spa y ciclo de vida
 
