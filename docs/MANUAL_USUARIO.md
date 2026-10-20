@@ -3,7 +3,8 @@
 Módulo **Seguimiento Legal** del sistema de gestión contractual de la Universidad Distrital. Sirve
 para consultar contratos suscritos y tramitar sus novedades: adición y prórroga, suspensión,
 reinicio, cesión, terminación anticipada y el registro de la póliza del cesionario. Cada novedad
-queda formalizada en un **acta** en PDF que el sistema genera y archiva.
+queda formalizada en un **acta** en PDF que el sistema genera y archiva (el registro de la póliza no
+genera acta).
 
 ## Contenido
 
@@ -131,8 +132,10 @@ Además:
 
 7. Pulse **Confirmar y Generar**. Espere sin cerrar ni recargar la página: el sistema genera el acta,
    la archiva y registra la novedad. Puede tardar hasta un minuto.
-8. Al terminar aparece la pantalla de éxito con el **Resumen del Proceso**. **Volver al Seguimiento**
-   lo regresa al panel con el contrato ya consultado, y la novedad nueva aparece en su historial.
+8. Al terminar aparece la pantalla de éxito con el **Resumen del Proceso**: contrato afectado, tipo de
+   novedad, fecha y hora de ejecución y responsable (el supervisor del contrato). **Volver al
+   Seguimiento** lo regresa al panel con el contrato ya consultado, y la novedad nueva aparece en su
+   historial.
 
    ![Pantalla de éxito con el Resumen del Proceso](img/manual/05-exito.jpg)
 
@@ -315,6 +318,7 @@ Completa la póliza del nuevo contratista después de una cesión. Disponible co
 
 ![Formulario Registrar Póliza del Cesionario diligenciado](img/manual/11-poliza.jpg)
 
+- No crea una novedad nueva ni genera acta: completa el registro de póliza que dejó la cesión.
 - Si la póliza ya tenía datos, el formulario los trae precargados y el registro los actualiza.
 - Pulse **Registrar Póliza** y confirme el resumen (cesionario, aseguradora y número de póliza).
 
@@ -350,8 +354,9 @@ Por eso el botón **Anular** solo está activo si se cumplen las dos condiciones
 | En ejecución | Una adición y prórroga, o una cesión cuya póliza ya se registró |
 
 Para anular, pulse **Anular**, revise los datos del diálogo **Confirmar Anulación** (contrato,
-vigencia, tipo, fecha y estado) y pulse **Confirmar Anulación**. El contrato vuelve a **En
-ejecución**. La anulación queda registrada de forma permanente en el historial.
+vigencia, tipo, fecha y estado) y pulse **Confirmar Anulación**. Aparece la pantalla **Novedad
+Anulada Exitosamente** y el contrato vuelve a **En ejecución**. La anulación queda registrada de
+forma permanente en el historial.
 
 ![Diálogo Confirmar Anulación](img/manual/13-anular.jpg)
 
@@ -364,7 +369,8 @@ Reabre administrativamente un contrato **Finalizado**.
 
    ![Diálogo Activar Contrato](img/manual/14-activar.jpg)
 
-El contrato vuelve a **En ejecución**. Esta acción no genera acta.
+Aparece la pantalla **Contrato Activado Exitosamente** y el contrato vuelve a **En ejecución**. Esta
+acción no genera acta.
 
 ## 15. Errores y soporte
 
@@ -374,7 +380,8 @@ Cuando una operación falla, la pantalla de error muestra:
 - La explicación y, cuando aplica, el **Servicio** donde ocurrió y qué hacer.
 - **Copiar error**: copia un bloque con el trámite, el código, el detalle, el servicio y la fecha,
   listo para pegar en el caso de soporte.
-- **Reintentar**: repite la operación con los mismos datos.
+- **Reintentar**: al crear una novedad o registrar la póliza, vuelve al formulario con lo que había
+  digitado, para corregir o enviarlo de nuevo; al anular o activar, repite la operación.
 - **Contactar Soporte**: abre la mesa de ayuda **IRIS** en otra pestaña.
 - **Volver al Panel de Gestión**.
 
