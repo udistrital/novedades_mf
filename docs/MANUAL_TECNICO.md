@@ -12,10 +12,7 @@ Documentos relacionados, que este manual no repite:
 | [README](../README.md) | Ficha del repositorio con el formato institucional |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Capas, flujos y ciclo de vida, en diagramas |
 | [adr/](adr/) | Una decisión de arquitectura por archivo, con su contexto y sus consecuencias |
-| [SEGURIDAD.md](SEGURIDAD.md) | Validación de seguridad previa al despliegue: SonarQube, dependencias, checklist |
 | [MANUAL_USUARIO.md](MANUAL_USUARIO.md) | Uso funcional, pantalla por pantalla |
-
-Si este manual contradice el código, manda el código.
 
 ## Contenido
 
@@ -70,12 +67,7 @@ Funciones del módulo:
 | Anular una novedad | Sí |
 | Activar (reabrir) un contrato finalizado | Sí |
 
-Funciones que el legado no tenía: búsqueda por contratista con autocomplete, filtro de vigencia
-"Todos", cláusula adicional en todas las novedades y considerando adicional en la cesión,
-previsualización del acta, valores en letras en resúmenes y actas, y pantallas de error con
-código, servicio de origen y texto para reportar a soporte.
-
-**Fuera del alcance**, a propósito:
+**Fuera del alcance**:
 
 | Qué | Por qué |
 |---|---|
@@ -116,7 +108,6 @@ graph LR
 | TypeScript | 5.5 | `strict`, `strictTemplates`, `noImplicitOverride`, `noPropertyAccessFromIndexSignature` |
 | RxJS | 7.8 | HTTP y composición de la cascada de escritura |
 | TailwindCSS | 3.4 | Con tokens propios y Preflight apagado |
-| zone.js | 0.14 | Solo para las pruebas: la aplicación es *zoneless* |
 | ESLint + angular-eslint | 9 / 18.4 | Configuración *flat*, también revisa plantillas y accesibilidad |
 | Karma + Jasmine | 6.4 / 5.2 | Pruebas unitarias en Chrome |
 
@@ -171,9 +162,6 @@ Las pruebas (`*.spec.ts`) viven al lado del archivo que prueban.
 - Chrome o Chromium, para `npm test`.
 - Acceso de red al gateway `autenticacion.portaloas.udistrital.edu.co`: incluso en local, el MF
   consume las APIs institucionales reales (no hay mocks).
-- Para **crear novedades**: `novedades_mid` corriendo en local en el puerto 8081
-  ([4.4](#44-generador-de-actas-local)). Sin él se puede consultar, pero ninguna novedad se puede
-  registrar.
 
 ```bash
 git clone https://github.com/udistrital/novedades_mf
