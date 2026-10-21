@@ -1,6 +1,5 @@
 /**
  * Ambiente: PRUEBAS.
- * Nombres de variables institucionales (no cambiar). URLs tal cual el legado.
  */
 export const environment = {
     production: false,

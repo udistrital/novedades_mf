@@ -6,7 +6,7 @@ Microcliente para la gestión, registro, actualización y consulta de novedades 
 
 ### Tecnologías Implementadas y Versiones
 
-* [Angular 18](https://angular.dev/) (standalone components, signals, zoneless)
+* [Angular 18](https://angular.dev/)
 * [single-spa](https://single-spa.js.org/) >= 4
 * [single-spa-angular](https://single-spa.js.org/docs/ecosystem-angular/) 9.2
 * [Angular Material 18](https://material.angular.io/)
@@ -18,7 +18,9 @@ Microcliente para la gestión, registro, actualización y consulta de novedades 
 
 El punto de entrada es `src/main.single-spa.ts`, que exporta el ciclo de vida de single-spa (`bootstrap`, `mount`, `unmount`). La compilación usa `@angular-builders/custom-webpack` y `single-spa-angular` para generar un único bundle UMD, `dist/novedades-mf/main.js`, que el cliente contenedor monta en la ruta `/novedades`.
 
-El código sigue un diseño por capas (presentación, aplicación, dominio e infraestructura) dentro de un solo dominio, `src/app/domains/contratos/`. El detalle está en [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), y cada decisión de arquitectura, en [docs/adr/](docs/adr/).
+El código sigue una arquitectura por capas (presentación, aplicación, dominio e infraestructura) dentro de un solo dominio, `src/app/domains/contratos/`. El detalle está en [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), y cada decisión de arquitectura, en [docs/adr/](docs/adr/).
+
+El uso del módulo está en el [manual de usuario](docs/MANUAL_USUARIO.md); la instalación, el despliegue, la integración con el backend y cómo extenderlo, en el [manual técnico](docs/MANUAL_TECNICO.md), y la validación de seguridad previa al despliegue, en [docs/SEGURIDAD.md](docs/SEGURIDAD.md).
 
 ### Módulos y Rutas
 
@@ -34,19 +36,7 @@ El código sigue un diseño por capas (presentación, aplicación, dominio e inf
 
 `:contractId` es `{numero}_{vigencia}`. Las rutas de novedad exigen un rol autorizado y que el estado del contrato admita esa novedad; si no, vuelven al panel.
 
-### Variables de Entorno
-
-La configuración por ambiente vive en `src/environments/`:
-
-| Variable | Descripción |
-| --- | --- |
-| `ADMINISTRATIVA_PRUEBAS_SERVICE` | API `administrativa_amazon_api` — contratos generales y proveedores |
-| `NOVEDADES_MID_SERVICE` | API `novedades_mid` — novedades por contrato |
-| `NOVEDADES_SERVICE` | API `novedades_crud` — persistencia de novedades (fase de escrituras) |
-| `CORE_AMAZON_SERVICE` | API `core_amazon_crud` — catálogo de entidades aseguradoras |
-| `FINANCIERA_JBPM_SERVICE` | API `financiera_jbpm` — CDP y CRP vigentes que imprime el acta |
-| `ACTAS_MID_SERVICE` | `novedades_mid` local (`POST novedad/generaracta`) — generación del PDF del acta; apunta a `localhost:8081` hasta que el endpoint se despliegue |
-| `TOKEN` | Configuración OAuth2 de WSO2 (client id, redirect, scopes, logout) |
+### Ambientes de Desarrollo
 
 | Ambiente | Archivo | Servidor local | Compilación |
 | --- | --- | --- | --- |
@@ -151,14 +141,6 @@ Microcliente de gestión de novedades.
 
 Con estos pasos, se tendrán las partes mínimas necesarias para ejecutar el proyecto en un entorno local. El microcliente queda publicado en `http://localhost:4209/main.js`, listo para ser consumido por el Root.
 
-## Ejecución Dockerfile
-
-No aplica: el microcliente se publica como un archivo estático que carga el cliente contenedor.
-
-## Ejecución docker-compose
-
-No aplica.
-
 ## Ejecución Pruebas
 
 Pruebas unitarias (Karma + Jasmine) y análisis estático:
@@ -168,15 +150,6 @@ npm test                                              # abre Chrome y queda obse
 npm test -- --watch=false --browsers=ChromeHeadless   # una sola corrida, sin ventana
 npm run lint
 ```
-
-## Estado CI
-
-Pendiente: el repositorio todavía no tiene pipeline de integración continua.
-
-## Modelo de Datos
-
-No aplica: el microcliente no persiste datos. Consume las APIs de la sección [Variables de Entorno](#variables-de-entorno), cuyos modelos de datos están documentados en sus propios repositorios.
-
 ## Licencia
 
 [This file is part of novedades_mf](LICENSE)
