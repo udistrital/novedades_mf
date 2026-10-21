@@ -15,11 +15,16 @@
     <div>
       <span class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Valor total del contrato</span>
       <p class="font-title-md text-title-md text-primary">{{ contract().totalValue | currency:'COP':'symbol':'1.0-0' }}</p>
+      @if (valorVigente() !== contract().totalValue) {
+        <p class="text-xs text-on-surface-variant">
+          Valor vigente (con adiciones): <span class="font-medium text-on-surface">{{ valorVigente() | currency:'COP':'symbol':'1.0-0' }}</span>
+        </p>
+      }
     </div>
     <div class="bg-surface p-3 rounded border border-surface-variant mt-2">
       <span class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Datos contratista</span>
       <p class="font-medium text-sm">{{ contract().contractorName }}</p>
-      <p class="text-xs text-on-surface-variant">NIT {{ contract().contractorId }}</p>
+      <p class="text-xs text-on-surface-variant">NIT {{ contractorDocument }}</p>
     </div>
     <div class="grid grid-cols-2 gap-2 mt-2">
       <div>
@@ -31,9 +36,55 @@
         <p class="text-sm">{{ contract().startDate }}</p>
       </div>
     </div>
-    <div>
-      <span class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Supervisor</span>
-      <p class="text-sm">{{ contract().supervisor }}</p>
+    <div class="flex flex-col gap-stack-sm">
+      <div>
+        <span class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Supervisor</span>
+        <p class="text-sm">{{ contract().supervisor }}</p>
+      </div>
+      <div>
+        <span class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Ordenador del gasto</span>
+        @if (sinOrdenador()) {
+          <p class="text-sm font-medium text-error flex items-center gap-1">
+            <mat-icon class="text-[16px] w-4 h-4 flex items-center justify-center">warning</mat-icon> Sin asignar
+          </p>
+        } @else {
+          <p class="text-sm">{{ contract().spendingManager }}</p>
+        }
+      </div>
     </div>
   </div>
 </app-card>
+
+<!--
+  Falta el ordenador del gasto: el acta lo exige y el servicio la rechaza sin él, así
+  que el aviso se da al entrar y no al confirmar, cuando el usuario ya llenó todo el
+  formulario. Se muestra una vez por visita: el botón lo cierra y el dato queda marcado
+  en rojo en la tarjeta.
+-->
+@if (sinOrdenador() && avisoAbierto()) {
+  <app-modal-shell maxWidth="md" (dismiss)="avisoAbierto.set(false)">
+    <div class="p-6 flex flex-col gap-4">
+      <div class="flex items-start gap-3">
+        <mat-icon class="text-error text-[28px] w-7 h-7 flex items-center justify-center shrink-0">warning</mat-icon>
+        <div class="flex flex-col gap-1">
+          <h2 class="font-title-md text-title-md text-on-surface">No se encontró Ordenador del Gasto</h2>
+          <p class="font-body-md text-body-md text-on-surface-variant">
+            El sistema no pudo encontrar un Ordenador del Gasto asignado a este contrato. El servicio puede no funcionar correctamente.
+          </p>
+        </div>
+      </div>
+      <div class="flex gap-3 p-3 bg-error-container text-on-error-container rounded-lg border border-error/40">
+        <p class="text-xs font-medium">
+          Si cree que esto es un error, comuníquese con el equipo de soporte a través de
+          <a [href]="soporteUrl" target="_blank" rel="noopener noreferrer" class="font-bold underline">IRIS</a>.
+        </p>
+      </div>
+      <button
+        type="button"
+        (click)="avisoAbierto.set(false)"
+        class="self-end px-4 py-2 bg-primary rounded hover:bg-primary-container transition-colors font-label-lg shadow-sm text-on-primary">
+        Entendido
+      </button>
+    </div>
+  </app-modal-shell>
+}

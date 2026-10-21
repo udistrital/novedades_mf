@@ -19,5 +19,5 @@ export class ConfirmAnnulModalComponent {
   readonly submitting = input(false);
 
   readonly confirm = output<void>();
-  readonly cancel = output<void>();
+  readonly dismiss = output<void>();
 }

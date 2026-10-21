@@ -10,7 +10,6 @@ import { singleSpaAngular, getSingleSpaExtraProviders } from 'single-spa-angular
 import { AppComponent } from './app/app.component';
 import { appConfig } from './app/app.config';
 import { environment } from './environments/environment';
-import { singleSpaPropsSubject } from './single-spa/single-spa-props';
 
 if (environment.production) {
   enableProdMode();
@@ -23,8 +22,7 @@ function bootstrapStandaloneApp(){
 }
 
 const lifecycles = singleSpaAngular({
-  bootstrapFunction: singleSpaProps => {
-    singleSpaPropsSubject.next(singleSpaProps);
+  bootstrapFunction: () => {
     return bootstrapApplication(AppComponent, {
       providers: [
         ...appConfig.providers,
@@ -35,7 +33,9 @@ const lifecycles = singleSpaAngular({
       ]
     });
   },
-  template: '<novedades-mf class="mat-typography" />',
+  // Sin `class="mat-typography"`: las reglas de tipografía de Material (h1, h2…)
+  // del theme pisan por especificidad a las utilidades Tailwind del MFE al montarse en el shell.
+  template: '<novedades-mf />',
   Router,
   NavigationStart,
   NgZone,
