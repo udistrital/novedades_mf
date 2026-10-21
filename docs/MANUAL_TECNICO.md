@@ -111,12 +111,16 @@ graph LR
 | ESLint + angular-eslint | 9 / 18.4 | Configuración *flat*, también revisa plantillas y accesibilidad |
 | Karma + Jasmine | 6.4 / 5.2 | Pruebas unitarias en Chrome |
 
-**Node.js**: 20 o 22 LTS. Angular 18 está soportado hasta Node 22. `npm install` acepta versiones
+**Node.js**: 20 o 22 LTS. Angular 18 está soportado hasta Node 22. `pnpm install` acepta versiones
 más nuevas, porque el campo `engines` del CLI dice `>=22.0.0`, y con Node 24 el proyecto compila y
 pasa las pruebas, pero `ng version` lo marca `Unsupported`: no es una combinación que Angular
 garantice.
 
-**Gestor de paquetes**: npm, con el `package-lock.json` versionado.
+**Gestor de paquetes**: pnpm, con `pnpm-lock.yaml` y `pnpm-workspace.yaml` versionados. La versión
+está fijada en el campo `packageManager` de `package.json`, y `corepack enable pnpm` (Corepack viene
+con Node 20 y 22) instala esa misma. `pnpm-workspace.yaml` autoriza en `allowBuilds` los scripts de
+instalación de `esbuild`, `lmdb`, `msgpackr-extract` y `nice-napi`: pnpm bloquea los que no están en
+la lista, y sin esos binarios el build falla.
 
 ## 3. Estructura del repositorio
 
@@ -158,21 +162,21 @@ Las pruebas (`*.spec.ts`) viven al lado del archivo que prueban.
 
 ### 4.1 Requisitos
 
-- Node.js 20 o 22 LTS y npm.
-- Chrome o Chromium, para `npm test`.
+- Node.js 20 o 22 LTS y pnpm (`corepack enable pnpm`).
+- Chrome o Chromium, para `pnpm test`.
 - Acceso de red al gateway `autenticacion.portaloas.udistrital.edu.co`: incluso en local, el MF
   consume las APIs institucionales reales (no hay mocks).
 
 ```bash
 git clone https://github.com/udistrital/novedades_mf
 cd novedades_mf
-npm install
+pnpm install
 ```
 
 ### 4.2 Solo el microfrontend (sin shell)
 
 ```bash
-npm start            # http://localhost:4209, con environment.development.ts
+pnpm start           # http://localhost:4209, con environment.development.ts
 ```
 
 `ng serve` sirve `src/index.html`, que contiene `<novedades-mf>`; `main.single-spa.ts` detecta
@@ -185,7 +189,7 @@ localStorage.setItem('access_token', '<jwt>');
 
 Luego se recarga la página. Las claves que se leen, en este orden, son `access_token`,
 `id_token` y `token` ([11](#11-seguridad)). Para trabajar contra el ambiente de pruebas en vez
-del local: `npm run start:test`.
+del local: `pnpm start:test`.
 
 ### 4.3 Integrado con el shell
 
@@ -201,7 +205,7 @@ git clone https://github.com/udistrital/core_mf_cliente
 cd core_mf_cliente && npm install && npm start
 
 # 3) Este microfrontend (http://localhost:4209/main.js)
-cd novedades_mf && npm start
+cd novedades_mf && pnpm start
 ```
 
 El root registra el MF en su import map local como `"@udistrital/novedades-mf":
@@ -288,7 +292,7 @@ Accept: application/json
 Los tres archivos de `src/environments/` usan **las mismas URLs de API**
 (`https://autenticacion.portaloas.udistrital.edu.co/apioas/...`), igual que el cliente legado.
 Falta confirmar con Infraestructura si ese gateway atiende datos de pruebas o de producción.
-Mientras tanto, **toda escritura se trata como real**, también desde `npm start`: crear, anular,
+Mientras tanto, **toda escritura se trata como real**, también desde `pnpm start`: crear, anular,
 activar o registrar una póliza modifica contratos de verdad. Para probar escrituras se usan
 contratos acordados con negocio, y se anota el número y la vigencia de cada uno.
 
@@ -317,11 +321,11 @@ interceptor ([11](#11-seguridad)).
 
 | Ambiente | Archivo | `deployUrl` | Servidor local | Compilación |
 |---|---|---|---|---|
-| Producción | `environment.ts` | `https://novedades.portaloas.udistrital.edu.co/` | — | `npm run build` o `npm run build:prod` |
-| Pruebas | `environment.test.ts` | `https://pruebasnovedades.portaloas.udistrital.edu.co/` | `npm run start:test` | `npm run build:test` |
-| Local | `environment.development.ts` | `http://localhost:4209/` | `npm start` | `npm run watch` |
+| Producción | `environment.ts` | `https://novedades.portaloas.udistrital.edu.co/` | — | `pnpm build` o `pnpm build:prod` |
+| Pruebas | `environment.test.ts` | `https://pruebasnovedades.portaloas.udistrital.edu.co/` | `pnpm start:test` | `pnpm build:test` |
+| Local | `environment.development.ts` | `http://localhost:4209/` | `pnpm start` | `pnpm watch` |
 
-`npm run build` usa la configuración `production`, que es la predeterminada. El `deployUrl` es la
+`pnpm build` usa la configuración `production`, que es la predeterminada. El `deployUrl` es la
 URL pública donde queda el bundle: el root importa `main.js` desde ahí y los chunks lazy se
 resuelven contra ella, no contra el origen del shell ([ADR-010](adr/ADR-010-deployurl-por-ambiente.md)).
 Los dos dominios públicos se tomaron de los ambientes del cliente legado. Si Infraestructura
@@ -350,7 +354,7 @@ dist/novedades-mf/
 
 El MF se publica como **archivos estáticos**: no hay Dockerfile ni servidor propio. Pasos:
 
-1. Compilar con la configuración del ambiente (`npm run build:prod` o `npm run build:test`).
+1. Compilar con la configuración del ambiente (`pnpm build:prod` o `pnpm build:test`).
 2. Publicar el contenido de `dist/novedades-mf/` en la URL del `deployUrl` de ese ambiente, con
    CORS que permita al dominio del shell cargar los scripts. `main.js` tiene que quedar en la raíz
    de esa URL, no dentro de una carpeta `novedades-mf/`.
@@ -377,9 +381,9 @@ pipeline del proyecto guía (`solicitudes_sabaticos_mf`), con estos pasos:
 
 | Rama | Qué corre |
 |---|---|
-| `feature/*`, `develop` | SonarQube + `npm run build` (solo compila) |
-| `release/*` | SonarQube + `npm run build:test` + subida al bucket de pruebas |
-| `master` | SonarQube + `npm run build:prod` + subida al bucket de producción |
+| `feature/*`, `develop` | SonarQube + `pnpm build` (solo compila) |
+| `release/*` | SonarQube + `pnpm build:test` + subida al bucket de pruebas |
+| `master` | SonarQube + `pnpm build:prod` + subida al bucket de producción |
 | `hotfix/*` | Solo SonarQube |
 
 Ajustes respecto al proyecto guía:
@@ -391,6 +395,9 @@ Ajustes respecto al proyecto guía:
   Infraestructura.
 - **Imagen de Node**: `node:22-alpine`, la versión más nueva que soporta Angular 18
   ([2](#2-tecnologías-y-versiones)).
+- **Gestor de paquetes**: pnpm en vez del `npm i` del guía, como en `gestion_contractual_mf`. Cada paso
+  de compilación empieza con `corepack enable pnpm` y `pnpm install --frozen-lockfile`, que falla si
+  el lockfile no corresponde con `package.json`.
 - Secretos que el pipeline nombra: `SONAR_HOST`, `SONAR_TOKEN`, `BUCKET_CLIENTES_TEST`,
   `BUCKET_CLIENTES_PROD`, `aws_access_key_id` y `aws_secret_access_key`.
 
@@ -1266,14 +1273,14 @@ dos excepciones inertes que documenta.
 ### 15.1 Comandos
 
 ```bash
-npm test -- --watch=false --browsers=ChromeHeadless    # una corrida, sin ventana
-npm test                                               # Chrome en modo observación
-npx ng test --include='**/contract.rules.spec.ts' --watch=false --browsers=ChromeHeadless
-npm run lint                                           # TS + plantillas + accesibilidad
-npm run build                                          # build de producción
+pnpm test --watch=false --browsers=ChromeHeadless      # una corrida, sin ventana
+pnpm test                                              # Chrome en modo observación
+pnpm ng test --include='**/contract.rules.spec.ts' --watch=false --browsers=ChromeHeadless
+pnpm lint                                              # TS + plantillas + accesibilidad
+pnpm build                                             # build de producción
 ```
 
-**Terminado** = `npm run lint` y `npm run build` en verde, y `npm test` en verde si se tocó lógica.
+**Terminado** = `pnpm lint` y `pnpm build` en verde, y `pnpm test` en verde si se tocó lógica.
 
 ### 15.2 Pruebas automáticas
 

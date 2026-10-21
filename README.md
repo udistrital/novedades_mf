@@ -40,9 +40,9 @@ El uso del módulo está en el [manual de usuario](docs/MANUAL_USUARIO.md); la i
 
 | Ambiente | Archivo | Servidor local | Compilación |
 | --- | --- | --- | --- |
-| Producción | `src/environments/environment.ts` | — | `npm run build:prod` |
-| Local | `src/environments/environment.development.ts` | `npm start` | `npm run watch` |
-| Pruebas | `src/environments/environment.test.ts` | `npm run start:test` | `npm run build:test` |
+| Producción | `src/environments/environment.ts` | — | `pnpm build:prod` |
+| Local | `src/environments/environment.development.ts` | `pnpm start` | `pnpm watch` |
+| Pruebas | `src/environments/environment.test.ts` | `pnpm start:test` | `pnpm build:test` |
 
 Cada compilación genera `dist/novedades-mf/main.js` con la URL pública (`deployUrl`) de su ambiente, definida en `angular.json`.
 
@@ -71,12 +71,12 @@ El Root contiene la lógica de Argo.
 3. Instalar las dependencias:
 
    ```bash
-   npm install
+   pnpm install
    ```
 
 4. Iniciar el Root:
    ```bash
-   npm start
+   pnpm start
    ```
 
 ### Core
@@ -100,13 +100,13 @@ El Core contiene componentes generales que construyen el layout y administran as
 3. Instalar las dependencias:
 
    ```bash
-   npm install
+   pnpm install
    ```
 
 4. Iniciar el Core:
 
    ```bash
-   npm start
+   pnpm start
    ```
 
 ### novedades_mf
@@ -130,13 +130,13 @@ Microcliente de gestión de novedades.
 3. Instalar las dependencias:
 
    ```bash
-   npm install
+   pnpm install
    ```
 
 4. Iniciar novedades_mf:
 
    ```bash
-   npm start
+   pnpm start
    ```
 
 Con estos pasos, se tendrán las partes mínimas necesarias para ejecutar el proyecto en un entorno local. El microcliente queda publicado en `http://localhost:4209/main.js`, listo para ser consumido por el Root.
@@ -146,9 +146,9 @@ Con estos pasos, se tendrán las partes mínimas necesarias para ejecutar el pro
 Pruebas unitarias (Karma + Jasmine) y análisis estático:
 
 ```bash
-npm test                                              # abre Chrome y queda observando cambios
-npm test -- --watch=false --browsers=ChromeHeadless   # una sola corrida, sin ventana
-npm run lint
+pnpm test                                             # abre Chrome y queda observando cambios
+pnpm test --watch=false --browsers=ChromeHeadless     # una sola corrida, sin ventana
+pnpm lint
 ```
 ## Licencia
 
