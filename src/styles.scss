@@ -1,0 +1,174 @@
+@use '@angular/material' as mat;
+@use '@angular/cdk' as cdk;
+
+/*
+ * ⚠️ REGLA DE ESTE ARCHIVO: ningún selector puede salir de `novedades-mf`.
+ *
+ * `single-spa-angular` no extrae este CSS a un archivo: lo empaqueta en el JS y lo
+ * inyecta como `<style>` en el `<head>` del documento COMPARTIDO al montar el MFE.
+ * No hay Shadow DOM ni aislamiento de ningún tipo, y se inyecta de último, así que
+ * cualquier selector sin ámbito gana los empates de especificidad contra el shell y
+ * le cambia el aspecto a una app que no es esta. Eso ya pasó dos veces: el Preflight
+ * de Tailwind (desactivado, ver abajo) y el tema precompilado de Material.
+ *
+ * Las tres piezas que garantizan la regla, cada una con su mecanismo:
+ *   1. Utilidades Tailwind → `important: 'novedades-mf'` en tailwind.config.js.
+ *   2. Tema de Material    → los `@include` de abajo, dentro del bloque del host.
+ *   3. CSS propio          → escrito a mano bajo `novedades-mf`.
+ * Y para que el ámbito sea completo, los overlays del CDK se montan dentro del host
+ * (`ScopedOverlayContainer`) en vez de en `<body>`.
+ *
+ * Reglas globales que sí se necesitan (`html`, `body`) viven en `src/index.html`,
+ * que solo existe en el arranque standalone y nunca llega al shell.
+ *
+ * Dos excepciones conocidas, ambas verificadas como inertes — no las "arregles" sin
+ * medir primero, el remedio es más caro que la enfermedad:
+ *   · `@tailwind base` emite `*, ::before, ::after` y `::backdrop` con los 51 valores
+ *     por defecto de `--tw-*`. Son SOLO definiciones de variables (cero declaraciones
+ *     reales), así que no pintan nada; existen para que las utilidades de transform,
+ *     filter, ring y shadow compongan. Acotarlas exigiría anidar `@tailwind` dentro
+ *     de un selector, que Sass no puede porque PostCSS lo expande después.
+ *   · `mat.core-theme()` saca `.mat-theme-loaded-marker { display: none }` con
+ *     `@at-root`. Es la clase con la que Material detecta temas duplicados; nadie la
+ *     lleva y el shell emite la misma regla idéntica.
+ *
+ * Para auditarlo tras un cambio: compilar como lo hace Angular
+ * (`npx sass src/styles.scss out.css --load-path=node_modules` y luego
+ * `npx tailwindcss -i out.css -o final.css`) y comprobar que todo selector de
+ * `final.css` contiene `novedades-mf`, salvo las dos excepciones de arriba.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Tema de Material acotado, en lugar de `@import '.../prebuilt-themes/azure-blue.css'`.
+ *
+ * El precompilado traía dos problemas: (a) es global, y sus selectores `.mat-*`
+ * alcanzaban los componentes Material del shell —que también es una app Material—
+ * pisándoles sus tokens; y (b) incluye `mat.typography-hierarchy()`, que emite
+ * `.mat-typography h1..h6` y `.mat-headline-*`. El shell tiene `mat-typography` en el
+ * `body`, así que esa regla le aplicaba `font: 400 1.75rem/2.25rem` a los `h5` de su
+ * footer y le partía el texto en tres líneas.
+ *
+ * Aquí NO se incluye la jerarquía tipográfica a propósito: el MFE nunca la usó (por
+ * eso `main.single-spa.ts` omite `class="mat-typography"` en su template) y su
+ * tipografía sale de Tailwind. Tampoco se usa `all-component-themes`: de los 30+
+ * componentes de Material este MFE usa dos, icono y autocomplete.
+ */
+$novedades-theme: mat.define-theme((
+  color: (theme-type: light, primary: mat.$azure-palette, tertiary: mat.$blue-palette)
+));
+
+novedades-mf {
+  /* Estructural, no tema: sin `cdk.overlay()` el panel del autocomplete pierde su
+     posicionamiento y se pinta en el flujo del documento. */
+  @include cdk.overlay();
+  @include cdk.a11y-visually-hidden();
+  @include mat.ripple();
+
+  /* Tokens de color y tipografía, solo de lo que se usa. */
+  @include mat.core-theme($novedades-theme);
+  @include mat.ripple-theme($novedades-theme);
+  @include mat.option-theme($novedades-theme);
+  @include mat.optgroup-theme($novedades-theme);
+  @include mat.autocomplete-theme($novedades-theme);
+  @include mat.icon-theme($novedades-theme);
+}
+
+/*
+ * Preflight de Tailwind deshabilitado (ver tailwind.config.js): su reset usa selectores
+ * sin ámbito (`*`, `h1`, `table`) y rompía elementos del shell. Esto es el equivalente,
+ * acotado al host.
+ */
+novedades-mf {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  /* Aísla el stacking context del MFE completo: cualquier z-index/opacity/transform
+     interno queda contenido aquí y nunca puede pintarse por encima de elementos del
+     shell (header, etc.) — sin esto, un z-index interno "gana" contra el shell según
+     el orden del DOM real, que single-spa no aísla. */
+  isolation: isolate;
+
+  &, * , *::before, *::after {
+    box-sizing: border-box;
+    border: 0 solid;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1, h2, h3, h4, p, figure {
+    margin: 0;
+  }
+
+  button, select, input, textarea, optgroup {
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
+  }
+
+  button, [type='button'], [type='submit'] {
+    -webkit-appearance: button;
+    background-image: none;
+  }
+
+  ul, ol {
+    list-style: none;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  /* Cursor de mano en todo elemento clicable del MFE, en vez de agregar `cursor-pointer`
+     botón por botón (patrón ya inconsistente en el código: algunos lo tenían, otros no). */
+  button:not(:disabled), a[href] {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  table {
+    border-collapse: collapse;
+    border-color: inherit;
+  }
+
+  img, svg, video, canvas {
+    display: block;
+    vertical-align: middle;
+    max-width: 100%;
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+
+  /* Centra el glifo y ajusta la caja al tamaño de fuente (text-[Npx]) en lugar de los 24px
+     fijos de Material. Selector compuesto (.mat-icon.mat-icon) para ganar en especificidad
+     a los estilos del componente MatIcon. */
+  .mat-icon.mat-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1em;
+    height: 1em;
+    line-height: 1;
+    overflow: visible;
+    vertical-align: middle;
+  }
+
+  /* Oculta el marcador por defecto de <details>. */
+  details > summary {
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+}
