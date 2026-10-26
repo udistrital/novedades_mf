@@ -1,0 +1,171 @@
+<details [open]="expanded" class="bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm group">
+  <summary class="p-4 cursor-pointer hover:bg-surface-container-low transition-colors flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-lg">
+    <div class="flex-1">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="text-body-md font-body-md font-bold text-primary">Contrato No. {{ contract.number }}</span>
+        <span class="text-label-sm font-label-sm text-on-surface-variant">· {{ vigencia }}</span>
+      </div>
+      <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">Contratista</span>
+      <p class="text-body-sm font-body-sm text-on-surface font-medium">{{ contract.contractorName }}</p>
+    </div>
+    <div class="flex items-center gap-6 w-full sm:w-auto justify-between sm:justify-end">
+      <div class="text-left sm:text-right">
+        <span class="text-label-sm font-label-sm text-on-surface-variant block">Valor Total</span>
+        <span class="text-body-md font-body-md text-on-surface font-semibold">{{ contract.totalValue | currency:'COP':'symbol':'1.0-0' }}</span>
+      </div>
+      <div class="h-8 w-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant group-hover:bg-surface-variant transition-colors">
+        <mat-icon class="transform group-open:rotate-180 transition-transform duration-200">expand_more</mat-icon>
+      </div>
+    </div>
+  </summary>
+  <div class="p-4 border-t border-outline-variant bg-surface">
+    <!-- Contract Details -->
+    <div class="grid grid-cols-1 md:grid-cols-[30%_1fr] gap-4 mb-6 p-4 bg-surface-container-lowest rounded border border-outline-variant/50">
+      <div>
+        <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">Contratante</span>
+        <span class="text-body-sm font-body-sm text-on-surface">{{ contract.contractingEntity }}</span>
+      </div>
+      <div class="md:row-span-2">
+        <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">Objeto del Contrato</span>
+        <span class="text-body-sm font-body-sm text-on-surface">{{ contract.object }}</span>
+      </div>
+      <div>
+        <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">NIT / CC Contratista</span>
+        <span class="text-body-sm font-body-sm text-on-surface">{{ contractorDocument }}</span>
+      </div>
+      <div>
+        <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">Vigencia</span>
+        <span class="text-body-sm font-body-sm text-on-surface">{{ vigencia }}</span>
+      </div>
+      <div>
+        <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">Estado del Contrato</span>
+        <span class="text-body-sm font-body-sm text-on-surface font-medium">{{ estado }}</span>
+      </div>
+      @if (valorVigente !== contract.totalValue) {
+        <div>
+          <span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">Valor Vigente (con adiciones)</span>
+          <span class="text-body-sm font-body-sm text-on-surface font-semibold">{{ valorVigente | currency:'COP':'symbol':'1.0-0' }}</span>
+        </div>
+      }
+    </div>
+    @if (pendientePoliza) {
+      <div class="flex items-start gap-3 p-3 mb-4 rounded-lg border border-error/40 bg-error-container/30">
+        <mat-icon class="text-error flex items-center justify-center">gpp_maybe</mat-icon>
+        <p class="text-body-md font-body-md text-on-surface">
+          <span class="font-semibold">Contrato cedido sin póliza registrada.</span>
+          Registra la póliza del cesionario para habilitar nuevas novedades sobre el contrato.
+        </p>
+      </div>
+    }
+
+    <!-- Novedades Section -->
+    <div class="mt-4">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="text-title-sm font-title-md font-semibold text-primary">Novedades ({{ contract.novelties.length }})</h3>
+        @if (bloqueadoPorTramite) {
+          <span class="text-label-sm font-label-sm text-on-surface-variant bg-surface-container px-3 py-1.5 rounded flex items-center gap-1">
+            <mat-icon class="text-[16px] flex items-center justify-center">hourglass_top</mat-icon>
+            Hay una novedad en trámite: no se pueden crear nuevas novedades.
+          </span>
+        } @else if (showActions) {
+          <div class="relative" #menuRef>
+            <button
+              type="button"
+              (click)="toggleMenu()"
+              [attr.aria-expanded]="isMenuOpen()"
+              aria-haspopup="true"
+              class="bg-secondary-container hover:bg-secondary-fixed-dim transition-colors px-4 py-1.5 rounded shadow-sm font-bold text-label-sm flex items-center gap-1 text-on-surface cursor-pointer">
+              <mat-icon class="text-[16px] flex items-center justify-center">add</mat-icon> Añadir Novedad
+            </button>
+
+            @if (isMenuOpen()) {
+              <div class="absolute right-0 mt-2 w-56 bg-surface-container-lowest rounded-lg shadow-lg border border-outline-variant z-10 py-1">
+                @for (option of noveltyMenuOptions; track option.action) {
+                  @if (option.path) {
+                    <a
+                      [routerLink]="['/contratos', contract.id, 'novedades', option.path]"
+                      (click)="closeMenu()"
+                      class="w-full text-left px-4 py-2 text-body-md font-body-md hover:bg-surface-container transition-colors flex items-center gap-2 text-on-surface cursor-pointer">
+                      <mat-icon class="text-primary text-[20px] flex items-center justify-center">{{ option.icon }}</mat-icon>
+                      {{ option.label }}
+                    </a>
+                  } @else {
+                    <button
+                      type="button"
+                      (click)="onActivate()"
+                      class="w-full text-left px-4 py-2 text-body-md font-body-md hover:bg-surface-container transition-colors flex items-center gap-2 text-on-surface cursor-pointer">
+                      <mat-icon class="text-primary text-[20px] flex items-center justify-center">{{ option.icon }}</mat-icon>
+                      {{ option.label }}
+                    </button>
+                  }
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+      <div class="overflow-x-auto border border-outline-variant rounded bg-surface-container-lowest">
+        <table class="w-full text-left">
+          <thead class="bg-surface-container-low border-b border-outline-variant">
+            <tr>
+              <th class="px-3 py-2 text-label-sm font-label-sm text-on-surface-variant font-semibold">Tipo de novedad</th>
+              <th class="px-3 py-2 text-label-sm font-label-sm text-on-surface-variant font-semibold">Fecha de expedición</th>
+              <th class="px-3 py-2 text-label-sm font-label-sm text-on-surface-variant font-semibold">Estado</th>
+              <th class="px-3 py-2 text-label-sm font-label-sm text-on-surface-variant font-semibold text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-outline-variant text-body-md font-body-md">
+            @for (novelty of contract.novelties; track novelty.id) {
+              <tr class="hover:bg-surface-container transition-colors">
+                <td class="px-3 py-2 text-on-surface font-medium">{{ novelty.type }}</td>
+                <td class="px-3 py-2 text-on-surface-variant">{{ novelty.expeditionDate }}</td>
+                <td class="px-3 py-2">
+                  @if (novelty.status === 'Terminada') {
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-surface-container-highest text-on-surface-variant border border-outline-variant">
+                      {{ novelty.status }}
+                    </span>
+                  } @else {
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-primary/10 text-primary border border-primary/20">
+                      {{ novelty.status }}
+                    </span>
+                  }
+                </td>
+                <td class="px-3 py-2 text-right">
+                  <div class="flex justify-end gap-1">
+                    <!-- Botón, no enlace: el mid devuelve el documento en base64 dentro de un
+                         JSON, así que navegar al endpoint mostraría el JSON en vez del PDF. -->
+                    <button type="button" (click)="verActa(novelty)"
+                      [disabled]="!novelty.documentId || abriendoActa() === novelty.id"
+                      [title]="novelty.documentId ? 'Ver Acta' : 'Sin acta registrada'"
+                      class="bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:bg-surface-container-low px-3 py-1 rounded text-label-sm font-bold transition-colors flex items-center gap-1 disabled:border-outline-variant/40 disabled:text-on-surface-variant/40 disabled:hover:bg-transparent disabled:cursor-not-allowed">
+                      @if (abriendoActa() === novelty.id) {
+                        <mat-icon class="text-[16px] animate-spin">sync</mat-icon> Abriendo…
+                      } @else {
+                        <mat-icon class="text-[16px]">visibility</mat-icon> Ver Acta
+                      }
+                    </button>
+                    @if (!readOnly) {
+                      <!-- disabled:text-error/40 en vez de disabled:opacity-50: `opacity` crea un
+                           stacking context que se pinta encima del panel de filtros (sticky) al
+                           hacer scroll; el color con alfa apaga el botón sin ese efecto. -->
+                      <button type="button" (click)="annul.emit(novelty)" class="bg-surface-container-lowest border border-error text-error hover:bg-error/10 px-3 py-1 rounded text-label-sm font-bold flex items-center gap-1 disabled:text-error/40 disabled:border-error/40 disabled:hover:bg-transparent disabled:cursor-not-allowed" [disabled]="!novelty.canAnnul" title="Anular">
+                        <mat-icon class="text-[16px]">delete</mat-icon> Anular
+                      </button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="4" class="px-3 py-4 text-center text-on-surface-variant">No hay novedades registradas para este contrato.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      @if (actaError()) {
+        <p role="alert" class="mt-2 text-label-sm font-label-sm text-error">{{ actaError() }}</p>
+      }
+    </div>
+  </div>
+</details>
