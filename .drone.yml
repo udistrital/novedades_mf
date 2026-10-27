@@ -1,0 +1,106 @@
+kind: pipeline
+name: oas_cliente_ci
+
+steps:
+
+- name: run_sonar_scanner
+  image: sonarsource/sonar-scanner-cli:latest
+  environment:
+    SONAR_HOST_URL:
+      from_secret: SONAR_HOST
+    SONAR_TOKEN:
+      from_secret: SONAR_TOKEN
+    SONAR_SCANNER_OPTS: "-Dsonar.working.directory=/tmp/.scannerwork"
+  commands:
+    - sonar-scanner
+  when:
+    branch:
+      - feature/*
+      - develop
+      - release/*
+      - hotfix/*
+      - master
+    event:
+    - push
+
+# node:22, la más nueva que soporta Angular 18. corepack activa el pnpm fijado en packageManager;
+# --frozen-lockfile instala exacto lo de pnpm-lock.yaml y falla si no corresponde con package.json
+- name: nodejs_develop
+  image: node:22-alpine
+  commands:
+  - node --version
+  - corepack enable pnpm
+  - pnpm install --frozen-lockfile
+  - pnpm run lint
+  - pnpm run build
+  when:
+    branch:
+    - feature/*
+    - develop
+    event:
+    - push
+
+- name: nodejs_release
+  image: node:22-alpine
+  commands:
+  - node --version
+  - corepack enable pnpm
+  - pnpm install --frozen-lockfile
+  - pnpm run build:test
+  when:
+    branch:
+    - release/*
+    event:
+    - push
+
+- name: nodejs_master
+  image: node:22-alpine
+  commands:
+  - node --version
+  - corepack enable pnpm
+  - pnpm install --frozen-lockfile
+  - pnpm run build:prod
+  when:
+    branch:
+    - master
+    event:
+    - push
+
+# El build sale en dist/novedades-mf/: main.js tiene que quedar en la raíz del target
+- name: publish_s3_release
+  image: plugins/s3
+  settings:
+    bucket:
+      from_secret: BUCKET_CLIENTES_TEST
+    access_key:
+      from_secret: aws_access_key_id
+    secret_key:
+      from_secret: aws_secret_access_key
+    region: us-east-1
+    source: dist/novedades-mf/**/*
+    target: /argo/${DRONE_REPO_NAME}
+    strip_prefix: dist/novedades-mf/
+  when:
+    branch:
+    - release/*
+    event:
+    - push
+
+- name: publish_s3_master
+  image: plugins/s3
+  settings:
+    bucket:
+      from_secret: BUCKET_CLIENTES_PROD
+    access_key:
+      from_secret: aws_access_key_id
+    secret_key:
+      from_secret: aws_secret_access_key
+    region: us-east-1
+    source: dist/novedades-mf/**/*
+    target: /argo/${DRONE_REPO_NAME}
+    strip_prefix: dist/novedades-mf/
+  when:
+    branch:
+    - master
+    event:
+    - push
