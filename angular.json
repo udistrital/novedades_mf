@@ -75,7 +75,7 @@
                   "with": "src/environments/environment.test.ts"
                 }
               ],
-              "deployUrl": "https://pruebasnovedades.portaloas.udistrital.edu.co/"
+              "deployUrl": "https://pruebasnovedadesv2.portaloas.udistrital.edu.co/"
             }
           },
           "defaultConfiguration": "production"
